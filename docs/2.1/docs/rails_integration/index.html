@@ -73,28 +73,30 @@
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Trailblazer</a>
+      <a href="/2.1/docs/trailblazer/index.html" class="font-bold pl-3 ">Trailblazer</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Rails integration</a>
+      <a href="/2.1/docs/rails_integration/index.html" class="font-bold pl-3 bg-selected">Rails integration</a>
+      
+        <a href="#trailblazer-overview" class="pl-3">Overview</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Test</a>
+      <a href="/2.1/docs/test/index.html" class="font-bold pl-3 ">Test</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Internals</a>
+      <a href="/2.1/docs/internals/index.html" class="font-bold pl-3 ">Internals</a>
       
     </div>
   
@@ -122,56 +124,56 @@
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Workflow</a>
+      <a href="/2.1/docs/workflow/index.html" class="font-bold pl-3 ">Workflow</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Endpoint</a>
+      <a href="/2.1/docs/endpoint/index.html" class="font-bold pl-3 ">Endpoint</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Reform</a>
+      <a href="/2.1/docs/reform/index.html" class="font-bold pl-3 ">Reform</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Cells</a>
+      <a href="/2.1/docs/cells/index.html" class="font-bold pl-3 ">Cells</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Representable</a>
+      <a href="/2.1/docs/representable/index.html" class="font-bold pl-3 ">Representable</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Trailblazer</a>
+      <a href="/2.1/docs/disposable/index.html" class="font-bold pl-3 ">Trailblazer</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Roar</a>
+      <a href="/2.1/docs/roar/index.html" class="font-bold pl-3 ">Roar</a>
       
     </div>
   
      <!-- # TODO: abstract to torture-cms -->
 
     <div class="flex flex-col pt-10">
-      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Tutorials</a>
+      <a href="/2.1/docs/tutorial/index.html" class="font-bold pl-3 ">Tutorials</a>
       
     </div>
   
@@ -182,7 +184,7 @@
     <div class="lg:p-10 pl-8 pr-4 py-10 bg-light-grey grow">
       <h1 class="lg:text-3xl text-2xl text-blue font-bold">
         <span class="font-black uppercase">
-          Operation
+          Trailblazer
         </span>
         Documentation
       </h1>
@@ -196,10 +198,147 @@
       </div> -->
       <div class="xl:flex xl:gap-0.5 mt-5">
         <div class="max-w-3xl lg:p-8 lg:pb-14 p-4 bg-white text-bg-blue" id="documentation">
-          
+          <h2 id="trailblazer-overview" class="text-2xl font-bold text-neutral-500 lg:text-3xl mt-6">Overview</h2>
+
+<p class="mt-6">An activity is an executable <em>circuit</em> of tasks. Each task is arbitrary Ruby code, usually encapsulated in a callable object. Depending on its return value and its outgoing connections, the next task to invoke is picked.</p>
+
+<p class="mt-6">Activities are tremendously helpful for modelling and implementing any kind of logic and any level of complexity. They’re useful for a hash merge algorithm, an application’s function to validate form data and update models with it, or for implementing long-running business workflows that drive entire application lifecycles.</p>
+
+<div class="rounded flex p-4 gap-4 mt-5 bg-bg-purple-1/50">
+          <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
+<p>
+  
+The `activity` gem is an extraction from Trailblazer 2.0, where we only had operations. Operations expose a linear flow which goes into one direction, only. While this was a massive improvement over messily nested code, we soon decided it's cool being able to model non-linear flows. This is why activities are the major concept since Trailblazer 2.1.
+
+</p>
+</div>
+
+<h3 id="trailblazer-overview-anatomy" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Anatomy</h3>
+
+<p class="mt-6">To understand the mechanics behind Trailblazer’s activities, you need to know a few simple concepts.</p>
+
+<ol>
+  <li>An <strong>activity</strong> is a circuit of tasks - boxes being connected by arrows.</li>
+  <li>It has one <strong>start</strong> and at least one <strong>end event</strong>. Those are the circles in the diagrams.</li>
+  <li>A <strong>task</strong> is a unit of business logic. They’re visualized as boxes. This is where your code goes!</li>
+  <li>Each task has one or more <strong>outputs</strong>. From one particular output you can draw one connecting line to the next task.</li>
+  <li>An output is triggered by a <strong>signal</strong>. The last line in a task usually decides what output to pick, and that happens by <code class="text-purple">return</code>ing a specific object, a signal.</li>
+  <li>Besides the signal, a <strong>semantic</strong> is assigned to an output. This is a completely arbitrary “meaning”. In Trailblazer, we use <code class="text-purple">success</code> and <code class="text-purple">failure</code> as conventional semantics.</li>
+  <li>In a railway activity, for instance, the “failure” and “success” track mean nothing more than following the <code class="text-purple">failure</code> or <code class="text-purple">success</code>-labeled outputs. That’s a <strong>track</strong>.</li>
+</ol>
+
+<p class="mt-6">Activities can be visualized neatly by taking advantage of the BPMN specification.</p>
+
+<p class="mt-6"><img src="/assets/intermediate-cbd976784e47bdf1321454717b7c0871c245b75cf7dfd889a969ec482c40697d.webp" /></p>
+
+<p class="mt-6">Well, this is not entirely BPMN, but you get the idea. Intuitively, you understand that the tasks <code class="text-purple">B</code> and <code class="text-purple">C</code> have only one outcome, whereas <code class="text-purple">A</code> yields two possible results. This works by adding two <em>outputs</em> to <code class="text-purple">A</code>.</p>
+
+<p class="mt-6">An output is a combination of a <em>semantic</em> and a <em>signal</em>. A part of the return value of the invoked task is interpreted as a signal, and that’s how Trailblazer picks the connection to the next task to take.</p>
+
+<p class="mt-6">Depending on <code class="text-purple">A</code>’s’ returned signal (yet to be defined), the flow will continue on its <code class="text-purple">success</code> or <code class="text-purple">failure</code> connection. It’s completely up to the modelling developer what names they choose for semantics, and how many outputs they need. Nevertheless, for binary outputs we usually take <code class="text-purple">success</code> and <code class="text-purple">failure</code> as meaningful semantics.</p>
+
+<h3 id="trailblazer-overview-dsl" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">DSL</h3>
+
+<p class="mt-6">To implement our activity, we can use Activity’s DSL.</p>
+
+<div class="rounded flex p-4 gap-4 mt-5 bg-bg-purple-1/50">
+          <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
+<p>
+  
+To demonstrate the concepts of an activity, we make use of the DSL. This simplifies defining activities. However, keep in mind that you're free to build activities using the PRO editor, with your own DSL or with our [low-level API].
+
+</p>
+</div>
+
+<pre class="mt-4"><code class="rounded">class Upsert &lt; Trailblazer::Activity::Path
+  step :find_model, Output(Trailblazer::Activity::Left, :failure) =&gt; Id(:create)
+  step :update
+  step :create, magnetic_to: nil, Output(Trailblazer::Activity::Right, :success) =&gt; Id(:update)
+
+  # ...
+end
+</code></pre>
+
+<p class="mt-6">The <code class="text-purple">Activity::Path</code> class is the simplest DSL strategy. It automatically connects each <code class="text-purple">step</code> to the previous one, unless you use the <code class="text-purple">:magnetic_to</code> option. In our case, this is necessary to connect <code class="text-purple">#find</code> (A) to <code class="text-purple">#create</code> (C). The <code class="text-purple">Output</code> method helps to define what signal and semantic an output has, and using <code class="text-purple">Id</code> you can point those to a specific neighbor task.</p>
+
+<p class="mt-6">If unsure, use the [developer tools] to render the circuit.</p>
+
+<pre class="mt-4"><code class="rounded">Trailblazer::Developer.render(A::Upsert)
+</code></pre>
+
+<p class="mt-6">Alternatively, use the PRO editor tools.</p>
+
+<h3 id="trailblazer-overview-invocation" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Invocation</h3>
+
+<p class="mt-6">Before you can use your activity, the tasks need to be written. Using the [task interface] this is pretty straight-forward. Note that you can return either a boolean value or a [signal subclass] in order to dictate the direction of flow.</p>
+
+<pre class="mt-4"><code class="rounded">class Upsert &lt; Trailblazer::Activity::Path
+  # ...
+
+  def find_model(ctx, id:, **) # A
+    ctx[:memo] = Memo.find(id)
+    ctx[:memo] ? Trailblazer::Activity::Right : Trailblazer::Activity::Left # can be omitted.
+  end
+
+  def update(ctx, params:, **) # B
+    ctx[:memo].update(**params)
+    true # can be omitted
+  end
+
+  def create(ctx, **)
+    ctx[:memo] = Memo.new
+  end
+end
+</code></pre>
+
+<div class="rounded flex p-4 gap-4 mt-5 bg-bg-purple-1/50">
+          <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
+<p>
+  
+You don't have to stick to the task interface! The [circuit interface] is a bit more clumsy, but gives you much better control over how ctx and signals are handled.
+
+</p>
+</div>
+
+<p class="mt-6">To run your activity, use its <code class="text-purple">call</code> method. <code class="text-purple">Activity</code>s always use the [circuit interface].</p>
+
+<pre class="mt-4"><code class="rounded">ctx = {id: 1, params: {text: "Hydrate!"}}
+
+signal, (ctx, flow_options) = A::Upsert.([ctx, {}])
+</code></pre>
+
+<p class="mt-6">The <code class="text-purple">ctx</code> will be whatever the most recently executed task returned, and hopefully contain what you’re expecting.</p>
+
+<pre class="mt-4"><code class="rounded"># FIXME
+</code></pre>
+
+<p class="mt-6">After this brief introduction, you should check out how [nesting] of activities will help you, what [operations] are, and what awesome debugging tools such as [tracing] we provide.</p>
+
+<p class="mt-6"><code class="text-purple">:activity</code> is guaranteed to match the currently invoked activity</p>
+
         </div>
         <div class="relative" id="right-toc">
-          
+          <div class="hidden bg-white pt-5 px-5 w-56 shrink-0 text-bg-blue fixed overflow-y-scroll h-[40rem]" id="right-toc-trailblazer-overview">
+  <h4 class="font-base font-bold leading-10 pl-2">
+    Overview
+  </h4>
+  <!-- bg-bg-orange to "highlight" the link -->
+  
+    <a class="documentation-right-nav-link" href="#trailblazer-overview-anatomy">Anatomy</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#trailblazer-overview-dsl">DSL</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#trailblazer-overview-invocation">Invocation</a>
+
+    
+  
+</div>
+
+
         </div>
       </div>
     </div>
