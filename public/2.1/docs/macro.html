@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>Trailblazer</title>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    
+    
+    <link rel="stylesheet" href="/assets/tailwind-603662ff03e9d907d1b9aacb9742fe2d5430cff2e8033b6f706a29af2b22d528.css" data-turbo-track="reload" />
+<link rel="stylesheet" href="/assets/inter-font-8c3e82affb176f4bca9616b838d906343d1251adc8408efe02cf2b1e4fcf2bc4.css" data-turbo-track="reload" />
+    <link rel="stylesheet" href="/assets/application-0aad967f02ae30cc09abfb66068870c30a6ebef02335739e965608eab1f44a12.css" data-turbo-track="reload" />
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/atom-one-dark.min.css" />
+    <script type="importmap" data-turbo-track="reload">{
+  "imports": {
+    "application": "/assets/application-d925829ab38a76ce0ac394fd3f770aaebb5bad1aada934488692875d3eab57b2.js",
+    "anchor-js": "/assets/anchor-js-821952d04abcd941bb3541822cd1c1f0234e5168bef1f9b2a050868af608aa5a.js",
+    "scrollmagic": "/assets/scrollmagic-fe2032c0c4e64c54cbe40894eec87821277108e36a296c8ee15c114cf4cbdf82.js",
+    "highlight.js/lib/core": "https://ga.jspm.io/npm:highlight.js@11.8.0/es/core.js",
+    "highlight.js/lib/languages/ruby": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/es/languages/ruby.min.js"
+  }
+}</script>
+<link rel="modulepreload" href="/assets/application-d925829ab38a76ce0ac394fd3f770aaebb5bad1aada934488692875d3eab57b2.js">
+<link rel="modulepreload" href="/assets/anchor-js-821952d04abcd941bb3541822cd1c1f0234e5168bef1f9b2a050868af608aa5a.js">
+<link rel="modulepreload" href="/assets/scrollmagic-fe2032c0c4e64c54cbe40894eec87821277108e36a296c8ee15c114cf4cbdf82.js">
+<script src="/assets/es-module-shims.min-4ca9b3dd5e434131e3bb4b0c1d7dff3bfd4035672a5086deec6f73979a49be73.js" async="async" data-turbo-track="reload"></script>
+<script type="module">import "application"</script>
+  </head>
+  <body>
+    <nav class="lg:flex lg:justify-between lg:items-center lg:h-[5.5rem] lg:px-[5.5rem] lg:z-30 bg-white text-base py-3 z-10 sticky top-0" id="navbar">
+  <a href="/2.1" class="block shrink-0 w-fit mx-auto lg:mx-0">
+    <img class="w-40 lg:my-0" src="/assets/logo_blue_ruby-e87334a67ff20033fae8c8d2c07e549b5f1faa9b75bb07fbb2ff9d1c0dfef6e7.svg" />
+  </a>
+  <div class="lg:hidden absolute right-4 top-2 flex w-9 h-9 items-center" id="hamburgerIcon">
+    <div class="pointer-events-none w-full h-0.5 bg-blue transition-all duration-150
+                  before:content-[''] before:absolute before:w-full before:h-0.5 before:bg-blue before:-translate-y-2.5 before:transition-all before:duration-150
+                  after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-blue after:translate-y-2.5 after:transition-all after:duration-150"></div>
+  </div>
+  <div class="lg:hidden flex flex-col text-center hidden" id="navList">
+    <div class="lg:absolute flex flex-col mt-15 gap-10 uppercase">
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="/2.1/docs">Documentation</a>
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="/2.1/blog">Blog</a>
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="/2.1/about">About</a>
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="#">Community</a>
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="#">Learn</a>
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="#">Chat with us</a>
+    </div>
+  </div>
+  <div class="lg:flex hidden gap-10 items-center">
+    <div class="flex gap-7">
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="/2.1/docs">Documentation</a>
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="/2.1/blog">Blog</a>
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="/2.1/about">About</a>
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="#">Community</a>
+      <a class="font-medium text-base uppercase hover:scale-110 lg:normal-case lg:font-semibold" href="#">Learn</a>
+    </div>
+    <a class="base-button text-base w-[12.5rem] h-[3.25rem] bg-light-purple text-blue hover:scale-105 hover:text-white hover:bg-purple" href="#">Chat with us</a>
+  </div>
+</nav>
+
+<section>
+  <div class="lg:hidden bg-bg-blue text-white fixed left-0 top-20 pr-1 py-3 rounded-r" id="sideNavShowButton" style="writing-mode: vertical-rl; text-orientation: upright;">
+    Chapters
+  </div>
+  <div class="lg:flex">
+    <nav class="documentation-side-nav" id="sideNav">
+      <div class="lg:hidden absolute right-4 top-4 text-3xl text-white" id="sideNavHideButton">
+        X
+      </div>
+      <div class="lg:pt-0 lg:pl-6 xl:pl-20 p-10 pl-20 text-white text-base leading-10">
+  
+     <!-- # TODO: abstract to torture-cms -->
+
+    <div class="flex flex-col pt-10">
+      <a href="/2.1/docs/activity/index.html" class="font-bold pl-3 ">Activity</a>
+      
+    </div>
+  
+     <!-- # TODO: abstract to torture-cms -->
+
+    <div class="flex flex-col pt-10">
+      <a href="/2.1/docs/macro/index.html" class="font-bold pl-3 bg-selected">Macro</a>
+      
+        <a href="#macro-overview" class="pl-3">Overview</a>
+      
+        <a href="#macro-nested" class="pl-3">Nested</a>
+      
+        <a href="#macro-wrap" class="pl-3">Wrap</a>
+      
+        <a href="#macro-each" class="pl-3">Each</a>
+      
+        <a href="#macro-model" class="pl-3">Model</a>
+      
+        <a href="#macro-rescue" class="pl-3">Rescue</a>
+      
+        <a href="#macro-policy" class="pl-3">Policy</a>
+      
+    </div>
+  
+     <!-- # TODO: abstract to torture-cms -->
+
+    <div class="flex flex-col pt-10">
+      <a href="/2.1/docs/operation/index.html" class="font-bold pl-3 ">Operation</a>
+      
+    </div>
+  
+    
+</div>
+
+    </nav>
+    <div class="lg:p-10 pl-8 pr-4 py-10 bg-light-grey grow">
+      <h1 class="lg:text-3xl text-2xl text-blue font-bold">
+        <span class="font-black uppercase">
+          Macro
+        </span>
+        Documentation
+      </h1>
+      <!-- <div class="text-base leading-10">
+        <span class="font-bold text-bg-blue">
+          Subject A |
+        </span>
+        <span class="text-purple">
+          Subject 02
+        </span>
+      </div> -->
+      <div class="xl:flex xl:gap-0.5 mt-5">
+        <div class="max-w-3xl lg:p-8 lg:pb-14 p-4 bg-white text-bg-blue" id="documentation">
+          <h2 id="macro-overview" class="text-2xl font-bold text-neutral-500 lg:text-3xl mt-6">Overview</h2>
+
+<p class="mt-6"><a href="https://github.com/trailblazer/trailblazer-macro" class="pink"><i class="fa fa-gem" aria-hidden="true"></i> trailblazer-macro &gt;= 2.1.11</a></p>
+
+<p class="mt-6">Macros provide shorthand methods to create and configure a particular step in your operation. Trailblazer ships with a handful of macros. Those are implemented in trailblazer-macro and trailblazer-macro-contract.</p>
+
+<p class="mt-6">Writing you own macros is a very simple thing to do if you follow the macro API.</p>
+
+<h3 id="macro-overview-general-notes" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">General notes</h3>
+
+<h4 id="macro-overview-general-notes-variable-mapping" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">General notes / Variable mapping</h4>
+
+<p class="mt-6">Most macros internally use <a href="/2.1/docs/activity.html#activity-variable-mapping">variable mapping</a> to allow injection of configuration variables or to limit their own scope. Macros do so by leveraging the composable API using <code class="text-purple">In()</code>, <code class="text-purple">Inject()</code> and <code class="text-purple">Out()</code>.</p>
+
+<p class="mt-6">This allows you to <em>add your own</em> variable mapping to a macro, as illustrated in the example below.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Create &lt; Trailblazer::Operation
+    step Model(Song, :find_by),
+      In() =&gt; -&gt;(ctx, my_id:, **) { ctx.merge(params: {id: my_id}) } # Model() needs {params[:id]}.
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">When running the above operation, the exemplary <code class="text-purple">Model()</code> macro will pick the ID from <code class="text-purple">:my_id</code>.</p>
+
+<pre class="mt-4"><code class="rounded">result = Create.(my_id: 1)
+</code></pre>
+
+<p class="mt-6">Please note that you shall <strong>not use <code class="text-purple">:input</code></strong> to configure your macro as it will override internal filters and breaks the macro’s configuration. Go with the new <a href="/2.1/docs/activity.html#activity-variable-mapping-composable-i-o">composable variable mapping</a> which is available from <code class="text-purple">trailblazer</code> 2.1.1 and onwards.</p>
+
+<h2 id="macro-nested" class="text-2xl font-bold text-neutral-500 lg:text-3xl mt-6">Nested</h2>
+
+<p class="mt-6">Only use the <code class="text-purple">Nested()</code> macro if you’re planning to nest an activity that can only be chosen at runtime.</p>
+
+<ul>
+  <li>If you know the nested activity upfront, use <a href="">Subprocess()</a>.</li>
+  <li>If you know the activities upfront, and need only need to choose at run-time, use the <a href="#macro-nested-auto_wire"><code class="text-purple">:auto_wire</code> option</a>.</li>
+</ul>
+
+<h3 id="macro-nested-dynamic" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Dynamic</h3>
+
+<p class="mt-6">Use <code class="text-purple">Nested()</code> to dynamically decide which nested activity to invoke, but when you don’t know all activities to pick from. This is sometimes the case in polymorphic setups, when a part of an operation needs to be “decided” at runtime, with no way to know what this will look like when writing the operation class.</p>
+
+<p class="mt-6">Consider the following activity to create a song. Depending on the input in <code class="text-purple">params</code>, you either want to run a nested <code class="text-purple">Id3Tag</code> processor activity for an MP3 song, or <code class="text-purple">VorbisComment</code> at a specific point during the song creation.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Create &lt; Trailblazer::Activity::Railway
+    step :model
+    step Nested(:decide_file_type) # Run either {Id3Tag} or {VorbisComment}
+    step :save
+    # ...
+    def decide_file_type(ctx, params:, **)
+      params[:type] == "mp3" ? Id3Tag : VorbisComment
+    end
+  end
+end
+</code></pre>
+
+<p class="mt-6">When using <code class="text-purple">Nested()</code> with only one argument, the <em>decider</em>, we call this the “dynamic style”. Since we don’t know the possible nested activities upfront, the macro needs to compile several internals at runtime, which will be slower than its static equivalent.</p>
+
+<h4 id="macro-nested-dynamic-decider" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Dynamic / Decider</h4>
+
+<p class="mt-6">The decider can be any “option style” callable: an instance method in the hosting <code class="text-purple">Create</code> activity, any lambda or proc, or a callable object or class. In our example, it’s an instance method.</p>
+
+<p class="mt-6">The decider receives <code class="text-purple">ctx</code> and keyword arguments just like any other step. It is run directly before the nested activity is run, it’s <strong>return value decides about</strong> which one that will be: <code class="text-purple">Id3Tag</code> or <code class="text-purple">VorbisComment</code>.</p>
+
+<h4 id="macro-nested-dynamic-nested-activity" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Dynamic / Nested activity</h4>
+
+<p class="mt-6">The nested activity (or operation) will, per default, receive the same <code class="text-purple">ctx</code> that a <code class="text-purple">step</code> in place of <code class="text-purple">Nested()</code> would receive.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Id3Tag &lt; Trailblazer::Activity::Railway
+    step :parse
+    step :encode_id3
+    # ...
+  end
+end
+</code></pre>
+
+<h3 id="macro-nested-auto_wire" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Auto_wire</h3>
+
+<p class="mt-6">The recommended way of maintaining dynamically nested operations (or activities) is to use <code class="text-purple">Nested()</code> with the <code class="text-purple">:auto_wire</code> option. It works exactly like its <a href="#macro-nested-dynamic">purely dynamic</a> counterpart but requires you to specify all possible nested activities <strong>at compile-time</strong>.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Create &lt; Trailblazer::Activity::Railway
+    step :model
+    step Nested(:decide_file_type,
+      auto_wire: [Id3Tag, VorbisComment]) # explicitely define possible nested activities.
+    step :save
+    # ...
+
+    def decide_file_type(ctx, params:, **)
+      params[:type] == "mp3" ? Id3Tag : VorbisComment
+    end
+  end
+end
+</code></pre>
+
+<p class="mt-6">The <code class="text-purple">:auto_wire</code> option expects an array of nested activities. While this might seem a bit clumsy, this brings several benefits. First of all, execution is much faster since the entire activity graph is created at compile-time. Second, you can use the Debugging API to <a href="#macro-nested-auto_wire-debugging">introspect things</a>.</p>
+
+<p class="mt-6">You can use any type of decider step. In this example, it’s a instance method <code class="text-purple">#decide_file_type</code> on the <code class="text-purple">Nested()</code>-hosting class.</p>
+
+<p class="mt-6"><img src="/assets/nested-static-create-53e0ce5e582749e042de6a01990c479e818d6617b21805084173ea5b5fca9fd2.png" /></p>
+
+<p class="mt-6">Internally, the “auto-wire” <code class="text-purple">Nested()</code> macro simply returns a small activity as illustrated above in gray. It has a <code class="text-purple">decide</code> step to figure out which nested activity to run, then runs the actual nested activity. All well-known termini (success, failure, pass_fast, fail_fast) of the nested activities are automatically connected to the <code class="text-purple">Nested()</code>’s activity’s termini.</p>
+
+<h4 id="macro-nested-auto_wire-output-wiring" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Auto_wire / Output Wiring</h4>
+
+<p class="mt-6">Given we had a nested activity <code class="text-purple">VorbisComment</code> implemented like so.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class VorbisComment &lt; Trailblazer::Activity::Railway
+    step :prepare_metadata
+    step :encode_cover, Output(:failure) =&gt; End(:unsupported_file_format)
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">If the <code class="text-purple">#encode_cover</code> step fails, the activity will stop in the <code class="text-purple">End.unsupported_file_format</code> terminus - an end event very specific to the <code class="text-purple">VorbisComment</code> activity.</p>
+
+<p class="mt-6"><img src="/assets/nested-static-vorbiscomment-09f9645152659736e82cf3f41bddde6d7e5a81d9d3e3b68bcee02f5d1c86b390.png" /></p>
+
+<p class="mt-6">This new terminus has to be wired explicitely in the nesting activity.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Create &lt; Trailblazer::Activity::Railway
+    step :model
+    step Nested(
+        :decide_file_type,
+        auto_wire: [Id3Tag, VorbisComment]
+      ),
+      # Output and friends are used *after* Nested().
+      # Connect VorbisComment's {unsupported_file_format} to our {failure} track:
+      Output(:unsupported_file_format) =&gt; Track(:failure)
+
+    step :save
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">Using <code class="text-purple">Output(:unsupported_file_type)</code> from the Wiring API you can connect this specific terminus to wherever you need it, here it’s routed to the failure track in <code class="text-purple">Create</code>. Note that Wiring API options are used after <code class="text-purple">Nested(...)</code>, not within its parenthesis.</p>
+
+<p class="mt-6">The complete activity graph would look a bit like the following diagram.</p>
+
+<p class="mt-6"><img src="/assets/nested-static-complete-b25ee2ee5a0ffc276bb0d855662fed3241c8af6d0261f432841b7e578cf446e5.png" /></p>
+
+<h3 id="macro-nested-compliance" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Compliance</h3>
+
+<h4 id="macro-nested-compliance-debugger" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Compliance / Debugger</h4>
+
+<p class="mt-6"><code class="text-purple">Nested</code> setups are traceable using <code class="text-purple">#wtf?</code>.</p>
+
+<pre class="mt-4"><code class="rounded">
+Trailblazer::Developer.wtf?(Song::Activity::Create, params: {type: "vorbis"})</code></pre>
+
+<p class="mt-6">The above examples result in a flow as follows.</p>
+
+<p class="mt-6"><img src="/assets/nested-static-trace-33fe6a9b27408f00c154d2d12e46da3aef68d76d76ebbd2b525e9b199bba5d5d.png" /></p>
+
+<h4 id="macro-nested-compliance-introspect" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Compliance / Introspect</h4>
+
+<p class="mt-6">The trace is fully compatible with the Debugging API and allows compile-time introspection. For example, you can specify the path to a nested activity <code class="text-purple">Id3Tag</code> and inspect it.</p>
+
+<pre class="mt-4"><code class="rounded">Trailblazer::Developer.render(Song::Activity::Create,
+  path: [
+    "Nested/decide_file_type", # ID of Nested()
+    Song::Activity::Id3Tag      # ID of the nested {Id3Tag} activity.
+  ]
+)
+</code></pre>
+
+<p class="mt-6">Note that the ID of the nested activities are the class constants.</p>
+
+<h4 id="macro-nested-compliance-patch" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Compliance / Patch</h4>
+
+<h2 id="macro-wrap" class="text-2xl font-bold text-neutral-500 lg:text-3xl mt-6">Wrap</h2>
+
+<p class="mt-6">Sometimes you need to run a sequence of steps within some block you provide. Often, this is required when certain steps must be wrapped in a database transaction. The <code class="text-purple">Wrap()</code> macro does just that.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Upload &lt; Trailblazer::Activity::FastTrack
+    step :model
+    step Wrap(MyTransaction) {
+      step :update   # this changes the database.
+      step :transfer # this might even break!
+    }
+    step :notify
+    fail :log_error
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">In an imaginary song <code class="text-purple">Upload</code> operation that transfers a music file to some streaming service platform while updating fields on the database, needs the steps <code class="text-purple">#update</code> and <code class="text-purple">#transfer</code> being run inside a transaction. The code running and interpreting this block is provided via the custom transaction <code class="text-purple">MyTransaction</code>.</p>
+
+<h3 id="macro-wrap-wrap-handler" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Wrap handler</h3>
+
+<p class="mt-6">The most simple “transaction” (we call it <em>wrap handler</em>) could look as follows.</p>
+
+<pre class="mt-4"><code class="rounded">class MyTransaction
+  def self.call((ctx, flow_options), **, &amp;block)
+    signal, (ctx, flow_options) = yield # calls the wrapped steps
+
+    return signal, [ctx, flow_options]
+  end
+end
+</code></pre>
+
+<p class="mt-6">Your transaction handler can be any type of [callable] exposing the <a href="activity.html#activity-internals-circuit-interface">circuit interface</a>.</p>
+
+<p class="mt-6">In the most simple transaction ever written, we simply run the wrapped steps by calling <code class="text-purple">yield</code>. This will return a circuit-interface return set. The interesting parts are the returned <code class="text-purple">ctx</code>, which is the ctx that left the wrapped steps, and the <code class="text-purple">signal</code>, which indicates the outcome of running the wrapped steps.</p>
+
+<p class="mt-6">Here, we simply return the original signal of the wrapped activity.</p>
+
+<p class="mt-6">Note that internally <code class="text-purple">#update</code> and <code class="text-purple">#transfer</code> are put into a separate activity. The terminus reached in that activity is the signal.</p>
+
+<p class="mt-6"><img src="/assets/wrap-f19981a15143742a9b363da41091290a565fb3d5e728da9d6822a5b30712c81b.png" /></p>
+
+<p class="mt-6">Given that both <code class="text-purple">#update</code> and <code class="text-purple">#transfer</code> are railway steps, the wrapped code can terminate in a <code class="text-purple">success</code> terminus, or a <code class="text-purple">failure</code>.
+Now, it’s your handler that is responsible to interpret that. In the example above, we simply pass on the wrapped activity’s terminal signal, making the <code class="text-purple">Upload</code> activity either continue from <code class="text-purple">success</code> or from <code class="text-purple">failure</code>.</p>
+
+<h4 id="macro-wrap-wrap-handler-routing" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Wrap handler / Routing</h4>
+
+<p class="mt-6">Let’s assume the <code class="text-purple">#transfer</code> step had a custom output that goes to a super-special terminus <code class="text-purple">End.timeout</code>.</p>
+
+<pre class="mt-4"><code class="rounded">step Wrap(MyTransaction) {
+  step :update   # this changes the database.
+  step :transfer,
+    Output(:failure) =&gt; End(:timeout) # creates a third terminus.
+},
+</code></pre>
+
+<p class="mt-6">The resulting wrapped activity now has three termini.</p>
+
+<p class="mt-6"><img src="/assets/wrap-timeout-113e68ad4bdfb447ed448cbdc296c3fdf4a89089e305c3ca433adea46d3c3704.png" /></p>
+
+<p class="mt-6">With our handler, which simply returns the wrapped activity’s signal, it’s possible to route the <code class="text-purple">:timeout</code> signal in <code class="text-purple">Upload</code>. For instance, if a <code class="text-purple">:timeout</code> should be resulting in <code class="text-purple">Upload</code> jumping to the <code class="text-purple">fail_fast</code> track after <code class="text-purple">#transfer</code> terminated in <code class="text-purple">timeout</code>, you can do so.</p>
+
+<pre class="mt-4"><code class="rounded">step Wrap(MyTransaction) {
+  step :update   # this changes the database.
+  step :transfer,
+    Output(:failure) =&gt; End(:timeout) # creates a third terminus.
+},
+  Output(:timeout) =&gt; Track(:fail_fast) # any wiring is possible here.
+</code></pre>
+
+<p class="mt-6">Here’s what the circuit would look like.</p>
+
+<p class="mt-6"><img src="/assets/wrap-route-ec3d6c04738282e4b99de87d494e4f738d97771b4148aa89c9a7e7f80db24871.png" /></p>
+
+<h3 id="macro-wrap-transaction" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Transaction</h3>
+
+<p class="mt-6">Wrapping steps into a real database transaction, and rolling back in case of a failure outcome in one of the steps, could look like so.</p>
+
+<pre class="mt-4"><code class="rounded">class MyTransaction
+  def self.call((ctx, flow_options), **)
+    handler_signal = nil # this is the signal we decide to return from Wrap().
+
+    ActiveRecord::Base.transaction do
+      signal, (ctx, flow_options) = yield # call the Wrap block
+
+      # It's now up to us to interpret the wrapped activity's outcome.
+      terminus_semantic = signal.to_h[:semantic]
+
+      if [:success, :pass_fast].include?(terminus_semantic)
+        handler_signal = Trailblazer::Activity::Right
+      else # something in the wrapped steps went wrong:
+        handler_signal = Trailblazer::Activity::Left
+
+        raise ActiveRecord::Rollback # This is the only way to tell ActiveRecord to rollback!
+      end
+    end # transaction
+
+    return handler_signal, [ctx, flow_options]
+  end
+end
+</code></pre>
+
+<p class="mt-6">This might look a bit clumsy, but most of the code is very straight-forward.</p>
+
+<ol>
+  <li>Your main intent, wrapping a sequence of steps into an <code class="text-purple">ActiveRecord::Base.transaction</code> block, contains the <code class="text-purple">yield</code> invocation that runs the wrapped steps.</li>
+  <li>Having the <code class="text-purple">signal</code> of the wrapped activity returned, you can decide how you’d like to interpret that. Usually, looking at the signals <code class="text-purple">:semantic</code> field indicates the outcome.</li>
+  <li>In case you’re not happy, a <code class="text-purple">raise ActiveRecord::Rollback</code> will make ActiveRecord undo whatever database commits happened in the block.</li>
+  <li>Instead of returning the nested activity’s <code class="text-purple">signal</code>, which is completely legit, <code class="text-purple">Wrap()</code> also allows you to return a <code class="text-purple">Right</code> or <code class="text-purple">Left</code> signal to communicate the outcome of the entire <code class="text-purple">Wrap()</code> component.</li>
+</ol>
+
+<h3 id="macro-wrap-exception-handling" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Exception handling</h3>
+
+<p class="mt-6">Catching and intercepting exceptions in <code class="text-purple">Wrap()</code> works identical to transactions. In case you don’t want to use our canonical <a href="#---FIXME">Rescue() macro</a> here is a sample wrap handler that uses <code class="text-purple">rescue</code> for intercepting exceptions thrown in <code class="text-purple">#update</code> or <code class="text-purple">#transfer</code>.</p>
+
+<pre class="mt-4"><code class="rounded">class MyRescue
+  def self.call((ctx, flow_options), **, &amp;block)
+    signal, (ctx, flow_options) = yield # calls the wrapped steps
+
+    return signal, [ctx, flow_options]
+  rescue
+    ctx[:exception] = $!.message
+    return Trailblazer::Activity::Left, [ctx, flow_options]
+  end
+end
+</code></pre>
+
+<p class="mt-6">With any exception being thrown, the original signal from the wrapped activity is returned, as if the steps were part of the <code class="text-purple">Upload</code> operation flow.</p>
+
+<p class="mt-6">The code below <code class="text-purple">rescue</code> is only run when an exception was thrown. Here, we write a new variable <code class="text-purple">:exception </code> to the <code class="text-purple">ctx</code> and return <code class="text-purple">Left</code>, indicating an error.</p>
+
+<h3 id="macro-wrap-compliance" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Compliance</h3>
+
+<h4 id="macro-wrap-compliance-debugger" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Compliance / Debugger</h4>
+
+<p class="mt-6">You can use tracing with <code class="text-purple">Wrap()</code>.</p>
+
+<pre class="mt-4"><code class="rounded">
+Trailblazer::Developer.wtf?(Song::Activity::Upload, params: {id: 1})</code></pre>
+
+<p class="mt-6">The trace per default shows Wrap’s ID.</p>
+
+<p class="mt-6"><img src="/assets/wrap-trace-aa2f28f630a403fb26227db61373bc2aef89982116ed00e1f86904ddcf99f8f9.png" /></p>
+
+<h4 id="macro-wrap-compliance-introspect" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Compliance / Introspect</h4>
+
+<p class="mt-6">You can use any <code class="text-purple">Introspect</code> mechanics on activities using <code class="text-purple">Wrap()</code>.</p>
+
+<pre class="mt-4"><code class="rounded">node, _ = Trailblazer::Developer::Introspect.find_path(
+  Song::Activity::Upload,
+  ["Wrap/MyTransaction", :transfer])
+#=&gt; #&lt;Node ...&gt;
+</code></pre>
+
+<h4 id="macro-wrap-compliance-patch" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Compliance / Patch</h4>
+
+<p class="mt-6"><code class="text-purple">Wrap()</code> is compatible with the Patch API, as in, you may replace nested steps or entire activities within the wrapped part.</p>
+
+<p class="mt-6">Consider the <code class="text-purple">Upload</code> activity used throughout this example.</p>
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Upload &lt; Trailblazer::Activity::FastTrack
+    step :model
+    step Wrap(MyTransaction) {
+      step :update   # this changes the database.
+      step :transfer # this might even break!
+    }
+    step :notify
+    fail :log_error
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">Say you want to replace the <code class="text-purple">#update</code> step within the wrap with a new step <code class="text-purple">#upsert</code>, you can use <code class="text-purple">Patch</code> as so.</p>
+
+<pre class="mt-4"><code class="rounded">upload_with_upsert = Trailblazer::Activity::DSL::Linear::Patch.call(
+  Song::Activity::Upload,
+  ["Wrap/MyTransaction"],
+  -&gt; { step :upsert, replace: :update }
+)
+</code></pre>
+
+<p class="mt-6">The returned new activity <code class="text-purple">upload_with_upsert</code> is a copy of <code class="text-purple">Upload</code> with the respective step replace. Note that in this very example, the method <code class="text-purple">#upsert</code> has to be included in the nested activity.</p>
+
+<h2 id="macro-each" class="text-2xl font-bold text-neutral-500 lg:text-3xl mt-6">Each</h2>
+
+<p class="mt-6"><a href="https://github.com/trailblazer/trailblazer-macro" class="pink"><i class="fa fa-gem" aria-hidden="true"></i> trailblazer-macro &gt;= 2.1.12</a></p>
+
+<p class="mt-6">The <code class="text-purple">Each()</code> macro allows to loop over a dataset while invoking a particular operation per iteration, as if multiple identical operations were serially connected, but receiving different input ctxs.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Cover &lt; Trailblazer::Activity::Railway
+    step :model
+    step Each(dataset_from: :composers_for_each) {
+      step :notify_composers
+    }
+    step :rearrange
+
+    # "decider interface"
+    def composers_for_each(ctx, model:, **)
+      model.composers
+    end
+
+    def notify_composers(ctx, index:, item:, **)
+      Mailer.send(to: item.email, message: "#{index}) You, #{item.full_name}, have been warned about your song being copied.")
+    end
+    def model(ctx, params:, **)
+      ctx[:model] = Song.find_by(id: params[:id])
+    end
+
+    include T.def_steps(:rearrange)
+  end
+end
+</code></pre>
+
+<p class="mt-6">You can either pass a block with steps to iterate, or an entire operation/activity. In this example, a block is used. Note that you need to use the <code class="text-purple">{}</code> curly braces due to Ruby’s precedence, just as it’s done in <code class="text-purple">Wrap()</code>.</p>
+
+<h3 id="macro-each-dataset_from" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">dataset_from</h3>
+
+<p class="mt-6">While you could simply assign a ctx variable <code class="text-purple">:dataset</code> in a step preceding the <code class="text-purple">Each()</code> macro, the recommended way is using <code class="text-purple">:dataset_from</code> and implementing a dedicated dataset provider.</p>
+
+<pre class="mt-4"><code class="rounded">step Each(dataset_from: :composers_for_each) {
+  step :notify_composers
+}
+</code></pre>
+
+<p class="mt-6">This can be an instance method or any kind of callable, following the “decider interface”.</p>
+
+<pre class="mt-4"><code class="rounded">def composers_for_each(ctx, model:, **)
+  model.composers
+end
+</code></pre>
+
+<p class="mt-6">Note that our dataset provider is an instance method <code class="text-purple">#composers_for_each</code> defined on the operation class hosting <code class="text-purple">Each()</code>. It exposes a step signature with ctx and handy keyword arguments and simply returns the dataset. It explicitely does not write to <code class="text-purple">ctx</code>!</p>
+
+<p class="mt-6">The only requirement to the dataset provider’s return value is that it returns an enumerable object - usually, that’s an array.</p>
+
+<h3 id="macro-each-iterated-block" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Iterated Block</h3>
+
+<p class="mt-6">Note that the iterated block’s <code class="text-purple">:instance_method</code>s are defined in the <code class="text-purple">Each()</code>-hosting activity, too.</p>
+
+<pre class="mt-4"><code class="rounded">def notify_composers(ctx, index:, item:, **)
+  Mailer.send(to: item.email, message: "#{index}) You, #{item.full_name}, have been warned about your song being copied.")
+end
+</code></pre>
+
+<p class="mt-6">Per default, <code class="text-purple">Each()</code> will loop over the dataset using <code class="text-purple">#each</code> and pass the iterated item and its index into each step of the block, named <code class="text-purple">:item</code> and <code class="text-purple">:index</code>.</p>
+
+<h4 id="macro-each-iterated-block-item-key" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Iterated Block / item key</h4>
+
+<p class="mt-6">If you don’t like the <code class="text-purple">:item</code> keyword argument in your steps, you can configure it using the <code class="text-purple">:item_key</code> option for <code class="text-purple">Each()</code>.</p>
+
+<pre class="mt-4"><code class="rounded">step Each(dataset_from: :composers_for_each, item_key: :composer) {
+  step :notify_composers
+}
+</code></pre>
+
+<p class="mt-6">The iterated steps now receive a <code class="text-purple">:composer</code> ctx variable instead of <code class="text-purple">:item</code>.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Cover &lt; Trailblazer::Activity::Railway
+    # ...
+    def notify_composers(ctx, index:, composer:, **)
+      Mailer.send(to: composer.email, message: "#{index}) You, #{composer.full_name}, have been warned about your song being copied.")
+    end
+  end
+end
+</code></pre>
+
+<h4 id="macro-each-iterated-block-operation" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Iterated Block / operation</h4>
+
+<p class="mt-6">If you would like the iterated steps to be within the “block”, use a dedicted activity or operation.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Cover &lt; Trailblazer::Activity::Railway
+    step :model
+    step Each(Notify, dataset_from: :composers_for_each)
+    step :rearrange
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">The iterated operation is composed of steps that have an identical interface with the block version.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Notify &lt; Trailblazer::Activity::Railway
+    step :send_email
+
+    def send_email(ctx, index:, item:, **)
+      Mailer.send(to: item.email, message: "#{index}) You, #{item.full_name}, have been warned about your song being copied.")
+    end
+  end
+end
+</code></pre>
+
+<h3 id="macro-each-collect-option" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Collect option</h3>
+
+<p class="mt-6">Ctx variables set within an iteration <a href="#macro-each-variable-mapping">are discarded per default</a>. While you could configure <a href="#macro-each-variable-mapping-filtering">collecting values yourself</a>, you can use the <code class="text-purple">:collect</code> option.</p>
+
+<pre class="mt-4"><code class="rounded">step Each(dataset_from: :composers_for_each, collect: true) {
+  step :notify_composers
+}
+</code></pre>
+
+<p class="mt-6">If one of your iterated steps sets <code class="text-purple">ctx[:value]</code> within <code class="text-purple">Each()</code>, this value will be collected.</p>
+
+<pre class="mt-4"><code class="rounded">def notify_composers(ctx, index:, item:, **)
+  ctx[:value] = [index, item.full_name]
+end
+</code></pre>
+
+<p class="mt-6">All collected values are available at <code class="text-purple">ctx[:collected_from_each]</code> when <code class="text-purple">Each()</code> is finished.</p>
+
+<pre class="mt-4"><code class="rounded">ctx = {params: {id: 1}} # Song 1 has two composers.
+
+signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Cover, ctx)
+
+puts ctx[:collected_from_each] #=&gt; [[0, "Fat Mike"], [1, "El Hefe"]]
+</code></pre>
+
+<h3 id="macro-each-variable-mapping" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Variable mapping</h3>
+
+<p class="mt-6">The <code class="text-purple">Each()</code> macro allows to configure what goes in and out of each iteration. However, it provides a default setting.</p>
+
+<pre class="mt-4"><code class="rounded">step Each(dataset_from: :composers_for_each) {
+  step :notify_composers
+  step :write_to_ctx
+}
+</code></pre>
+
+<ul>
+  <li>Per default, the iterated steps can see the entire outer <code class="text-purple">ctx</code>, plus <code class="text-purple">:index</code> and <code class="text-purple">:item</code>.</li>
+  <li>Any variable written to <code class="text-purple">ctx</code> is discarded after the iteration.</li>
+</ul>
+
+<pre class="mt-4"><code class="rounded">def write_to_ctx(ctx, index:, seq:, **)
+  # ...
+  ctx[:variable] = index # this is discarded!
+end
+</code></pre>
+
+<p class="mt-6">This default setting assures that no data from the iteration bleeds into the outer ctx.</p>
+
+<h4 id="macro-each-variable-mapping-filtering" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Variable mapping / Filtering</h4>
+
+<p class="mt-6">You may configure what goes in and out of the iterated activity. Use the variable mapping API by passing arguments to <code class="text-purple">Each()</code>.</p>
+
+<p class="mt-6">For example, say you want to collect messages from each iteration.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Cover &lt; Trailblazer::Activity::Railway
+    step :model
+    step Each(dataset_from: :composers_for_each,
+      Inject(:messages) =&gt; -&gt;(*) { {} },
+
+      # all filters called before/after each iteration!
+      Out() =&gt; [:messages]
+    ) {
+      step :write_to_ctx
+    }
+    step :rearrange
+
+    def write_to_ctx(ctx, item:, messages:, index:, **)
+      ctx[:messages] = messages.merge(index =&gt; item.full_name)
+    end
+    include EachTest::CoverMethods
+    include EachTest::ComposersForEach
+  end
+end
+</code></pre>
+
+<ol>
+  <li>When starting the iteration, the ctx variable <code class="text-purple">:messages</code> will be initialized to an empty hash (unless you provide it in the outside ctx).</li>
+  <li>The <code class="text-purple">#write_to_ctx</code> step within <code class="text-purple">Each()</code> sees that <code class="text-purple">:messages</code> variable and can override it, adding its non-sense message to the hash.</li>
+  <li>Since you configured <code class="text-purple">Out() =&gt; [:messages]</code>, the following iteration will see that very <code class="text-purple">:messages</code> variable from the last iteration.</li>
+</ol>
+
+<p class="mt-6">This allows to collect outgoing variables from the iterations, even in case of failures.</p>
+
+<div class="rounded flex p-4 gap-4 mt-5 bg-bg-purple-1/50">
+          <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
+<p>
+  
+Note how the `Inject()` and `Out()` calls are within the parenthesis of `Each()`.
+
+</p>
+</div>
+
+<h3 id="macro-each-failure" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Failure</h3>
+
+<p class="mt-6">If not configured, a failing iterated step leads the entire iteration to be stopped. The <code class="text-purple">Each()</code> activity will terminate on its <code class="text-purple">failure</code> terminus.</p>
+
+<p class="mt-6">You can still access <code class="text-purple">ctx[:collected_from_each]</code> for each iterated block. Note that you can even see which iteration failed in the trace!</p>
+
+<p class="mt-6"><img src="/assets/each-failure-trace-8bffd33d6ef1cd14eb8d18d2ed59c8ba469d817ff1549ac76257ee0205c87062.png" /></p>
+
+<p class="mt-6">In combination with TRB’s debugger, this gives you a powerful tool for finding bugs in your code or understanding the flow, without having to jump around through iterations using <code class="text-purple">pry</code> or other tools.</p>
+
+<h3 id="macro-each-compliance" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Compliance</h3>
+
+<h4 id="macro-each-compliance-debugger" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Compliance / Debugger</h4>
+
+<p class="mt-6">You can use tracing with <code class="text-purple">Each()</code>.</p>
+
+<pre class="mt-4"><code class="rounded">Trailblazer::Developer.wtf?(Song::Activity::Cover, [{
+  params: {id: 1},
+  # ...
+}])
+</code></pre>
+
+<p class="mt-6">Note that a virtual step <code class="text-purple">invoke_block_activity</code> is displayed to group the iterations, suffixed with the number of the iteration.</p>
+
+<p class="mt-6"><img src="/assets/each-trace-ea938758bbe294226d67b7ce635d2f6b2a572f99815306cf2ef14a78d19fbbb2.png" /></p>
+
+<p class="mt-6">TODO: show how runtime data can be accessed for each iterated block.</p>
+
+<h4 id="macro-each-compliance-introspect" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Compliance / Introspect</h4>
+
+<p class="mt-6">You can use any <code class="text-purple">Introspect</code> mechanics on the nested activity using <code class="text-purple">Each()</code>.</p>
+
+<pre class="mt-4"><code class="rounded">node, _ = Trailblazer::Developer::Introspect.find_path(
+  Song::Activity::Cover,
+  ["Each/composers_for_each", "Each.iterate.block", "invoke_block_activity", :notify_composers])
+#=&gt; #&lt;Node ...&gt;
+</code></pre>
+
+<h4 id="macro-each-compliance-patch" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Compliance / Patch</h4>
+
+<p class="mt-6">You may patch the iterated activity.</p>
+
+<pre class="mt-4"><code class="rounded">cover_patched = Trailblazer::Activity::DSL::Linear::Patch.(
+  Song::Activity::Cover,
+  ["Each/composers_for_each", "Each.iterate.block"],
+  -&gt; { step :log_email }
+)
+</code></pre>
+
+<p class="mt-6">Here, the <code class="text-purple">Each.iterate.block</code> task represents the nested iterated activity.</p>
+
+<h2 id="macro-model" class="text-2xl font-bold text-neutral-500 lg:text-3xl mt-6">Model</h2>
+
+<p class="mt-6">An operation can automatically find or create a model for you using the <code class="text-purple">Model()</code> macro. The produced model is written to <code class="text-purple">ctx[:model]</code>.</p>
+
+<p class="mt-6">You could easily write this code yourself, nevertheless, our macro comes with a bunch of helpful features.</p>
+
+<h3 id="macro-model-model-find" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Model::Find</h3>
+
+<p class="mt-6"><a href="https://github.com/trailblazer/trailblazer-macro" class="pink"><i class="fa fa-gem" aria-hidden="true"></i> trailblazer-macro 2.1.16</a></p>
+
+<p class="mt-6">In operations that target existing models, the <code class="text-purple">Model::Find()</code> macro is the right tool to use.</p>
+
+<h4 id="macro-model-model-find-find_by" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model::Find / Find_by</h4>
+
+<p class="mt-6">To find a model by its ID using <code class="text-purple">Song.find_by(id: id)</code> use the macro like so.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Update &lt; Trailblazer::Activity::Railway
+    step Model::Find(Song, find_by: :id)
+    step :validate
+    step :save
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">The <code class="text-purple">id</code> value is extracted from <code class="text-purple">id = params[:id]</code>.</p>
+
+<p class="mt-6">Note that the finder method doesn’t have to be <code class="text-purple">find_by</code> - you may pass any method name to <code class="text-purple">Find()</code>, for example <code class="text-purple">:where</code>.</p>
+
+<p class="mt-6">The <code class="text-purple">id:</code> key is also up to you. As an example, you can dictate a query with a different key using the following code.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Update &lt; Trailblazer::Activity::Railway
+    step Model::Find(Song, find_by: :short_id) # Song.find_by(short_id: params[:short_id])
+    step :validate
+    step :save
+    # ...
+  end
+end
+</code></pre>
+
+<h4 id="macro-model-model-find-params_key" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model::Find / params_key</h4>
+
+<p class="mt-6">Sometimes the ID key and the <code class="text-purple">params</code> key differ. Use the <code class="text-purple">:params_key</code> option if you want to look into <code class="text-purple">params</code> using a different key.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Update &lt; Trailblazer::Activity::Railway
+    step Model::Find(Song, find_by: :id, params_key: :slug) # Song.find_by(id: params[:slug])
+    step :validate
+    step :save
+    # ...
+  end
+end
+</code></pre>
+
+<h4 id="macro-model-model-find-id_from" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model::Find / id_from</h4>
+
+<p class="mt-6">If the ID extraction is more complicated, maybe you need to look into a deeply nested hash in <code class="text-purple">params</code>, use the block style to implement your own extraction.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Update &lt; Trailblazer::Activity::Railway
+    step Model::Find(Song, find_by: :id) { |ctx, params:, **|
+      params[:song] &amp;&amp; params[:song][:id]
+    }
+    step :validate
+    step :save
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">The block receives the same <code class="text-purple">ctx, **kws</code> style arguments that an ordinary step would.</p>
+
+<h4 id="macro-model-model-find-not-found" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model::Find / Not Found</h4>
+
+<p class="mt-6">You can wire the <code class="text-purple">Model::Find()</code> step to a dedicated terminus <code class="text-purple">:not_found</code> in case of a missing model (instead of connecting it to the default failure track). The new terminus represents an explicit outcome and could, for instance, be used in an <a href="/2.1/docs/endpoint.html">endpoint</a> to render a <strong>404 response</strong> without having to check if <code class="text-purple">ctx[:model]</code> is present or not.</p>
+
+<p class="mt-6"><img src="/assets/model-not-found-df43034c45d6953bca466a01d533ec2b24197bcff7aa02f2cae60a8c02357089.png" /></p>
+
+<p class="mt-6">To add the explicit <code class="text-purple">End.not_found</code>terminus, pass the <code class="text-purple">:not_found_terminus</code> option to the macro.</p>
+
+<pre class="mt-4"><code class="rounded">class Song
+  module Activity
+    class Update &lt; Trailblazer::Activity::Railway
+      step Model::Find(Song, find_by: :id, not_found_terminus: true)
+      step :validate
+      step :save
+      include T.def_steps(:validate, :save)
+    end
+  end
+end
+</code></pre>
+
+<p class="mt-6">When running the <code class="text-purple">Update</code> activity with an invalid ID, it terminates on <code class="text-purple">End.not_found</code>.</p>
+
+<pre class="mt-4"><code class="rounded">signal, (ctx, _) = Trailblazer::Activity::TaskWrap.invoke(Song::Activity::Update, [{params: {id: nil}},{}])
+puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:not_found&gt;
+</code></pre>
+
+<h4 id="macro-model-model-find-find" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model::Find / find</h4>
+
+<p class="mt-6">In case your model needs to be retrieved using a positional ID argument, use the <code class="text-purple">:find</code> style without a hash.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Update &lt; Trailblazer::Activity::Railway
+    step Model::Find(Song, :find) # Song.find(id)
+    step :validate
+    step :save
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">This will result in an invocation like <code class="text-purple">Song.find(id)</code>. As always <code class="text-purple">:find</code> can be anything, for example, <code class="text-purple">:[]</code> in case you’re using Sequel.</p>
+
+<h4 id="macro-model-model-find-debugging" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model::Find / Debugging</h4>
+
+<p class="mt-6">With tracing turned on, you can see that <code class="text-purple">Model::Find()</code> actually creates a tiny activity with two steps.</p>
+
+<p class="mt-6"><img src="/assets/model_find_trace-bc4680889f4e540df99279d9766160dafe7b90e19fa09b254e5abdf125e43d8c.png" /></p>
+
+<ol>
+  <li>The first extracts the ID from params. If this step fails, your configured ID couldn’t be found</li>
+  <li>The second step runs the finder.</li>
+</ol>
+
+<h3 id="macro-model-model-build" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Model::Build</h3>
+
+<p class="mt-6">For <code class="text-purple">Create</code> operations without an existing model you can use <code class="text-purple">Model::Build</code> to instantiate a new model.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Create &lt; Trailblazer::Activity::Railway
+    step Model::Build(Song, :new)
+    step :validate
+    step :save
+    # ...
+  end
+end
+</code></pre>
+
+<p class="mt-6">Here, <code class="text-purple">:new</code> might be replace with any method you want to be called on <code class="text-purple">Song</code>, e.g. <code class="text-purple">:build</code>.</p>
+
+<h3 id="macro-model-dependency-injection" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Dependency Injection</h3>
+
+<h3 id="macro-model-model" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Model</h3>
+
+<div class="rounded flex p-4 gap-4 mt-5 bg-bg-purple-1/50">
+          <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
+<p>
+  
+The `Model()` macro will be deprecated and removed in Trailblazer 2.2. Please switch over to the more powerful [`Model::Find` and friends](/2.1/docs/macro.html#macro-model-model-find).
+
+</p>
+</div>
+
+<p class="mt-6">An operation can automatically find or create a model for you using the <code class="text-purple">Model()</code> macro.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Create &lt; Trailblazer::Activity::Railway
+    step Model(Song, :new)
+    step :validate
+    step :save
+    include T.def_steps(:validate, :save)
+  end
+end
+</code></pre>
+
+<p class="mt-6">After this step, there is a fresh model instance under <code class="text-purple">ctx[:model]</code> that can be used in all following steps and the returned result object.</p>
+
+<pre class="mt-4"><code class="rounded">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Create, params: {})
+puts ctx[:model] #=&gt; #&lt;struct Song id=nil, title=nil&gt;
+</code></pre>
+
+<p class="mt-6">Internally, the <code class="text-purple">Model()</code> macro will simply invoke <code class="text-purple">Song.new</code> to populate <code class="text-purple">ctx[:model]</code>.</p>
+
+<h4 id="macro-model-model-find_by" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model / Find_by</h4>
+
+<p class="mt-6">You can also find models using <code class="text-purple">:find_by</code>. This is helpful for <code class="text-purple">Update</code> or <code class="text-purple">Delete</code> operations.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Update &lt; Trailblazer::Activity::Railway
+    step Model(Song, :find_by)
+    step :validate
+    step :save
+    include T.def_steps(:validate, :save)
+  end
+end
+</code></pre>
+
+<p class="mt-6">The <code class="text-purple">Model</code> macro will invoke the following code for you.</p>
+
+<pre class="mt-4"><code class="rounded">
+ctx[:model] = Song.find_by(id: params[:id])</code></pre>
+
+<p class="mt-6">This will assign <code class="text-purple">ctx[:model]</code> for you by invoking <code class="text-purple">find_by</code>.</p>
+
+<pre class="mt-4"><code class="rounded">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Update, params: {id: 1}, seq: [])
+ctx[:model] #=&gt; #&lt;Song id=1, ...&gt;
+puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:success&gt;
+</code></pre>
+
+<p class="mt-6">If <code class="text-purple">Song.find_by</code> returns <code class="text-purple">nil</code>, this will deviate to the failure track, skipping the rest of the operation.</p>
+
+<pre class="mt-4"><code class="rounded">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Update, params: {})
+ctx[:model] #=&gt; nil
+puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:failure&gt;
+</code></pre>
+
+<h4 id="macro-model-model-key" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model / Key</h4>
+
+<p class="mt-6">It is also possible to <code class="text-purple">find_by</code> using an attribute other than <code class="text-purple">:id</code>.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Update &lt; Trailblazer::Activity::Railway
+    step Model(Song, :find_by, :title) # third positional argument.
+    step :validate
+    step :save
+    include T.def_steps(:validate, :save)
+  end
+end
+</code></pre>
+
+<h4 id="macro-model-model-find" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model / find</h4>
+
+<p class="mt-6">Note that, instead of <code class="text-purple">find_by</code>, you may also use <code class="text-purple">:find</code>. This is not recommended, though, since it raises an exception, which is not the preferred way of flow control in Trailblazer.</p>
+
+<h4 id="macro-model-model-arbitrary-finder" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model / Arbitrary Finder</h4>
+
+<p class="mt-6">It’s possible to specify any finder method, which is helpful with ROMs such as Sequel.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Update &lt; Trailblazer::Activity::Railway
+    step Model(Song, :[])
+    step :validate
+    step :save
+    include T.def_steps(:validate, :save)
+  end
+end
+</code></pre>
+
+<p class="mt-6">The provided method will be invoked and Trailblazer passes to it the value of<code class="text-purple">params[:id]</code>.</p>
+
+<pre class="mt-4"><code class="rounded">
+Song[params[:id]]</code></pre>
+
+<p class="mt-6">Given your database gem provides that finder, it will result in a query.</p>
+
+<pre class="mt-4"><code class="rounded">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Update, params: {id: 1}, seq: [])
+ctx[:model] #=&gt; #&lt;struct Song id=1, title="Roxanne"&gt;
+</code></pre>
+
+<h4 id="macro-model-model-not-found" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model / Not Found</h4>
+
+<p class="mt-6">You can wire the <code class="text-purple">Model()</code> step to a dedicated terminus <code class="text-purple">:not_found</code> in case of a missing model, instead of connecting it to the default failure track. The new terminus represents an explicit outcome and could, for instance, be used in an <a href="/2.1/docs/endpoint.html">endpoint</a> to render a <strong>404 response</strong> without having to check if <code class="text-purple">ctx[:model]</code> is present or not.</p>
+
+<p class="mt-6"><img src="/assets/model-not-found-df43034c45d6953bca466a01d533ec2b24197bcff7aa02f2cae60a8c02357089.png" /></p>
+
+<p class="mt-6">To add the explicit <code class="text-purple">End.not_found</code>terminus, pass the <code class="text-purple">:not_found_terminus</code> option to the macro.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Update &lt; Trailblazer::Activity::Railway
+    step Model(Song, :find_by, not_found_terminus: true)
+    step :validate
+    step :save
+    include T.def_steps(:validate, :save)
+  end
+end
+</code></pre>
+
+<p class="mt-6">When running the <code class="text-purple">Update</code> activity with an invalid ID, it terminates on <code class="text-purple">End.not_found</code>.</p>
+
+<pre class="mt-4"><code class="rounded">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Update, params: {id: nil})
+puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:not_found&gt;
+</code></pre>
+
+<h4 id="macro-model-model-dependency-injection" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model / Dependency Injection</h4>
+
+<p class="mt-6">The following <code class="text-purple">Model()</code> options can be injected using variables when <code class="text-purple">call</code>ing the operation.</p>
+
+<ul>
+  <li><code class="text-purple">:"model.class"</code> which represents the first argument for <code class="text-purple">Model()</code>.</li>
+  <li><code class="text-purple">:"model.action"</code> representing the second argument.</li>
+  <li><code class="text-purple">:"model.find_by_key"</code> which represents the third argument.</li>
+</ul>
+
+<p class="mt-6">As per your design, you may inject one or more of those variables as follows.</p>
+
+<pre class="mt-4"><code class="rounded">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Create,
+  params:               {title: "Olympia"}, # some random variable.
+  "model.class":        Hit,
+  "model.action":       :find_by,
+  "model.find_by_key":  :title, seq: []
+)
+</code></pre>
+
+<p class="mt-6">You can even leave <code class="text-purple">Model()</code> entirely unconfigured.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Create &lt; Trailblazer::Activity::Railway
+    step Model()
+    step :validate
+    step :save
+    include T.def_steps(:validate, :save)
+  end
+</code></pre>
+
+<p class="mt-6">This implies you inject all required variables at run-time.</p>
+
+<h4 id="macro-model-model-model-class" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Model / Model class</h4>
+
+<p class="mt-6">Usually, the specific model class for <code class="text-purple">Model()</code> is set directly in the macro.</p>
+
+<pre class="mt-4"><code class="rounded">module Song::Activity
+  class Create &lt; Trailblazer::Activity::Railway
+    step Model(Song, :new)
+    step :validate
+    step :save
+    include T.def_steps(:validate, :save)
+  end
+end
+</code></pre>
+
+<p class="mt-6">Nevertheless, it’s possible to override it using the <code class="text-purple">:"model.class"</code> variable when invoking the operation/activity.</p>
+
+<pre class="mt-4"><code class="rounded">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Create, params: {}, :"model.class" =&gt; Hit)
+</code></pre>
+
+<p class="mt-6">Note that you <a href="">don’t have  to configure</a> any model class at all when injecting it.</p>
+
+
+<h2 id="macro-rescue" class="text-2xl font-bold text-neutral-500 lg:text-3xl mt-6">Rescue</h2>
+
+<p class="mt-6">While you could be implementing your own <code class="text-purple">begin/rescue/end</code> mechanics using <a href="#wrap"><code class="text-purple">Wrap</code></a>, Trailblazer offers you the <code class="text-purple">Rescue()</code> macro to catch and handle exceptions that might occur while running any series of steps.</p>
+
+<pre class="mt-4"><code class="rounded">class Song::Activity::Create &lt; Trailblazer::Activity::Railway
+  step :create_model
+  step Rescue() {
+    step :upload
+    step :rehash
+  }
+  step :notify
+  fail :log_error
+  # ...
+end
+</code></pre>
+
+<p class="mt-6">Any exception raised during a step in the <code class="text-purple">Rescue</code> block will cause the execution to stop, and continues after the block on the left (or <code class="text-purple">failure</code>) track.</p>
+
+<h3 id="macro-rescue-options" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Options</h3>
+
+<p class="mt-6">You can specify what particular exceptions to catch and an optional handler that is called when an exception is encountered.</p>
+
+<pre class="mt-4"><code class="rounded">class Song::Activity::Create &lt; Trailblazer::Activity::Railway
+  step :create_model
+  step Rescue(RuntimeError, handler: MyHandler) {
+    step :upload
+    step :rehash
+  }
+  step :notify
+  fail :log_error
+  # ...
+end
+</code></pre>
+
+<p class="mt-6">The handler’s <code class="text-purple">#call</code> method receives the exception and the circuit-interface arguments.</p>
+
+<pre class="mt-4"><code class="rounded">class MyHandler
+  def self.call(exception, (ctx), *)
+    ctx[:exception_class] = exception.class
+  end
+end
+</code></pre>
+
+<p class="mt-6">Alternatively, you can use a  <code class="text-purple">Callable</code> object for <code class="text-purple">:handler</code>.</p>
+
+<h3 id="macro-rescue-full-example" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Full example</h3>
+
+<p class="mt-6">The  <code class="text-purple">Nested</code>, <code class="text-purple">Wrap</code> and <code class="text-purple">Rescue</code> macros can also be nested, allowing an easily extendable business workflow with error handling along the way.</p>
+
+<p class="mt-6">TODO: add example</p>
+
+<h2 id="macro-policy" class="text-2xl font-bold text-neutral-500 lg:text-3xl mt-6">Policy</h2>
+
+<p class="mt-6">The <code class="text-purple">Policy</code> macros <a href="#pundit"><code class="text-purple">Policy::Pundit</code></a>, and <a href="#guard"><code class="text-purple">Policy::Guard</code></a> help to implement permission decider steps.</p>
+
+<h3 id="macro-policy-pundit" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Pundit</h3>
+
+<p class="mt-6">The <code class="text-purple">Policy::Pundit</code> module allows using <a href="https://github.com/elabs/pundit">Pundit</a>-compatible policy classes in an operation.</p>
+
+<p class="mt-6">A Pundit policy has various rule methods and a special constructor that receives the current user and the current model.</p>
+
+<pre class="mt-4"><code class="rounded">class MyPolicy
+  def initialize(user, model)
+    @user, @model = user, model
+  end
+
+  def create?
+    @user == Module &amp;&amp; @model.id.nil?
+  end
+
+  def new?
+    @user == Class
+  end
+end
+</code></pre>
+
+<p class="mt-6">In pundit policies, it is a convention to have access to those objects at runtime and build rules on top of those.</p>
+
+<p class="mt-6">You can plug this policy into your pipe at any point. However, this must be inserted after the <code class="text-purple">"model"</code> skill is available.</p>
+
+<pre class="mt-4"><code class="rounded">class Create &lt; Trailblazer::Operation
+  step Model( Song, :new )
+  step Policy::Pundit( MyPolicy, :create? )
+  # ...
+end
+</code></pre>
+
+<p class="mt-6">Note that you don’t have to create the model via the <code class="text-purple">Model</code> macro - you can use any logic you want. The <code class="text-purple">Pundit</code> macro will grab the model from <code class="text-purple">["model"]</code>, though.</p>
+
+<p class="mt-6">This policy will only pass when the operation is invoked as follows.</p>
+
+<pre class="mt-4"><code class="rounded">
+Create.(current_user: User.find(1))</code></pre>
+
+<p class="mt-6">Any other call will cause a policy breach and stop the pipe from executing after the <code class="text-purple">Policy::Pundit</code> step.</p>
+
+<h4 id="macro-policy-pundit-api" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Pundit / API</h4>
+
+<p class="mt-6">Add your polices using the <code class="text-purple">Policy::Pundit</code> macro. It accepts the policy class name, and the rule method to call.</p>
+
+<pre class="mt-4"><code class="rounded">class Create &lt; Trailblazer::Operation
+  step Model( Song, :new )
+  step Policy::Pundit( MyPolicy, :create? )
+  # ...
+end
+</code></pre>
+
+<p class="mt-6">The step will create the policy instance automatically for you and passes the <code class="text-purple">"model"</code> and the <code class="text-purple">"current_user"</code> skill into the policies constructor. Just make sure those dependencies are available before the step is executed.</p>
+
+<p class="mt-6">If the policy returns <code class="text-purple">falsey</code>, it <a href="api.html#flow-control-step">deviates to the left track</a>.</p>
+
+<p class="mt-6">After running the <code class="text-purple">Pundit</code> step, its result is readable from the <code class="text-purple">Result</code> object.</p>
+
+<pre class="mt-4"><code class="rounded">result = Create.(params: {}, current_user: Module)
+result[:"result.policy.default"].success? #=&gt; true
+result[:"result.policy.default"][:policy] #=&gt; #&lt;MyPolicy ...&gt;
+</code></pre>
+
+<p class="mt-6">Note that the actual policy instance is available via <code class="text-purple">["result.policy.#{name}"]["policy"]</code> to be reinvoked with other rules (e.g. in the view layer).</p>
+
+<h4 id="macro-policy-pundit-name" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Pundit / Name</h4>
+
+<p class="mt-6">You can add any number of Pundit policies to your pipe. Make sure to use <code class="text-purple">name:</code> to name them, though.</p>
+
+<pre class="mt-4"><code class="rounded">class Create &lt; Trailblazer::Operation
+  step Model( Song, :new )
+  step Policy::Pundit( MyPolicy, :create?, name: "after_model" )
+  # ...
+end
+</code></pre>
+
+<p class="mt-6">The result will be stored in <code class="text-purple">"result.policy.#{name}"</code></p>
+
+<pre class="mt-4"><code class="rounded">result = Create.(params: {}, current_user: Module)
+result[:"result.policy.after_model"].success? #=&gt; true
+</code></pre>
+
+<h4 id="macro-policy-pundit-dependency-injection" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Pundit / Dependency Injection</h4>
+
+<p class="mt-6">Override a configured policy using dependency injection.</p>
+
+<pre class="mt-4"><code class="rounded">Create.(params: {},
+  current_user:            Module,
+  :"policy.default.eval" =&gt; Trailblazer::Operation::Policy::Pundit.build(AnotherPolicy, :create?)
+)
+</code></pre>
+
+<p class="mt-6">You can inject it using <code class="text-purple">"policy.#{name}.eval"</code>. It can be any object responding to <code class="text-purple">call</code>.</p>
+
+<h3 id="macro-policy-guard" class="font-bold text-neutral-500 lg:text-2xl mt-6 text-xl">Guard</h3>
+
+<p class="mt-6">A guard is a step that helps you evaluating a condition and writing the result. If the condition was evaluated as <code class="text-purple">falsey</code>, the pipe won’t be further processed and a policy breach is reported in <code class="text-purple">Result["result.policy.default"]</code>.</p>
+
+<pre class="mt-4"><code class="rounded">class Create &lt; Trailblazer::Operation
+  step Policy::Guard(-&gt;(options, pass:, **) { pass })
+  step :process
+
+  def process(options, **)
+    options[:x] = true
+  end
+end
+</code></pre>
+
+<p class="mt-6">The only way to make the above operation invoke the second step <code class="text-purple">:process</code> is as follows.</p>
+
+<pre class="mt-4"><code class="rounded">
+result = Create.({ pass: true })
+result["x"] #=&gt; true</code></pre>
+
+<p class="mt-6">Any other input will result in an abortion of the pipe after the guard.</p>
+
+<pre class="mt-4"><code class="rounded">
+result = Create.()
+result["x"] #=&gt; nil
+result["result.policy.default"].success? #=&gt; false</code></pre>
+
+<p class="mt-6">Learn more about <a href="skill.md">→ dependency injection</a> to pass params and current user into the operation. TODO: fix link</p>
+
+<h4 id="macro-policy-guard-api" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Guard / API</h4>
+
+<p class="mt-6">The <code class="text-purple">Policy::Guard</code> macro helps you inserting your guard logic. If not defined, it will be evaluated <a href="#guard-position">where you insert</a> it.</p>
+
+<pre class="mt-4"><code class="rounded">step :process
+
+def process(options, **)
+  options[:x] = true
+end
+</code></pre>
+
+<p class="mt-6">The <code class="text-purple">options</code> object is passed into the guard and allows you to read and inspect data like <code class="text-purple">params</code> or <code class="text-purple">current_user</code>. Please use kw args.</p>
+
+<h4 id="macro-policy-guard-callable" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Guard / Callable</h4>
+
+<p class="mt-6">As always, the guard can also be a <code class="text-purple">Callable</code>-marked object.</p>
+
+<pre class="mt-4"><code class="rounded">class MyGuard
+  def call(options, pass:, **)
+    pass
+  end
+end
+</code></pre>
+
+<p class="mt-6">Insert the object instance via the <code class="text-purple">Policy::Guard</code> macro.</p>
+
+<pre class="mt-4"><code class="rounded">class Create &lt; Trailblazer::Operation
+  step Policy::Guard( MyGuard.new )
+  step :process
+
+  # ...
+end
+</code></pre>
+
+<h4 id="macro-policy-guard-instance-method" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Guard / Instance Method</h4>
+
+<p class="mt-6">As always, you may also use an instance method to implement a guard.</p>
+
+<pre class="mt-4"><code class="rounded">class Create &lt; Trailblazer::Operation
+  step Policy::Guard( :pass? )
+
+  def pass?(options, pass:, **)
+    pass
+  end
+  step :process
+  # ...
+end
+</code></pre>
+
+<h4 id="macro-policy-guard-name" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Guard / Name</h4>
+
+<p class="mt-6">The guard name defaults to <code class="text-purple">default</code> and can be set via <code class="text-purple">name:</code>. This allows having multiple guards.</p>
+
+<pre class="mt-4"><code class="rounded">class Create &lt; Trailblazer::Operation
+  step Policy::Guard( -&gt;(options, current_user:, **) { current_user }, name: :user )
+  # ...
+end
+</code></pre>
+
+<p class="mt-6">The result will sit in <code class="text-purple">result.policy.#{name}</code>.</p>
+
+<pre class="mt-4"><code class="rounded">result = Create.(:current_user =&gt; true)
+result[:"result.policy.user"].success? #=&gt; true
+</code></pre>
+
+<h4 id="macro-policy-guard-dependency-injection" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Guard / Dependency Injection</h4>
+
+<p class="mt-6">Instead of using the configured guard, you can inject any callable object that returns a <code class="text-purple">Result</code> object. Do so by overriding the <code class="text-purple">policy.#{name}.eval</code> path when calling the operation.</p>
+
+<pre class="mt-4"><code class="rounded">Create.(
+  :current_user           =&gt; Module,
+  :"policy.default.eval"  =&gt; Trailblazer::Operation::Policy::Guard.build(-&gt;(options, **) { false })
+)
+</code></pre>
+
+<p class="mt-6">An easy way to let Trailblazer build a compatible object for you is using <code class="text-purple">Guard.build</code>.</p>
+
+<p class="mt-6">This is helpful to override a certain policy for testing, or to invoke it with special rights, e.g. for an admin.</p>
+
+<h4 id="macro-policy-guard-position" class="font-bold text-neutral-500 lg:text-1xl mt-4 text-xl">Guard / Position</h4>
+
+<p class="mt-6">You may specify a position.</p>
+
+<pre class="mt-4"><code class="rounded">class Create &lt; Trailblazer::Operation
+  step :model!
+  step Policy::Guard( :authorize! ),
+    before: :model!
+end
+</code></pre>
+
+<p class="mt-6">Resulting in the guard inserted before <code class="text-purple">model!</code>, even though it was added at a later point.</p>
+
+<pre class="mt-4"><code class="rounded">  Trailblazer::Developer.railway(Create, style: :rows) #=&gt;
+   # 0 ========================&gt;operation.new
+   # 1 ==================&gt;policy.default.eval
+   # 2 ===============================&gt;model!
+</code></pre>
+
+<p class="mt-6">This is helpful if you maintain modules for operations with generic steps.</p>
+
+        </div>
+        <div class="relative" id="right-toc">
+          <div class="hidden bg-white pt-5 px-5 w-56 shrink-0 text-bg-blue fixed overflow-y-scroll h-[40rem]" id="right-toc-macro-overview">
+  <h4 class="font-base font-bold leading-10 pl-2">
+    Overview
+  </h4>
+  <!-- bg-bg-orange to "highlight" the link -->
+  
+    <a class="documentation-right-nav-link" href="#macro-overview-general-notes">General notes</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-overview-general-notes-variable-mapping">Variable mapping</a>
+    
+  
+</div>
+
+
+<div class="hidden bg-white pt-5 px-5 w-56 shrink-0 text-bg-blue fixed overflow-y-scroll h-[40rem]" id="right-toc-macro-nested">
+  <h4 class="font-base font-bold leading-10 pl-2">
+    Nested
+  </h4>
+  <!-- bg-bg-orange to "highlight" the link -->
+  
+    <a class="documentation-right-nav-link" href="#macro-nested-dynamic">Dynamic</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-nested-dynamic-decider">Decider</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-nested-dynamic-nested-activity">Nested activity</a>
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-nested-auto_wire">Auto_wire</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-nested-auto_wire-output-wiring">Output Wiring</a>
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-nested-compliance">Compliance</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-nested-compliance-debugger">Debugger</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-nested-compliance-introspect">Introspect</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-nested-compliance-patch">Patch</a>
+    
+  
+</div>
+
+
+<div class="hidden bg-white pt-5 px-5 w-56 shrink-0 text-bg-blue fixed overflow-y-scroll h-[40rem]" id="right-toc-macro-wrap">
+  <h4 class="font-base font-bold leading-10 pl-2">
+    Wrap
+  </h4>
+  <!-- bg-bg-orange to "highlight" the link -->
+  
+    <a class="documentation-right-nav-link" href="#macro-wrap-wrap-handler">Wrap handler</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-wrap-wrap-handler-routing">Routing</a>
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-wrap-transaction">Transaction</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-wrap-exception-handling">Exception handling</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-wrap-compliance">Compliance</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-wrap-compliance-debugger">Debugger</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-wrap-compliance-introspect">Introspect</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-wrap-compliance-patch">Patch</a>
+    
+  
+</div>
+
+
+<div class="hidden bg-white pt-5 px-5 w-56 shrink-0 text-bg-blue fixed overflow-y-scroll h-[40rem]" id="right-toc-macro-each">
+  <h4 class="font-base font-bold leading-10 pl-2">
+    Each
+  </h4>
+  <!-- bg-bg-orange to "highlight" the link -->
+  
+    <a class="documentation-right-nav-link" href="#macro-each-dataset_from">dataset_from</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-each-iterated-block">Iterated Block</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-each-iterated-block-item-key">item key</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-each-iterated-block-operation">operation</a>
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-each-collect-option">Collect option</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-each-variable-mapping">Variable mapping</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-each-variable-mapping-filtering">Filtering</a>
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-each-failure">Failure</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-each-compliance">Compliance</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-each-compliance-debugger">Debugger</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-each-compliance-introspect">Introspect</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-each-compliance-patch">Patch</a>
+    
+  
+</div>
+
+
+<div class="hidden bg-white pt-5 px-5 w-56 shrink-0 text-bg-blue fixed overflow-y-scroll h-[40rem]" id="right-toc-macro-model">
+  <h4 class="font-base font-bold leading-10 pl-2">
+    Model
+  </h4>
+  <!-- bg-bg-orange to "highlight" the link -->
+  
+    <a class="documentation-right-nav-link" href="#macro-model-model-find">Model::Find</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-find-find_by">Find_by</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-find-params_key">params_key</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-find-id_from">id_from</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-find-not-found">Not Found</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-find-find">find</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-find-debugging">Debugging</a>
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-model-model-build">Model::Build</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-model-dependency-injection">Dependency Injection</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-model-model">Model</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-find_by">Find_by</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-key">Key</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-find">find</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-arbitrary-finder">Arbitrary Finder</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-not-found">Not Found</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-dependency-injection">Dependency Injection</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-model-model-model-class">Model class</a>
+    
+  
+</div>
+
+
+<div class="hidden bg-white pt-5 px-5 w-56 shrink-0 text-bg-blue fixed overflow-y-scroll h-[40rem]" id="right-toc-macro-rescue">
+  <h4 class="font-base font-bold leading-10 pl-2">
+    Rescue
+  </h4>
+  <!-- bg-bg-orange to "highlight" the link -->
+  
+    <a class="documentation-right-nav-link" href="#macro-rescue-options">Options</a>
+
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-rescue-full-example">Full example</a>
+
+    
+  
+</div>
+
+
+<div class="hidden bg-white pt-5 px-5 w-56 shrink-0 text-bg-blue fixed overflow-y-scroll h-[40rem]" id="right-toc-macro-policy">
+  <h4 class="font-base font-bold leading-10 pl-2">
+    Policy
+  </h4>
+  <!-- bg-bg-orange to "highlight" the link -->
+  
+    <a class="documentation-right-nav-link" href="#macro-policy-pundit">Pundit</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-policy-pundit-api">API</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-policy-pundit-name">Name</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-policy-pundit-dependency-injection">Dependency Injection</a>
+    
+  
+    <a class="documentation-right-nav-link" href="#macro-policy-guard">Guard</a>
+
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-policy-guard-api">API</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-policy-guard-callable">Callable</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-policy-guard-instance-method">Instance Method</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-policy-guard-name">Name</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-policy-guard-dependency-injection">Dependency Injection</a>
+    
+      <a class="documentation-right-nav-link text-grey" href="#macro-policy-guard-position">Position</a>
+    
+  
+</div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="px-10 py-22 bg-bg-purple-3">
+  <h2 class="section-header font-bold">
+    Is there anything unanswered?
+    <br/>
+    Get in touch with
+    <span class="font-black">
+      TRAILBLAZER
+    </span>
+    <a href="" class="base-button bg-purple text-white mt-15 mx-auto">Chat with us</a>
+  </h2>
+</section>
+
+<footer class="lg:text-left bg-bg-blue py-16 text-white text-center text-base">
+  <div class="lg:flex justify-between w-11/12 max-w-[80rem] mx-auto">
+    <div class="lg:flex lg:flex-col lg:justify-between">
+      <a href="/2.1/" class="block shrink-0 w-fit mx-auto lg:mx-0" >
+        <img class="w-48" src="/assets/logo_white-77ad0d4ab1d29ebcc47fa603cb7437f4059138ab621c41cba097ed6d4f1c98e2.svg" />
+      </a>
+      <div class="lg:block hidden">
+        © 2023 Trailblazer GmbH
+      </div>
+    </div>
+    <div class="lg:flex lg:gap-20 xl:gap-40">
+      <div class="lg:mt-0 flex flex-col gap-5 mt-15">
+        <a class="font-bold text-xl hover:scale-105" href="#">Documentation</a>
+        <a class="hover:scale-105" href="#">About</a>
+        <a class="hover:scale-105" href="#">Community</a>
+        <a class="hover:scale-105" href="#">Blog</a>
+        <a class="hover:scale-105" href="#">Legal</a>
+      </div>
+      <div class="lg:mt-0 flex flex-col gap-5 mt-15">
+        <a class="font-bold text-xl hover:scale-105" href="#">Products</a>
+        <a class="hover:scale-105" href="#">Trailblazer</a>
+        <a class="hover:scale-105" href="#">Trailblazer Pro</a>
+        <a class="hover:scale-105" href="#">Support</a>
+      </div>
+      <div class="lg:mt-0 flex flex-col gap-5 mt-15">
+        <a class="font-bold text-xl hover:scale-105" href="#">Learn</a>
+        <a class="hover:scale-105" href="#">What is Trailblazer?</a>
+        <a class="hover:scale-105" href="#">Trailblazer PRO</a>
+        <a class="hover:scale-105" href="#">Tips and Tutorials</a>
+        <a class="hover:scale-105" href="#">Chat</a>
+      </div>
+    </div>
+  </div>
+  <div class="lg:hidden mt-15">
+    © 2023 Trailblazer GmbH
+  </div>
+</footer>
+
+
+  </body>
+</html>
