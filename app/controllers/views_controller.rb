@@ -500,10 +500,10 @@ class ViewsController < ApplicationController
 
   }
 
-  def docs
+  def docs # TODO: remove me, this is only for development.
     pages = Torture::Cms::DSL.(Pages)
 
-    pages = Torture::Cms::Site.new.render_pages(pages,
+    pages, _ = Torture::Cms::Site.new.render_pages(pages,
       controller: self, # TODO: pass this to all cells.
     )
 
@@ -529,7 +529,7 @@ class ViewsController < ApplicationController
 
     pages = Torture::Cms::DSL.(pages)
 
-    pages = Torture::Cms::Site.new.render_pages(pages,
+    pages, _ = Torture::Cms::Site.new.render_pages(pages,
       controller: self,
       kramdown_options: {converter: "to_fuckyoukramdown"}, # use Kramdown::Torture parser from the torture-server gem.
     )
@@ -543,6 +543,7 @@ class ViewsController < ApplicationController
 
   def landing
     pages = {
+      kramdown_options: {converter: "to_fuckyoukramdown"}, # use Kramdown::Torture parser from the torture-server gem.
       "landing" => {
         toc_title: "Trailblazer",
         "2.1" => {
@@ -558,14 +559,9 @@ class ViewsController < ApplicationController
 
     pages = Torture::Cms::DSL.(pages)
 
-    pages = Torture::Cms::Site.new.render_pages(pages,
-    # pages = Torture::Cms::Site.new.produce_versioned_pages(pages, section_cell: My::Cell::Section,
+    pages, _ = Torture::Cms::Site.new.render_pages(pages,
       controller: self,
-
-      kramdown_options: {converter: "to_fuckyoukramdown"}, # use Kramdown::Torture parser from the torture-server gem.
     )
-
-    # raise pages[0].to_h["2.1"].inspect
 
     activity_content_html = pages[0].to_h["2.1"][:content]
 
