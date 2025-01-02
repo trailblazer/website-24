@@ -28,6 +28,8 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
 end
 
+gem "trailblazer-developer"
+
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   # gem "web-console"
@@ -54,8 +56,8 @@ gem "cells", github: "trailblazer/cells", branch: "cells-5"
 gem "erbse"
 
 # gem "torture", path: "../torture"
-gem "torture"
-# gem "torture-server", path: "../torture-server"
-gem "torture-server", github: "apotonick/torture-server", branch: "cms"
+gem "torture", ">= 0.0.3"
+gem "torture-server", path: "../torture-server"
+# gem "torture-server", github: "apotonick/torture-server", branch: "cms"
 
 # gem "trailblazer-developer"
