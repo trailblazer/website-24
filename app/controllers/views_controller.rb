@@ -123,6 +123,7 @@ class ViewsController < ApplicationController
           "trailblazer-rails" => ["trailblazer-rails", "https://github.com/trailblazer/trailblazer-rails"],
           "trailblazer-macro" => ["trailblazer-macro", "https://github.com/trailblazer/trailblazer-macro"],
           "trailblazer-endpoint" => ["trailblazer-endpoint", "https://github.com/trailblazer/trailblazer-endpoint"],
+          "trailblazer-test" => ["trailblazer-test", "https://github.com/trailblazer/trailblazer-test"],
 
         }
 
@@ -648,12 +649,12 @@ class ViewsController < ApplicationController
         target_url:  "/2.1/docs/test/index.html",
 
         "overview.md.erb" => {snippet_file: "assertions/pass_fail_test.rb"},
-        "assertions/pass_fail.md.erb" => {snippet_file: "assertions/pass_fail_test.rb"},
+        "assertions/pass_fail.md.erb" => {snippet_file: "assertion_test.rb"},
         "assertions/expose.md.erb" => {snippet_file: "assertions/expose_test.rb"},
-        "helpers/callable.md.erb" => {snippet_file: "helpers/callable_test.rb"},
-        "helpers/mocking.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
-        "rspec.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
-        "system.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
+        # "helpers/callable.md.erb" => {snippet_file: "helpers/callable_test.rb"},
+        # "helpers/mocking.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
+        # "rspec.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
+        # "system.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
       }
     },
 
