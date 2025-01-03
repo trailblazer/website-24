@@ -8,7 +8,7 @@ Whenever you introduce a new operation class to your application, you have four 
 1. You could skip testing and program the next feature - then, you shouldn't be reading this.
 2. If the operation is simple enough, cover its behavior in a smoke test and test both the successful invocation and its invalid state in a UI test. Nevertheless, this can be cumbersome and slow.
 3. Write your own operation unit tests.
-4. Use `assert_pass` and `assert_fail` to quickly test all possible inputs and outcomes in a unit test.
+4. Use `#assert_pass` and `#assert_fail` to quickly test all possible inputs and outcomes in a unit test.
 
 The goal of `trailblazer-test` is to provide an API for writing extremely robust tests for operations (or activities) with a minimal amount of written test code. Asserting edge cases - such as specific validations or possible breaking scenarios - should be a one-liner with this library.
 
@@ -71,6 +71,10 @@ Here, the internal logic will check attributes against `result[:record]`.
 <%= h4 "WTF?" %>
 
 Whenever you're unsure what's happening in your operation, or a test fails that shouldn't, add a question mark and use `assert_pass?`.
+
+<%= code "pass-wtf" %>
+
+Now, run the test case.
 
 <%= image_tag "assert-pass-wtf" %>
 

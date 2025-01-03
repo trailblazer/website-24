@@ -1,0 +1,30 @@
+<%= h3 "Suite" %>
+
+In addition to the above assertion helpers, the "Suite" test mode helps you with configuring defaults, so there's even less code.
+
+The "Suite" test is designed to
+
+* simplify the merging of the input arguments
+* merge expected attributes automatically without having to repeat those
+* set defaults like the tested operation
+
+
+A typical operation test case might look as follows.
+
+<%= code "test", zoom: "zoom" %>
+
+<%= h4 "Installation" %>
+
+If you want to use the Suite logic to save typing, instruct our `Test.module` using the `:suite` option (you could've guessed that!).
+
+<%= code "install" %>
+
+This will initialize merging logic along with `default_ctx`, `expected_attributes`, `operation` and `key_in_params`. However, you still need to configure those defaults yourself.
+
+<%= h4 "default_ctx" %>
+
+You can define a `default_ctx` using `let()` (and maintain different versions in `describe` blocks). `default_ctx` defines what to pass *into* the operation per default.
+
+<%= code "default-ctx" %>
+
+Note that `default_ctx` is always the full, complete context you'd normally pass into `Operation.call()`.
