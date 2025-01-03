@@ -78,4 +78,58 @@ The operation will be called with [wtf?](/2.1/docs/trailblazer/index.html#trailb
 
 <%= h3 "Assert_fail" %>
 
+Just like your new best friend `#assert_pass`, its counterpart is designed to help you with deliberately failing operations, for instance, to test validation errors.
 
+In the basic form, `#assert_fail` runs an operation and checks if it terminates on `:failure`.
+
+<%= code "fail-basic" %>
+
+Due to unmet validations the `Create` operation fails. In turn, this assertion is valid. It simply checks if the operation terminates on the `:failure` terminus.
+
+<%= h4 "Return value" %>
+
+The assertion helper returns the result of the failed operation.
+
+<%= code "fail-return" %>
+
+You can write your own assertions by plucking the result object.
+
+<%= h4 "Block style" %>
+
+Use the block form for a more concise test.
+
+<%= code "fail-block" %>
+
+It's possible to mix block style and the assertion helpers explained below.
+
+<%= h4 "Contract errors" %>
+
+Just like `#assert_pass` helps you testing the *model*, `#assert_fail` is built to assist you with testing contract errors.
+
+You can pass an array of contract fields that must have errors.
+
+<%= code "fail-array" %>
+
+Testing validation errors has just become much simpler. This assertion checks if the `title` and `content` field of the default contract contains errors.
+
+If you want to test the exact error messages, use the hash form.
+
+<%= code "fail-hash" %>
+
+The assertion will check the error messages for both fields.
+
+Note that the helper will tell you if the errors did not match.
+
+<%= image_tag "assert-fail-message" %>
+
+<%= info do %>
+Please [let us know](https://trailblazer.zulipchat.com) if you need anything else! Every app has a slightly different testing style and we're depending on your input to provide the best testing helpers possible.
+<% end %>
+
+<%= h4 "WTF?" %>
+
+If tests fail and you have no clue, add a question mark and use `#assert_fail?`.
+
+<%= code "fail-wtf" %>
+
+The operation's trace is printed on the console for you, so you can quickly debug.
