@@ -88,3 +88,13 @@ All tactical features such as the [block style](#trailblazer-test-operation-unit
 <% end %>
 
 Suite's `#assert_pass` is aiming at very typical use cases when writing tests with a huge cover rate. Nevertheless, it saves you from having to repeat `params` hashes or expected attributes over and over again.
+
+<%= h4 "assert_fail" %>
+
+The assertion helper for testing validation errors also uses the `default_ctx`.
+
+<%= code "assert-fail" %>
+
+This makes testing a specific edge case very straight-forward. Here, we test if passing an invalid `tag_list` in `params[:memo]` will yield the expected contract validation error.
+
+Note that only `tag_list` is invalid! The required field `title` is still set via the `default_ctx`.
