@@ -28,3 +28,63 @@ You can define a `default_ctx` using `let()` (and maintain different versions in
 <%= code "default-ctx" %>
 
 Note that `default_ctx` is always the full, complete context you'd normally pass into `Operation.call()`.
+
+You have two ways to customize this `ctx` in your actual test cases:
+
+* Pass a hash to the assertion helpers, which will be merged with the model-specific values.
+* `Ctx()` for more extensive changes, or to entirely overwrite the default structure.
+
+The `default_ctx` is used as the `input` argument for `#assert_pass` and `#assert_fail`.
+
+<%= h4 "Expected attributes" %>
+
+The counterpart of `default_ctx` defines what the attributes of the operation's `model` will look like when the operation was run successfully.
+
+<%= code "expected-attrs" %>
+
+This hash is used only with `#assert_pass` and represents the third positional argument.
+
+<%= h4 "operation" %>
+
+Instead of having to pass the asserted operation constant each time you use an assertion helper, you can conveniently define it using `let()`.
+
+<%= code "let-operation" %>
+
+Again, you may use any level of `describe` to fine-tune your tests. You may also override it using the [`:operation` option].
+
+<%= h4 "key_in_params" %>
+
+As typical for a Rails app, the actual incoming form fields are nested under a specific key, such as `params[:memo][...]`. The `key_in_params` sets this key to `:memo`. This is necessary for the automatic merging logic in Suite.
+
+Note that, if your app doesn't nest attributes under a "root" key, you can set `key_in_params` to `false`.
+
+<%= code "key_in_params" %>
+
+This will instruct the merging logic to omit that model-named key. In turn, the `default_ctx` shall have one nesting level less.
+
+<%= code "let-key-in-params-false" %>
+
+<%= h4 "assert_pass" %>
+
+The assertion helpers from `Suite` are bringing together `operation`, `default_ctx` and `expected_attributes`. As a matter of fact, `#assert_pass` in "Suite style" doesn't need any arguments at all.
+
+<%= code "assert-pass-empty" %>
+
+This resolves to an effective call like so.
+
+<%= code :ruby do %>assert_pass operation, default_ctx, expected_attributes
+<% end %>
+
+As you can see, the Suite helper uses your defaults wherever possible. Now, the real power becomes visible when testing specific cases.
+
+<%= code "assert-pass" %>
+
+The first hash passed here represents a chunk of the `params` you want to test. It is merged into `default_ctx[:params][:memo]` for you.
+
+The second hash is merged with `expected_attributes`. In addition to all default assumptions, it checks whether the model's `tag_list` property is an array of two elements.
+
+<%= info do %>
+All tactical features such as the [block style](#trailblazer-test-operation-unit-tests-assert_pass-block-style) or [returning the result object](#trailblazer-test-operation-unit-tests-assert_pass-return-value) are identical to the basic `#assert_pass` helper.
+<% end %>
+
+Suite's `#assert_pass` is aiming at very typical use cases when writing tests with a huge cover rate. Nevertheless, it saves you from having to repeat `params` hashes or expected attributes over and over again.
