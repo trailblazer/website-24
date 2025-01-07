@@ -98,3 +98,53 @@ The assertion helper for testing validation errors also uses the `default_ctx`.
 This makes testing a specific edge case very straight-forward. Here, we test if passing an invalid `tag_list` in `params[:memo]` will yield the expected contract validation error.
 
 Note that only `tag_list` is invalid! The required field `title` is still set via the `default_ctx`.
+
+<%= h3 "Ctx Helper" %>
+
+If the rather simple auto-merging of the `ctx` in `Suite` is not enough, and you're in need of a custom-tailored `ctx` to pass into the tested operation, use `Ctx()`. It mostly goes as the first argument to `#assert_pass` and `#assert_fail`.
+
+<%= code "ctx-merge" %>
+
+The `Ctx()` helper will, per default, grab the `default_ctx` and deep-merge it with the hash you're providing. The merge results in the following data-structure to be passed into an operation.
+
+<%= code "ctx-merge-actual" %>
+
+
+The helper brings some nice API especially for testing edge cases and failures.
+
+<%= code "ctx-example" %>
+
+Whenever you use `Ctx()` the computed hash is passed through directly into the operation, so you have full control over what's going in. Both `assert_pass` and `assert_fail` are not altering your ctx anymore.
+
+<%= h4 "Merge" %>
+
+The standard behavior of `Ctx()` is to merge the passed hash with `default_ctx`.
+
+<%= code "ctx-inject", collapse: "skip" %>
+
+This allows to quickly add variables such as the `:current_user` to the ctx.
+
+<%= h4 "Params Merge" %>
+
+Anything under the `:params` key is deep-merged with your `default_ctx`, which is helpful for customizing form field values.
+
+<%= code "ctx-merge", collapse: "skip" %>
+
+Note how `:title` is added to the existing `:memo` hash, effectively overwriting the default `:title`.
+
+<%= h4 "Exclude" %>
+
+If you want to delete a certain form field from the input, you can use `:exclude`. This is great for testing presence or required validations.
+
+<%= code "ctx-exclude", collapse: "skip" %>
+
+The `:title` field under `:song` is now removed from the input.
+
+You may also use `:exclude` in combination with the params merging.
+
+<%= code "ctx-exclude-params-merge", collapse: "skip" %>
+
+Or exclude form fields and still add variables.
+
+<%= code "ctx-exclude-merge", collapse: "skip" %>
+
