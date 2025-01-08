@@ -1,0 +1,31 @@
+<%= h3 "Mock_step" %>
+
+To stub any step with heavy logic, I/O calls or external API interactions, use `#mock_step`.
+
+Consider the following operation.
+
+<%= code "create", collapse: "skip" %>
+
+In order to create a "copy" of `Create`, where the step `:save` is replaced with your logic do as follows.
+
+<%= code "create-mock", collapse: "skip" %>
+
+The `:path` option allows specifying what step to mock, the block implements the new logic for that particular step.
+
+You now have to pass the mocked operation into your assertions (or, when using `Suite`, make the `let(:operation)` block return the mocked one).
+
+<%= code "create-assert", collapse: "skip" %>
+
+<%= h4 "Nesting" %>
+
+The `#mock_step` feature internally uses [patching](/2.1/docs/operation/#operation-step-dsl-patching) for this allows to mock even deeply nested steps when using `Subprocess()`.
+
+Here's the `Validate` operation from the above example.
+
+<%= code "validate", collapse: "skip" %>
+
+Let's say we want to stub `verify_content` in `Validate`, which in turn sits in `Create`. You need to pass the complete path to the helper.
+
+<%= code "mock-nested", collapse: "skip" %>
+
+Make sure you use IDs for nested operations to make patching simpler. Check the [patching docs](/2.1/docs/operation/#operation-step-dsl-patching) for a better understanding.

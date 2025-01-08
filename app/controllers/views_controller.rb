@@ -651,6 +651,7 @@ class ViewsController < ApplicationController
         "overview.md.erb" => {snippet_file: "assertions/pass_fail_test.rb"},
         "assertions/pass_fail.md.erb" => {snippet_file: "assertion_test.rb"},
         "assertions/suite.md.erb" => {snippet_file: "suite_test.rb"},
+        "mock_step.md.erb" => {snippet_file: "mock_step_test.rb"},
         "assertions/expose.md.erb" => {snippet_file: "assertions/expose_test.rb"},
         # "helpers/callable.md.erb" => {snippet_file: "helpers/callable_test.rb"},
         # "helpers/mocking.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
