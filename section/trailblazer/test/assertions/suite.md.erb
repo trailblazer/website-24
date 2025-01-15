@@ -5,8 +5,8 @@ In addition to the above assertion helpers, the "Suite" test mode helps you with
 The "Suite" test is designed to
 
 * simplify the merging of the input arguments
-* merge expected attributes automatically without having to repeat those
-* set defaults like the tested operation
+* merge expected model attributes automatically without having to repeat those
+* set defaults, such as the tested operation
 
 
 A typical operation test case might look as follows.
@@ -32,7 +32,7 @@ Note that `default_ctx` is always the full, complete context you'd normally pass
 You have two ways to customize this `ctx` in your actual test cases:
 
 * Pass a hash to the assertion helpers, which will be merged with the model-specific values.
-* `Ctx()` for more extensive changes, or to entirely overwrite the default structure.
+* [`Ctx()`](#trailblazer-test-operation-unit-tests-ctx-helper) for more extensive changes, or to entirely overwrite the default structure.
 
 The `default_ctx` is used as the `input` argument for `#assert_pass` and `#assert_fail`.
 
