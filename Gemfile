@@ -57,7 +57,7 @@ gem "erbse"
 
 # gem "torture", path: "../torture"
 gem "torture", ">= 0.0.3"
-gem "torture-server", path: "../torture-server"
-# gem "torture-server", github: "apotonick/torture-server", branch: "cms"
+# gem "torture-server", path: "../torture-server"
+gem "torture-server", github: "apotonick/torture-server", branch: "cms"
 
 # gem "trailblazer-developer"
