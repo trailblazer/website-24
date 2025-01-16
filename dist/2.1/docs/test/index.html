@@ -592,7 +592,7 @@ end
 
 <p class="">A typical operation test case might look as follows.</p>
 
-<pre class=""><code class="rounded">  # ...
+<pre class=""><code class="rounded">class MemoOperationTest &lt; Minitest::Spec  # test/memo/operation_test.rb
   Trailblazer::Test::Assertion.module!(self, suite: true)
 
   # The default ctx passed into the tested operation.
@@ -623,7 +623,99 @@ end
       {tag_list: "fridge,todo"}, # input + default_ctx
       {tag_list: ["fridge", "todo"]}) # what's expected on the model.
   end
-  # ...
+
+  it "passes with valid input, {tag_list} is optional" do
+    assert_pass( {}, {} )
+  end
+
+  it "converts {tag_list} and converts it to an array" do
+    assert_pass( {tag_list: "fridge,todo"}, {tag_list: ["fridge", "todo"]} ) do |result|
+      assert_equal true, result[:model].persisted?
+    end
+  end
+
+  it "fails with invalid {tag_list}" do
+    assert_fail({tag_list: []}, [:tag_list])
+  end
+
+  it "Update allows integer {duration}" do
+    assert_pass({tag_list: "todo"}, {tag_list: ["todo"]}, operation: Memo::Operation::Update )
+  end
+
+  let(:yogi) { "Yogi" }
+
+  it "fails with missing key {:title}" do
+    assert_fail( Ctx(exclude: [:title]), [:title] ) do |result|
+      assert_equal ["must be filled"], result[:"contract.default"].errors[:title]
+    end
+  end
+
+  it "passes" do
+    assert_pass( Ctx({current_user: yogi}), {} )
+  end
+
+  it "passes with correct {current_user}" do
+    ctx = Ctx({current_user: yogi}  )
+    puts ctx
+    #=&gt; {:params=&gt;{:memo=&gt;{:title=&gt;"Todo", :content=&gt;"Stock up beer"}},
+    #    :current_user=&gt;"Yogi"}
+
+    assert_pass ctx, {}
+    assert_equal %({:params=&gt;{:memo=&gt;{:title=&gt;\"Todo\", :content=&gt;\"Stock up beer\"}}, :current_user=&gt;\"Yogi\"}), ctx.inspect
+  end
+
+  # allows deep-merging additionnal {:params}
+  it "passes with correct tag_list for user" do
+    ctx = Ctx(
+      {
+        current_user: yogi,
+        # this is deep-merged with default_ctx!
+        params: {memo: {title: "Reminder"}}
+      }
+    )
+
+    assert_pass ctx, {title: "Reminder"}
+=begin
+        {:params=&gt;{
+          :memo=&gt;{
+            :title=&gt;"Reminder",
+            :content=&gt;"Stock up beer"
+           }
+          },
+        :current_user=&gt;"Yogi"}
+=end
+    assert_equal ctx.inspect, %({:params=&gt;{:memo=&gt;{:title=&gt;\"Reminder\", :content=&gt;\"Stock up beer\"}}, :current_user=&gt;\"Yogi\"})
+
+  end
+
+  it "provides {Ctx()}" do
+    ctx = Ctx(exclude: [:title])
+    #=&gt; {:params=&gt;{:memo=&gt;{:content=&gt;"Stock up beer"}}}
+
+    assert_fail ctx, [:title]
+    assert_equal %{{:params=&gt;{:memo=&gt;{:content=&gt;\"Stock up beer\"}}}}, ctx.inspect
+  end
+
+  it "allows {:exclude} and merge into {params}" do
+    ctx = Ctx({params: {memo: {tag_list: "todo"}}}, exclude: [:title])
+    #=&gt; {:params=&gt;{:memo=&gt;{:content=&gt;"Stock up beer", :tag_list=&gt;"todo"}}}
+
+    assert_equal ctx.inspect, %({:params=&gt;{:memo=&gt;{:content=&gt;"Stock up beer", :tag_list=&gt;"todo"}}})
+  end
+
+  it "provides {Ctx()}" do
+    ctx = Ctx({current_user: yogi}, exclude: [:title])
+    #=&gt; {:params=&gt;{:memo=&gt;{:content=&gt;"Stock up beer"}},
+    #    :current_user=&gt;#&lt;User name="Yogi"&gt;}
+    assert_equal ctx.inspect, %({:params=&gt;{:memo=&gt;{:content=&gt;\"Stock up beer\"}}, :current_user=&gt;\"Yogi\"})
+  end
+
+  it "{Ctx} provides {merge: false} to allow direct ctx building without any automatic merging" do
+    ctx = Ctx({current_user: yogi}, merge: false)
+
+    assert_equal %{{:current_user=&gt;\"Yogi\"}}, ctx.inspect
+  end
+
 end
 </code></pre>
 

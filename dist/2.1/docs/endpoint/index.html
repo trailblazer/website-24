@@ -479,7 +479,24 @@ class ApplicationController &lt; ActionController::Base
 <p class="">Use the <code class="text-purple">::endpoint</code> block DSL on the controller class level to configure how endpoints are built and run.</p>
 
 <pre class=""><code class="rounded">class ApplicationController &lt; ActionController::Base
-  # ...
+  include Trailblazer::Endpoint::Controller.module
+
+  module Endpoint
+    class Protocol &lt; Trailblazer::Endpoint::Protocol::Operation
+      def authenticate(ctx, **)
+        true
+      end
+
+      def policy(ctx, **)
+        true
+      end
+    end
+  end
+
+  def current_user
+    "user"
+  end
+
   endpoint do
     options do
       {
@@ -515,7 +532,6 @@ class ApplicationController &lt; ActionController::Base
     end
 
   end
-  # ...
 end
 </code></pre>
 
@@ -529,7 +545,30 @@ end
 <p class="">You can keep controller actions very lean by defining generic handlers once, on the <code class="text-purple">ApplicationController</code> level using the <code class="text-purple">default_matcher</code> block.</p>
 
 <pre class=""><code class="rounded">endpoint do
-  # ...
+  options do
+    {
+      protocol: Endpoint::Protocol,
+      # connect fast track outputs to success/failure:
+      fast_track_to_railway: true,
+    }
+  end
+
+  ctx do |controller:, **| # this block is executed in controller instance context.
+    {
+      params:       controller.params,
+      current_user: controller.current_user,
+    }
+  end
+
+  flow_options do |controller:, activity:, **|
+    {
+      context_options: {
+        aliases: {"contract.default": :contract},
+        container_class: Trailblazer::Context::Container::WithAliases,
+      }
+    }
+  end
+
   default_matcher do
     {
       failure: -&gt;(ctx, **) { head 401 }, # handles {failure} outcome.
@@ -538,7 +577,7 @@ end
       end
     }
   end
-  # ...
+
 end
 </code></pre>
 
@@ -556,7 +595,6 @@ end
 <p class="">The compilation of your controller’s endpoints can be configured using <code class="text-purple">options</code>.</p>
 
 <pre class=""><code class="rounded">endpoint do
-  # ...
   options do
     {
       protocol: Endpoint::Protocol,
@@ -564,7 +602,32 @@ end
       fast_track_to_railway: true,
     }
   end
-  # ...
+
+  ctx do |controller:, **| # this block is executed in controller instance context.
+    {
+      params:       controller.params,
+      current_user: controller.current_user,
+    }
+  end
+
+  flow_options do |controller:, activity:, **|
+    {
+      context_options: {
+        aliases: {"contract.default": :contract},
+        container_class: Trailblazer::Context::Container::WithAliases,
+      }
+    }
+  end
+
+  default_matcher do
+    {
+      failure: -&gt;(ctx, **) { head 401 }, # handles {failure} outcome.
+      not_found: -&gt;(ctx, params:, **) do
+        render html: "ID #{params[:id]} not found.", status: 404
+      end
+    }
+  end
+
 end
 </code></pre>
 
@@ -578,7 +641,6 @@ end
 <p class="">If you’re not interested in handling your operation’s <code class="text-purple">pass_fast</code> and <code class="text-purple">fail_fast</code> termination separately, you can use the <code class="text-purple">:fast_track_to_railway</code> shortcut in <code class="text-purple">options</code> to wire the two fast track termini to their railway friends.</p>
 
 <pre class=""><code class="rounded">endpoint do
-  # ...
   options do
     {
       # ...
@@ -586,7 +648,32 @@ end
       fast_track_to_railway: true,
     }
   end
-  # ...
+
+  ctx do |controller:, **| # this block is executed in controller instance context.
+    {
+      params:       controller.params,
+      current_user: controller.current_user,
+    }
+  end
+
+  flow_options do |controller:, activity:, **|
+    {
+      context_options: {
+        aliases: {"contract.default": :contract},
+        container_class: Trailblazer::Context::Container::WithAliases,
+      }
+    }
+  end
+
+  default_matcher do
+    {
+      failure: -&gt;(ctx, **) { head 401 }, # handles {failure} outcome.
+      not_found: -&gt;(ctx, params:, **) do
+        render html: "ID #{params[:id]} not found.", status: 404
+      end
+    }
+  end
+
 end
 </code></pre>
 
@@ -599,9 +686,15 @@ end
 <p class="">However, in some cases, you might want to deal with a <code class="text-purple">fail_fast</code> or <code class="text-purple">pass_fast</code> termination of your operation. Simply override it when defining the specific endpoint.</p>
 
 <pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
   endpoint Memo::Operation::Create, fast_track_to_railway: false
-  # ...
+
+  def create
+    invoke Memo::Operation::Create do
+      # failure is inherited
+      success   { |ctx, model:, **| redirect_to memo_path(id: model.id) }
+      fail_fast { |ctx, **| head 500 }
+    end
+  end
 end
 </code></pre>
 
@@ -615,14 +708,39 @@ end
 <p class="">Use the <code class="text-purple">ctx</code> block to define what ctx variables to pass into the endpoint (and operation) invocation by default.</p>
 
 <pre class=""><code class="rounded">endpoint do
-  # ...
+  options do
+    {
+      protocol: Endpoint::Protocol,
+      # connect fast track outputs to success/failure:
+      fast_track_to_railway: true,
+    }
+  end
+
   ctx do |controller:, **| # this block is executed in controller instance context.
     {
       params:       controller.params,
       current_user: controller.current_user,
     }
   end
-  # ...
+
+  flow_options do |controller:, activity:, **|
+    {
+      context_options: {
+        aliases: {"contract.default": :contract},
+        container_class: Trailblazer::Context::Container::WithAliases,
+      }
+    }
+  end
+
+  default_matcher do
+    {
+      failure: -&gt;(ctx, **) { head 401 }, # handles {failure} outcome.
+      not_found: -&gt;(ctx, params:, **) do
+        render html: "ID #{params[:id]} not found.", status: 404
+      end
+    }
+  end
+
 end
 </code></pre>
 
@@ -638,7 +756,9 @@ end
 <p class="">It is possible to set a default wiring for your domain operations in their endpoint using the <code class="text-purple">:protocol_block</code>. The following example connects the <code class="text-purple">not_found</code> terminus to the endpoint’s <code class="text-purple">not_found</code> track. As this is not a standard railway/fast-track terminus, it’s not wired automatically.</p>
 
 <pre class=""><code class="rounded">class ApplicationController &lt; ActionController::Base
-    # ...
+  include Trailblazer::Endpoint::Controller.module
+
+  endpoint do
     options do
       {
         # ...
@@ -649,7 +769,13 @@ end
         end
       }
     end
-    # ...
+
+    ctx do |controller:, **|
+      {
+        params: controller.params,
+      }
+    end
+  end
 end
 </code></pre>
 
@@ -667,7 +793,8 @@ end
 <p class="">Alternatively, you may use conditional code leveraging the operation’s introspection API. The <code class="text-purple">protocol_block</code> is executed in the respective operation context each time you’re adding a concrete endpoint.</p>
 
 <pre class=""><code class="rounded">class ApplicationController &lt; ActionController::Base
-  # ...
+  include Trailblazer::Endpoint::Controller.module
+
   endpoint do
     options do
       {
@@ -684,7 +811,6 @@ end
     end
     # ...
   end
-  # ...
 end
 </code></pre>
 
@@ -696,7 +822,21 @@ end
 <p class="">You can set <code class="text-purple">flow_options</code> that are injected into the endpoint (or operation) invocation using the same-named block. This is where you would set ctx aliases, for instance.</p>
 
 <pre class=""><code class="rounded">endpoint do
-  # ...
+  options do
+    {
+      protocol: Endpoint::Protocol,
+      # connect fast track outputs to success/failure:
+      fast_track_to_railway: true,
+    }
+  end
+
+  ctx do |controller:, **| # this block is executed in controller instance context.
+    {
+      params:       controller.params,
+      current_user: controller.current_user,
+    }
+  end
+
   flow_options do |controller:, activity:, **|
     {
       context_options: {
@@ -705,7 +845,16 @@ end
       }
     }
   end
-  # ...
+
+  default_matcher do
+    {
+      failure: -&gt;(ctx, **) { head 401 }, # handles {failure} outcome.
+      not_found: -&gt;(ctx, params:, **) do
+        render html: "ID #{params[:id]} not found.", status: 404
+      end
+    }
+  end
+
 end
 </code></pre>
 
@@ -714,9 +863,15 @@ end
 <p class="">While the <a href="#endpoint-controller-configuration" class="underline text-purple">block version of <code class="text-purple">::endpoint</code></a> allows to configure the build process and some runtime variables, most of the time you will be using this method to define endpoints per controller action in a concrete controller.</p>
 
 <pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
   endpoint Memo::Operation::Create # define endpoint.
-  # ...
+
+  def create
+    invoke Memo::Operation::Create do # call the endpoint, use matchers:
+      success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
+      # failure is inherited
+      # not_found is inherited
+    end
+  end
 end
 </code></pre>
 
@@ -741,13 +896,29 @@ end
 <p class="">You may add arbitrary wiring for your operation when defining the concrete endpoint. This is done by passing a block after the endpoint’s constant.</p>
 
 <pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
   endpoint Memo::Operation::Update do
     {
       Output(:not_found) =&gt; End(:failure)
     }
   end
-  # ...
+
+  endpoint Memo::Operation::Create do
+    {} # override ApplicationController's wiring.
+  end
+
+  def update
+    invoke Memo::Operation::Update do
+      success   { |ctx, model:, **| redirect_to memo_path(id: model.id) }
+      failure   { |ctx, **| head 401 }
+    end
+  end
+
+  def create
+    invoke Memo::Operation::Create do
+      success   { |ctx, model:, **| head 201 }
+      failure   { |ctx, **| head 401 }
+    end
+  end
 end
 </code></pre>
 
@@ -768,12 +939,22 @@ end
 <p class="">If you need one distinct operation in several endpoints, pass a name instead of the class.</p>
 
 <pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
   endpoint "create", domain_activity: Memo::Operation::Create
   endpoint "create/admin",
     domain_activity: Memo::Operation::Create,
     protocol: Protocol::Admin
-  # ...
+
+  def create
+    invoke "create" do # endpoint name
+      success   { |ctx, **| render html: ctx.keys.inspect }
+    end
+  end
+
+  def create_with_admin
+    invoke "create/admin" do
+      success   { |ctx, admin:, **| render html: admin.inspect + ctx.keys.inspect }
+    end
+  end
 end
 </code></pre>
 
@@ -782,13 +963,22 @@ end
 <p class="">In the controller action, you now need to pass the <em>name</em> to <code class="text-purple">#invoke</code>.</p>
 
 <pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
+  endpoint "create", domain_activity: Memo::Operation::Create
+  endpoint "create/admin",
+    domain_activity: Memo::Operation::Create,
+    protocol: Protocol::Admin
+
   def create
     invoke "create" do # endpoint name
       # ...
     end
   end
-  # ...
+
+  def create_with_admin
+    invoke "create/admin" do
+      success   { |ctx, admin:, **| render html: admin.inspect + ctx.keys.inspect }
+    end
+  end
 end
 </code></pre>
 
@@ -801,7 +991,8 @@ end
 <p class="">You can invoke the controller’s endpoints using <code class="text-purple">#invoke</code>. Just pass the endpoint’s name, which is usually the class constant.</p>
 
 <pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
+  endpoint Memo::Operation::Create # define endpoint.
+
   def create
     invoke Memo::Operation::Create do # call the endpoint, use matchers:
       success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
@@ -809,7 +1000,6 @@ end
       # not_found is inherited
     end
   end
-  # ...
 end
 </code></pre>
 
@@ -823,14 +1013,39 @@ end
 <p class="">Keep in mind that, per default, only the variables configured in the <a href="/2.1/docs/endpoint/index.html#endpoint-controller-configuration-ctx" class="underline text-purple"><code class="text-purple">ctx {}</code> block</a> are passed into the endpoint, and the operation.</p>
 
 <pre class=""><code class="rounded">endpoint do
-  # ...
+  options do
+    {
+      protocol: Endpoint::Protocol,
+      # connect fast track outputs to success/failure:
+      fast_track_to_railway: true,
+    }
+  end
+
   ctx do |controller:, **| # this block is executed in controller instance context.
     {
       params:       controller.params,
       current_user: controller.current_user,
     }
   end
-  # ...
+
+  flow_options do |controller:, activity:, **|
+    {
+      context_options: {
+        aliases: {"contract.default": :contract},
+        container_class: Trailblazer::Context::Container::WithAliases,
+      }
+    }
+  end
+
+  default_matcher do
+    {
+      failure: -&gt;(ctx, **) { head 401 }, # handles {failure} outcome.
+      not_found: -&gt;(ctx, params:, **) do
+        render html: "ID #{params[:id]} not found.", status: 404
+      end
+    }
+  end
+
 end
 </code></pre>
 
@@ -850,13 +1065,20 @@ end
 <p class="">If you need additional variables, simply pass them to <code class="text-purple">#invoke</code>.</p>
 
 <pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
+  endpoint Memo::Operation::Update
+
+  def update
+    invoke Memo::Operation::Update do
+      success { |ctx, variables:, **| render html: variables }
+    end
+  end
+
+  MyBucket = Object
   def update_with_runtime_variables
     invoke Memo::Operation::Update, storage: MyBucket do
       # ...
     end
   end
-  # ...
 end
 </code></pre>
 
