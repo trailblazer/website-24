@@ -13,6 +13,8 @@ A typical operation test case might look as follows.
 
 <%= code "test", zoom: "zoom" %>
 
+Here, we're assuming you are using `Minitest::Spec`, which is our preferred test style as it's super concise, fast and readable. We also got [`Minitest::Test`](/2.1/docs/test/index.html#trailblazer-test-xxxxxxxxx) and [RSpec](/2.1/docs/test/index.html#trailblazer-test-rspec) helpers to offer.
+
 <%= h4 "Installation" %>
 
 If you want to use the Suite logic to save typing, instruct our `Test.module` using the `:suite` option (you could've guessed that!).
@@ -99,6 +101,14 @@ This makes testing a specific edge case very straight-forward. Here, we test if 
 
 Note that only `tag_list` is invalid! The required field `title` is still set via the `default_ctx`.
 
+<%= h4 "Minitest::Test" %>
+
+You don't have to use `Minitest::Spec`. If you fancy the rather cumbersome `Minitest::Test` style, pass the `spec: false` option when adding helpers.
+
+<%= code "test-suite", collapse: "skip" %>
+
+Instead of `let(...)` you now have to use methods to define default structures.
+
 <%= h3 "Ctx Helper" %>
 
 If the rather simple auto-merging of the `ctx` in `Suite` is not enough, and you're in need of a custom-tailored `ctx` to pass into the tested operation, use `Ctx()`. It mostly goes as the first argument to `#assert_pass` and `#assert_fail`.
@@ -147,4 +157,3 @@ You may also use `:exclude` in combination with the params merging.
 Or exclude form fields and still add variables.
 
 <%= code "ctx-exclude-merge", collapse: "skip" %>
-
