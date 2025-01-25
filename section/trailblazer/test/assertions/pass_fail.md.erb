@@ -1,7 +1,8 @@
-<%= h2 "Operation unit tests" %>
+<%= h2 "Minitest" %>
 
 <%= gem_version "trailblazer-test", "1.0.0" %>
 
+The `trailblazer-test` gem allows simple, streamlined unit tests for operations.
 
 Whenever you introduce a new operation class to your application, you have four choices for testing.
 
@@ -12,7 +13,20 @@ Whenever you introduce a new operation class to your application, you have four 
 
 The goal of `trailblazer-test` is to provide an API for writing extremely robust tests for operations (or activities) with a minimal amount of written test code. Asserting edge cases - such as specific validations or possible breaking scenarios - should be a one-liner with this library.
 
-TODO: how to include, etc.
+<%= h3 "Installation" %>
+
+Add this line to your application's Gemfile:
+
+~~~ ruby
+gem 'trailblazer-test', ">= 1.0.0"
+~~~
+
+The provided assertions and helpers work with Minitest. For RSpec support use [`rspec-trailblazer`](#testing-rspec) which provides matchers such as `pass_with` and `fail_with` around our assertions.
+
+<%= info do %>
+We're working on RSpec matchers. The current implementation is [documented here](#testing-rspec). Please [chat with us](https://trailblazer.zulipchat.com) if you want to help.
+<% end %>
+
 <%= h3 "Base class" %>
 
 It is a good idea to maintain a slim `OperationTest` or `OperationSpec` base class in your `test_helper.rb`.
@@ -46,7 +60,7 @@ To implement assertions in addition to the default ones, you can also use the bl
 
 <%= code "pass-block", collapse: "skip" %>
 
-You can combine your own assertions with the [model assertions](#trailblazer-test-operation-unit-tests-assert_pass-model-assertions) provided by `#assert_pass`.
+You can combine your own assertions with the [model assertions](#testing-with-trailblazer-minitest-assert_pass-model-assertions) provided by `#assert_pass`.
 
 <%= h4 "Model assertions" %>
 

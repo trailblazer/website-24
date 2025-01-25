@@ -124,6 +124,7 @@ class ViewsController < ApplicationController
           "trailblazer-macro" => ["trailblazer-macro", "https://github.com/trailblazer/trailblazer-macro"],
           "trailblazer-endpoint" => ["trailblazer-endpoint", "https://github.com/trailblazer/trailblazer-endpoint"],
           "trailblazer-test" => ["trailblazer-test", "https://github.com/trailblazer/trailblazer-test"],
+          "rspec-trailblazer" => ["rspec-trailblazer", "https://github.com/trailblazer/rspec-trailblazer"],
 
         }
 
@@ -640,9 +641,9 @@ class ViewsController < ApplicationController
     },
 
     "test" => { # FIXME
-      toc_title: "Test",
+      toc_title: "Testing",
       "2.1" => {
-        title: "Trailblazer Test",
+        title: "Testing with Trailblazer",
         snippet_dir: "../trailblazer-test/test/docs",
         section_dir: "section/trailblazer/test",
         target_file: "public/2.1/docs/test/index.html",
@@ -653,9 +654,7 @@ class ViewsController < ApplicationController
         "assertions/suite.md.erb" => {snippet_file: "suite_test.rb"},
         "mock_step.md.erb" => {snippet_file: "mock_step_test.rb"},
         "assertions/expose.md.erb" => {snippet_file: "assertions/expose_test.rb"},
-        # "helpers/callable.md.erb" => {snippet_file: "helpers/callable_test.rb"},
-        # "helpers/mocking.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
-        # "rspec.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
+        "rspec.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
         # "system.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
       }
     },

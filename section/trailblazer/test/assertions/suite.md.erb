@@ -13,7 +13,7 @@ A typical operation test case might look as follows.
 
 <%= code "test", zoom: "zoom" %>
 
-Here, we're assuming you are using `Minitest::Spec`, which is our preferred test style as it's super concise, fast and readable. We also got [`Minitest::Test`](/2.1/docs/test/index.html#trailblazer-test-xxxxxxxxx) and [RSpec](/2.1/docs/test/index.html#trailblazer-test-rspec) helpers to offer.
+Here, we're assuming you are using `Minitest::Spec`, which is our preferred test style as it's super concise, fast and readable. We also got [`Minitest::Test`](#testing-with-trailblazer-minitest-suite-minitest-test) and [RSpec](#testing-with-trailblazer-rspec) helpers to offer.
 
 <%= h4 "Installation" %>
 
@@ -34,7 +34,7 @@ Note that `default_ctx` is always the full, complete context you'd normally pass
 You have two ways to customize this `ctx` in your actual test cases:
 
 * Pass a hash to the assertion helpers, which will be merged with the model-specific values.
-* [`Ctx()`](#trailblazer-test-operation-unit-tests-ctx-helper) for more extensive changes, or to entirely overwrite the default structure.
+* [`Ctx()`](#testing-with-trailblazer-minitest-ctx-helper) for more extensive changes, or to entirely overwrite the default structure.
 
 The `default_ctx` is used as the `input` argument for `#assert_pass` and `#assert_fail`.
 
@@ -86,7 +86,7 @@ The first hash passed here represents a chunk of the `params` you want to test. 
 The second hash is merged with `expected_attributes`. In addition to all default assumptions, it checks whether the model's `tag_list` property is an array of two elements.
 
 <%= info do %>
-All tactical features such as the [block style](#trailblazer-test-operation-unit-tests-assert_pass-block-style) or [returning the result object](#trailblazer-test-operation-unit-tests-assert_pass-return-value) are identical to the basic `#assert_pass` helper.
+All tactical features such as the [block style](#testing-with-trailblazer-minitest-assert_pass-block-style) or [returning the result object](#trailblazer-test-operation-unit-tests-assert_pass-return-value) are identical to the basic `#assert_pass` helper.
 <% end %>
 
 Suite's `#assert_pass` is aiming at very typical use cases when writing tests with a huge cover rate. Nevertheless, it saves you from having to repeat `params` hashes or expected attributes over and over again.
