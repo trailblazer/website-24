@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <title>Test - Trailblazer</title>
+    <title>Testing - Trailblazer</title>
     <meta content="width=device-width,initial-scale=1" name="viewport"/>
     
     
@@ -135,7 +135,7 @@
   
     <div class="flex flex-col ">
       <div class="bg-dark-purple flex items-center">
-        <a class="pl-4 font-bold" href="/2.1/docs/test/index.html">Test</a>
+        <a class="pl-4 font-bold" href="/2.1/docs/test/index.html">Testing</a>
 
         
       </div>
@@ -144,14 +144,14 @@
       
         
         <!-- FIXME: link should know its IDs. -->
-        <div class="flex items-center" id="left-toc-trailblazer-test-installation">
-          <a href="#trailblazer-test-installation" class="pl-8">Installation</a>
+        <div class="flex items-center" id="left-toc-testing-with-trailblazer-minitest">
+          <a href="#testing-with-trailblazer-minitest" class="pl-8">Minitest</a>
         </div>
       
         
         <!-- FIXME: link should know its IDs. -->
-        <div class="flex items-center" id="left-toc-trailblazer-test-operation-unit-tests">
-          <a href="#trailblazer-test-operation-unit-tests" class="pl-8">Operation unit tests</a>
+        <div class="flex items-center" id="left-toc-testing-with-trailblazer-rspec">
+          <a href="#testing-with-trailblazer-rspec" class="pl-8">Rspec</a>
         </div>
       
     </div>
@@ -315,7 +315,7 @@
       <h1 class="lg:text-3xl text-2xl text-blue font-bold">
         <span class="py-1 px-3 border border rounded border border-white text-white bg-purple">2.1</span>
         <span class="font-black uppercase header-text">
-          Trailblazer Test
+          Testing with Trailblazer
         </span>
         Documentation
       </h1>
@@ -342,25 +342,6 @@ Smoke tests make sure of the integrity of your application, and assert that cont
 
 <p class="">There’s no need to test controllers, models, service objects, etc. in isolation - unless you want to do so for a better documentation of your internal APIs. As operations are the single entry-point for your functions, your entire stack is covered with the two test types.</p>
 
-<p class="">The <code class="text-purple">trailblazer-test</code> gem allows simple, streamlined operation unit tests.</p>
-<h2 id="trailblazer-test-installation" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Installation</span></h2>
-
-<p class="">Add this line to your application’s Gemfile:</p>
-
-<pre><code class="language-ruby">gem 'trailblazer-test', "&gt;= 1.0.0"
-</code></pre>
-
-<p class="">The provided assertions and helpers work with Minitest. For RSpec support use <a href="#test-rspec" class="underline text-purple"><code class="text-purple">rspec-trailblazer</code></a> which provides matchers such as <code class="text-purple">pass_with</code> and <code class="text-purple">fail_with</code> around our assertions.</p>
-
-<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
-  <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
-  <div class="space-y-3">
-    
-<p class="">We’re working on RSpec matchers. The current implementation is <a href="#test-rspec" class="underline text-purple">documented here</a>. Please <a href="https://trailblazer.zulipchat.com" class="underline text-purple">chat with us</a> if you want to help.</p>
-
-  </div>
-</div>
-
 <!--
 
 However, the idea of operation tests is: Run the complete unit with a certain input set, and test the side-effects. This differs to the Rails Way™ testing style, where smaller units of code, such as a specific validation or a callback, are tested in complete isolation. While that might look tempting and clean, it will create a test environment that is not identical to what happens in production.
@@ -368,12 +349,14 @@ However, the idea of operation tests is: Run the complete unit with a certain in
 In production, you will never trigger one specific callback or a particular validation, only. Your application will run all code required to create a `Song` object, for instance. In Trailblazer, this means running the `Song::Create` operation, and testing that very operation with all its side-effects.
  -->
 
-<h2 id="trailblazer-test-operation-unit-tests" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Operation unit tests</span></h2>
+<h2 id="testing-with-trailblazer-minitest" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Minitest</span></h2>
 
 <p class=""><span class="flex max-w-fit max-h-7 border border-grey uppercase text-grey text-xs pt-1 pb-1 pl-2 pr-2 pr-1 ml-4 rounded">
             <svg class="fill-grey mt-[2px]" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M168.5 72L256 165l87.5-93h-175zM383.9 99.1L311.5 176h129L383.9 99.1zm50 124.9H256 78.1L256 420.3 433.9 224zM71.5 176h129L128.1 99.1 71.5 176zm434.3 40.1l-232 256c-4.5 5-11 7.9-17.8 7.9s-13.2-2.9-17.8-7.9l-232-256c-7.7-8.5-8.3-21.2-1.5-30.4l112-152c4.5-6.1 11.7-9.8 19.3-9.8H376c7.6 0 14.8 3.6 19.3 9.8l112 152c6.8 9.2 6.1 21.9-1.5 30.4z"></path></svg>
             <a href="https://github.com/trailblazer/trailblazer-test/tree/v1.0.0" class="ml-1" title="This feature was introduced in trailblazer-test v1.0.0.">trailblazer-test 1.0.0</a>
           </span></p>
+
+<p class="">The <code class="text-purple">trailblazer-test</code> gem allows simple, streamlined unit tests for operations.</p>
 
 <p class="">Whenever you introduce a new operation class to your application, you have four choices for testing.</p>
 
@@ -386,14 +369,31 @@ In production, you will never trigger one specific callback or a particular vali
 
 <p class="">The goal of <code class="text-purple">trailblazer-test</code> is to provide an API for writing extremely robust tests for operations (or activities) with a minimal amount of written test code. Asserting edge cases - such as specific validations or possible breaking scenarios - should be a one-liner with this library.</p>
 
-<p class="">TODO: how to include, etc.</p>
-<h3 id="trailblazer-test-operation-unit-tests-base-class" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Base class</span></h3>
+<h3 id="testing-with-trailblazer-minitest-installation" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Installation</span></h3>
+
+<p class="">Add this line to your application’s Gemfile:</p>
+
+<pre><code class="language-ruby">gem 'trailblazer-test', "&gt;= 1.0.0"
+</code></pre>
+
+<p class="">The provided assertions and helpers work with Minitest. For RSpec support use <a href="#testing-rspec" class="underline text-purple"><code class="text-purple">rspec-trailblazer</code></a> which provides matchers such as <code class="text-purple">pass_with</code> and <code class="text-purple">fail_with</code> around our assertions.</p>
+
+<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
+  <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
+  <div class="space-y-3">
+    
+<p class="">We’re working on RSpec matchers. The current implementation is <a href="#testing-rspec" class="underline text-purple">documented here</a>. Please <a href="https://trailblazer.zulipchat.com" class="underline text-purple">chat with us</a> if you want to help.</p>
+
+  </div>
+</div>
+
+<h3 id="testing-with-trailblazer-minitest-base-class" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Base class</span></h3>
 
 <p class="">It is a good idea to maintain a slim <code class="text-purple">OperationTest</code> or <code class="text-purple">OperationSpec</code> base class in your <code class="text-purple">test_helper.rb</code>.</p>
 
 <p class="">By including the assertion modules your tests can use our assertions such as <code class="text-purple">assert_pass</code> and <code class="text-purple">assert_exposes</code>.</p>
 
-<h3 id="trailblazer-test-operation-unit-tests-assert_pass" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Assert_pass</span></h3>
+<h3 id="testing-with-trailblazer-minitest-assert_pass" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Assert_pass</span></h3>
 
 <p class="">The very basic version of <code class="text-purple">#assert_pass</code> runs an operation and asserts the reached terminus was <code class="text-purple">:success</code>.</p>
 
@@ -406,7 +406,7 @@ end
 
 <p class="">You need to pass the operation constant and the entire input hash yourself.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_pass-return-value" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
+<h4 id="testing-with-trailblazer-minitest-assert_pass-return-value" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Return value</span>
 
                   </h4>
@@ -421,7 +421,7 @@ end
 end
 </code></pre>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_pass-block-style" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
+<h4 id="testing-with-trailblazer-minitest-assert_pass-block-style" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Block style</span>
 
                   </h4>
@@ -433,9 +433,9 @@ end
 end
 </code></pre>
 
-<p class="">You can combine your own assertions with the <a href="#trailblazer-test-operation-unit-tests-assert_pass-model-assertions" class="underline text-purple">model assertions</a> provided by <code class="text-purple">#assert_pass</code>.</p>
+<p class="">You can combine your own assertions with the <a href="#testing-with-trailblazer-minitest-assert_pass-model-assertions" class="underline text-purple">model assertions</a> provided by <code class="text-purple">#assert_pass</code>.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_pass-model-assertions" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
+<h4 id="testing-with-trailblazer-minitest-assert_pass-model-assertions" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Model assertions</span>
 
                   </h4>
@@ -457,7 +457,7 @@ assert result[:model].id &gt; 0
 
 <p class="">Note that you can use the lambda form for dynamic assertions, for example to check if a date or an ID is set correctly.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_pass-model_at" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
+<h4 id="testing-with-trailblazer-minitest-assert_pass-model_at" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">model_at</span>
 
                   </h4>
@@ -471,7 +471,7 @@ assert_pass Memo::Operation::Create, input, model_at: :record,
 
 <p class="">Here, the internal logic will check attributes against <code class="text-purple">result[:record]</code>.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_pass-wtf-" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
+<h4 id="testing-with-trailblazer-minitest-assert_pass-wtf-" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">WTF?</span>
 
                   </h4>
@@ -487,7 +487,7 @@ assert_pass Memo::Operation::Create, input, model_at: :record,
 
 <p class="">The operation will be called with <a href="/2.1/docs/trailblazer/index.html#trailblazer-developer-wtf-" class="underline text-purple">wtf?</a> and the trace is printed on the terminal.</p>
 
-<h3 id="trailblazer-test-operation-unit-tests-assert_fail" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Assert_fail</span></h3>
+<h3 id="testing-with-trailblazer-minitest-assert_fail" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Assert_fail</span></h3>
 
 <p class="">Just like your new best friend <code class="text-purple">#assert_pass</code>, its counterpart is designed to help you with deliberately failing operations, for instance, to test validation errors.</p>
 
@@ -498,7 +498,7 @@ assert_pass Memo::Operation::Create, input, model_at: :record,
 
 <p class="">Due to unmet validations the <code class="text-purple">Create</code> operation fails. In turn, this assertion is valid. It simply checks if the operation terminates on the <code class="text-purple">:failure</code> terminus.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_fail-return-value" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_fail
+<h4 id="testing-with-trailblazer-minitest-assert_fail-return-value" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_fail
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Return value</span>
 
                   </h4>
@@ -512,7 +512,7 @@ assert_equal result[:"contract.default"].errors.size, 2
 
 <p class="">You can write your own assertions by plucking the result object.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_fail-block-style" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_fail
+<h4 id="testing-with-trailblazer-minitest-assert_fail-block-style" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_fail
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Block style</span>
 
                   </h4>
@@ -526,7 +526,7 @@ end
 
 <p class="">It’s possible to mix block style and the assertion helpers explained below.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_fail-contract-errors" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_fail
+<h4 id="testing-with-trailblazer-minitest-assert_fail-contract-errors" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_fail
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Contract errors</span>
 
                   </h4>
@@ -566,7 +566,7 @@ end
   </div>
 </div>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_fail-wtf-" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_fail
+<h4 id="testing-with-trailblazer-minitest-assert_fail-wtf-" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_fail
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">WTF?</span>
 
                   </h4>
@@ -578,7 +578,7 @@ end
 
 <p class="">The operation’s trace is printed on the console for you, so you can quickly debug.</p>
 
-<h3 id="trailblazer-test-operation-unit-tests-suite" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Suite</span></h3>
+<h3 id="testing-with-trailblazer-minitest-suite" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Suite</span></h3>
 
 <p class="">In addition to the above assertion helpers, the “Suite” test mode helps you with configuring defaults, so there’s even less code.</p>
 
@@ -592,7 +592,7 @@ end
 
 <p class="">A typical operation test case might look as follows.</p>
 
-<pre class=""><code class="rounded">class MemoOperationTest &lt; Minitest::Spec  # test/memo/operation_test.rb
+<pre class=""><code class="rounded">  # ...
   Trailblazer::Test::Assertion.module!(self, suite: true)
 
   # The default ctx passed into the tested operation.
@@ -623,103 +623,13 @@ end
       {tag_list: "fridge,todo"}, # input + default_ctx
       {tag_list: ["fridge", "todo"]}) # what's expected on the model.
   end
-
-  it "passes with valid input, {tag_list} is optional" do
-    assert_pass( {}, {} )
-  end
-
-  it "converts {tag_list} and converts it to an array" do
-    assert_pass( {tag_list: "fridge,todo"}, {tag_list: ["fridge", "todo"]} ) do |result|
-      assert_equal true, result[:model].persisted?
-    end
-  end
-
-  it "fails with invalid {tag_list}" do
-    assert_fail({tag_list: []}, [:tag_list])
-  end
-
-  it "Update allows integer {duration}" do
-    assert_pass({tag_list: "todo"}, {tag_list: ["todo"]}, operation: Memo::Operation::Update )
-  end
-
-  let(:yogi) { "Yogi" }
-
-  it "fails with missing key {:title}" do
-    assert_fail( Ctx(exclude: [:title]), [:title] ) do |result|
-      assert_equal ["must be filled"], result[:"contract.default"].errors[:title]
-    end
-  end
-
-  it "passes" do
-    assert_pass( Ctx({current_user: yogi}), {} )
-  end
-
-  it "passes with correct {current_user}" do
-    ctx = Ctx({current_user: yogi}  )
-    puts ctx
-    #=&gt; {:params=&gt;{:memo=&gt;{:title=&gt;"Todo", :content=&gt;"Stock up beer"}},
-    #    :current_user=&gt;"Yogi"}
-
-    assert_pass ctx, {}
-    assert_equal %({:params=&gt;{:memo=&gt;{:title=&gt;\"Todo\", :content=&gt;\"Stock up beer\"}}, :current_user=&gt;\"Yogi\"}), ctx.inspect
-  end
-
-  # allows deep-merging additionnal {:params}
-  it "passes with correct tag_list for user" do
-    ctx = Ctx(
-      {
-        current_user: yogi,
-        # this is deep-merged with default_ctx!
-        params: {memo: {title: "Reminder"}}
-      }
-    )
-
-    assert_pass ctx, {title: "Reminder"}
-=begin
-        {:params=&gt;{
-          :memo=&gt;{
-            :title=&gt;"Reminder",
-            :content=&gt;"Stock up beer"
-           }
-          },
-        :current_user=&gt;"Yogi"}
-=end
-    assert_equal ctx.inspect, %({:params=&gt;{:memo=&gt;{:title=&gt;\"Reminder\", :content=&gt;\"Stock up beer\"}}, :current_user=&gt;\"Yogi\"})
-
-  end
-
-  it "provides {Ctx()}" do
-    ctx = Ctx(exclude: [:title])
-    #=&gt; {:params=&gt;{:memo=&gt;{:content=&gt;"Stock up beer"}}}
-
-    assert_fail ctx, [:title]
-    assert_equal %{{:params=&gt;{:memo=&gt;{:content=&gt;\"Stock up beer\"}}}}, ctx.inspect
-  end
-
-  it "allows {:exclude} and merge into {params}" do
-    ctx = Ctx({params: {memo: {tag_list: "todo"}}}, exclude: [:title])
-    #=&gt; {:params=&gt;{:memo=&gt;{:content=&gt;"Stock up beer", :tag_list=&gt;"todo"}}}
-
-    assert_equal ctx.inspect, %({:params=&gt;{:memo=&gt;{:content=&gt;"Stock up beer", :tag_list=&gt;"todo"}}})
-  end
-
-  it "provides {Ctx()}" do
-    ctx = Ctx({current_user: yogi}, exclude: [:title])
-    #=&gt; {:params=&gt;{:memo=&gt;{:content=&gt;"Stock up beer"}},
-    #    :current_user=&gt;#&lt;User name="Yogi"&gt;}
-    assert_equal ctx.inspect, %({:params=&gt;{:memo=&gt;{:content=&gt;\"Stock up beer\"}}, :current_user=&gt;\"Yogi\"})
-  end
-
-  it "{Ctx} provides {merge: false} to allow direct ctx building without any automatic merging" do
-    ctx = Ctx({current_user: yogi}, merge: false)
-
-    assert_equal %{{:current_user=&gt;\"Yogi\"}}, ctx.inspect
-  end
-
+  # ...
 end
 </code></pre>
 
-<h4 id="trailblazer-test-operation-unit-tests-suite-installation" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
+<p class="">Here, we’re assuming you are using <code class="text-purple">Minitest::Spec</code>, which is our preferred test style as it’s super concise, fast and readable. We also got <a href="#testing-with-trailblazer-minitest-suite-minitest-test" class="underline text-purple"><code class="text-purple">Minitest::Test</code></a> and <a href="#testing-with-trailblazer-rspec" class="underline text-purple">RSpec</a> helpers to offer.</p>
+
+<h4 id="testing-with-trailblazer-minitest-suite-installation" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Installation</span>
 
                   </h4>
@@ -732,7 +642,7 @@ end
 
 <p class="">This will initialize merging logic along with <code class="text-purple">default_ctx</code>, <code class="text-purple">expected_attributes</code>, <code class="text-purple">operation</code> and <code class="text-purple">key_in_params</code>. However, you still need to configure those defaults yourself.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-suite-default_ctx" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
+<h4 id="testing-with-trailblazer-minitest-suite-default_ctx" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">default_ctx</span>
 
                   </h4>
@@ -757,12 +667,12 @@ end
 
 <ul class="space-y-2">
   <li class="list-image-disc ml-10">Pass a hash to the assertion helpers, which will be merged with the model-specific values.</li>
-  <li class="list-image-disc ml-10"><a href="#trailblazer-test-operation-unit-tests-ctx-helper" class="underline text-purple"><code class="text-purple">Ctx()</code></a> for more extensive changes, or to entirely overwrite the default structure.</li>
+  <li class="list-image-disc ml-10"><a href="#testing-with-trailblazer-minitest-ctx-helper" class="underline text-purple"><code class="text-purple">Ctx()</code></a> for more extensive changes, or to entirely overwrite the default structure.</li>
 </ul>
 
 <p class="">The <code class="text-purple">default_ctx</code> is used as the <code class="text-purple">input</code> argument for <code class="text-purple">#assert_pass</code> and <code class="text-purple">#assert_fail</code>.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-suite-expected-attributes" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
+<h4 id="testing-with-trailblazer-minitest-suite-expected-attributes" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Expected attributes</span>
 
                   </h4>
@@ -780,7 +690,7 @@ end
 
 <p class="">This hash is used only with <code class="text-purple">#assert_pass</code> and represents the third positional argument.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-suite-operation" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
+<h4 id="testing-with-trailblazer-minitest-suite-operation" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">operation</span>
 
                   </h4>
@@ -792,7 +702,7 @@ end
 
 <p class="">Again, you may use any level of <code class="text-purple">describe</code> to fine-tune your tests. You may also override it using the [<code class="text-purple">:operation</code> option].</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-suite-key_in_params" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
+<h4 id="testing-with-trailblazer-minitest-suite-key_in_params" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">key_in_params</span>
 
                   </h4>
@@ -816,7 +726,7 @@ end
 end
 </code></pre>
 
-<h4 id="trailblazer-test-operation-unit-tests-suite-assert_pass" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
+<h4 id="testing-with-trailblazer-minitest-suite-assert_pass" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">assert_pass</span>
 
                   </h4>
@@ -849,14 +759,14 @@ end
   <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
   <div class="space-y-3">
     
-<p class="">All tactical features such as the <a href="#trailblazer-test-operation-unit-tests-assert_pass-block-style" class="underline text-purple">block style</a> or <a href="#trailblazer-test-operation-unit-tests-assert_pass-return-value" class="underline text-purple">returning the result object</a> are identical to the basic <code class="text-purple">#assert_pass</code> helper.</p>
+<p class="">All tactical features such as the <a href="#testing-with-trailblazer-minitest-assert_pass-block-style" class="underline text-purple">block style</a> or <a href="#trailblazer-test-operation-unit-tests-assert_pass-return-value" class="underline text-purple">returning the result object</a> are identical to the basic <code class="text-purple">#assert_pass</code> helper.</p>
 
   </div>
 </div>
 
 <p class="">Suite’s <code class="text-purple">#assert_pass</code> is aiming at very typical use cases when writing tests with a huge cover rate. Nevertheless, it saves you from having to repeat <code class="text-purple">params</code> hashes or expected attributes over and over again.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-suite-assert_fail" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
+<h4 id="testing-with-trailblazer-minitest-suite-assert_fail" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">assert_fail</span>
 
                   </h4>
@@ -872,7 +782,30 @@ end
 
 <p class="">Note that only <code class="text-purple">tag_list</code> is invalid! The required field <code class="text-purple">title</code> is still set via the <code class="text-purple">default_ctx</code>.</p>
 
-<h3 id="trailblazer-test-operation-unit-tests-ctx-helper" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Ctx Helper</span></h3>
+<h4 id="testing-with-trailblazer-minitest-suite-minitest-test" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Suite
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Minitest::Test</span>
+
+                  </h4>
+
+<p class="">You don’t have to use <code class="text-purple">Minitest::Spec</code>. If you fancy the rather cumbersome <code class="text-purple">Minitest::Test</code> style, pass the <code class="text-purple">spec: false</code> option when adding helpers.</p>
+
+<pre class=""><code class="rounded">class MemoCreateTest &lt; Minitest::Test
+  Trailblazer::Test::Assertion.module!(self, suite: true, spec: false)
+  # ...
+  def operation; Memo::Operation::Create end
+  def default_ctx; {params: {memo: {title: "Note to self", content: "Remember me!"}}} end
+  def expected_attributes; {title: "Note to self", content: "Remember me!"} end
+  def key_in_params; :memo end
+
+  def test_our_assertions
+    assert_pass({}, {})
+  end
+end
+</code></pre>
+
+<p class="">Instead of <code class="text-purple">let(...)</code> you now have to use methods to define default structures.</p>
+
+<h3 id="testing-with-trailblazer-minitest-ctx-helper" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Ctx Helper</span></h3>
 
 <p class="">If the rather simple auto-merging of the <code class="text-purple">ctx</code> in <code class="text-purple">Suite</code> is not enough, and you’re in need of a custom-tailored <code class="text-purple">ctx</code> to pass into the tested operation, use <code class="text-purple">Ctx()</code>. It mostly goes as the first argument to <code class="text-purple">#assert_pass</code> and <code class="text-purple">#assert_fail</code>.</p>
 
@@ -910,7 +843,7 @@ end
 
 <p class="">Whenever you use <code class="text-purple">Ctx()</code> the computed hash is passed through directly into the operation, so you have full control over what’s going in. Both <code class="text-purple">assert_pass</code> and <code class="text-purple">assert_fail</code> are not altering your ctx anymore.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-ctx-helper-merge" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Ctx Helper
+<h4 id="testing-with-trailblazer-minitest-ctx-helper-merge" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Ctx Helper
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Merge</span>
 
                   </h4>
@@ -930,7 +863,7 @@ end
 
 <p class="">This allows to quickly add variables such as the <code class="text-purple">:current_user</code> to the ctx.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-ctx-helper-params-merge" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Ctx Helper
+<h4 id="testing-with-trailblazer-minitest-ctx-helper-params-merge" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Ctx Helper
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Params Merge</span>
 
                   </h4>
@@ -951,7 +884,7 @@ end
 
 <p class="">Note how <code class="text-purple">:title</code> is added to the existing <code class="text-purple">:memo</code> hash, effectively overwriting the default <code class="text-purple">:title</code>.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-ctx-helper-exclude" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Ctx Helper
+<h4 id="testing-with-trailblazer-minitest-ctx-helper-exclude" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Ctx Helper
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Exclude</span>
 
                   </h4>
@@ -985,8 +918,7 @@ end
 end
 </code></pre>
 
-
-<h3 id="trailblazer-test-operation-unit-tests-mock_step" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Mock_step</span></h3>
+<h3 id="testing-with-trailblazer-minitest-mock_step" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Mock_step</span></h3>
 
 <p class="">To stub any step with heavy logic, I/O calls or external API interactions, use <code class="text-purple">#mock_step</code>.</p>
 
@@ -1019,7 +951,7 @@ end
 }
 </code></pre>
 
-<h4 id="trailblazer-test-operation-unit-tests-mock_step-nesting" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Mock_step
+<h4 id="testing-with-trailblazer-minitest-mock_step-nesting" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Mock_step
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Nesting</span>
 
                   </h4>
@@ -1048,7 +980,7 @@ end
 
 <p class="">Make sure you use IDs for nested operations to make patching simpler. Check the <a href="/2.1/docs/operation/#operation-step-dsl-patching" class="underline text-purple">patching docs</a> for a better understanding.</p>
 
-<h3 id="trailblazer-test-operation-unit-tests-assert_exposes" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Assert_exposes</span></h3>
+<h3 id="testing-with-trailblazer-minitest-assert_exposes" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Assert_exposes</span></h3>
 
 <p class="">To test a bunch of attributes of an arbitrary object, <code class="text-purple">#assert_pass</code> internally uses <code class="text-purple">#assert_exposes</code>.</p>
 
@@ -1069,7 +1001,7 @@ assert_equal "Rancid",   model.band
 
 <p class="">Note that <code class="text-purple">assert_exposes</code> accepts any object with a reader interface.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_exposes-reader" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_exposes
+<h4 id="testing-with-trailblazer-minitest-assert_exposes-reader" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_exposes
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Reader</span>
 
                   </h4>
@@ -1092,7 +1024,7 @@ end
 
 <p class="">Now the value is read via <code class="text-purple">model.get(:title)</code>.</p>
 
-<h4 id="trailblazer-test-operation-unit-tests-assert_exposes-lambda" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_exposes
+<h4 id="testing-with-trailblazer-minitest-assert_exposes-lambda" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_exposes
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Lambda</span>
 
                   </h4>
@@ -1106,98 +1038,120 @@ end
 
 <p class="">The lambda will receive a hash with the <code class="text-purple">:actual</code> value read from the asserted object. It must return a boolean.</p>
 
+<h2 id="testing-with-trailblazer-rspec" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Rspec</span></h2>
+
+<p class=""><span class="flex max-w-fit max-h-7 border border-grey uppercase text-grey text-xs pt-1 pb-1 pl-2 pr-2 pr-1 ml-4 rounded">
+            <svg class="fill-grey mt-[2px]" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M168.5 72L256 165l87.5-93h-175zM383.9 99.1L311.5 176h129L383.9 99.1zm50 124.9H256 78.1L256 420.3 433.9 224zM71.5 176h129L128.1 99.1 71.5 176zm434.3 40.1l-232 256c-4.5 5-11 7.9-17.8 7.9s-13.2-2.9-17.8-7.9l-232-256c-7.7-8.5-8.3-21.2-1.5-30.4l112-152c4.5-6.1 11.7-9.8 19.3-9.8H376c7.6 0 14.8 3.6 19.3 9.8l112 152c6.8 9.2 6.1 21.9-1.5 30.4z"></path></svg>
+            <a href="https://github.com/trailblazer/rspec-trailblazer/tree/v0.1.0" class="ml-1" title="This feature was introduced in rspec-trailblazer v0.1.0.">rspec-trailblazer 0.1.0</a>
+          </span></p>
+
+<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
+  <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
+  <div class="space-y-3">
+    
+<p class="">We’re still working on RSpec matchers. Please <a href="https://trailblazer.zulipchat.com" class="underline text-purple">chat with us</a> if you want to help.</p>
+
+  </div>
+</div>
+
         </div>
 
             <!-- 5.5rem is lg navbar height -->
         <div class="bg-white h-screen w-56 sticky top-[5.5rem]" id="right-toc">
           <div id="docsearch" class="flex flex-col w-[203px] pt-5"></div>
 
-          <div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-trailblazer-test-installation">
+          <div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-testing-with-trailblazer-minitest">
   <h4 class="font-base font-bold leading-10 pl-2">
-     Installation
+     Minitest
   </h4>
 
+  
+    <a class="block px-2 leading-8" href="#testing-with-trailblazer-minitest-installation">Installation</a>
+
+    
+  
+    <a class="block px-2 leading-8" href="#testing-with-trailblazer-minitest-base-class">Base class</a>
+
+    
+  
+    <a class="block px-2 leading-8" href="#testing-with-trailblazer-minitest-assert_pass">Assert_pass</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_pass-return-value">Return value</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_pass-block-style">Block style</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_pass-model-assertions">Model assertions</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_pass-model_at">model_at</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_pass-wtf-">WTF?</a>
+    
+  
+    <a class="block px-2 leading-8" href="#testing-with-trailblazer-minitest-assert_fail">Assert_fail</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_fail-return-value">Return value</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_fail-block-style">Block style</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_fail-contract-errors">Contract errors</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_fail-wtf-">WTF?</a>
+    
+  
+    <a class="block px-2 leading-8" href="#testing-with-trailblazer-minitest-suite">Suite</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-suite-installation">Installation</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-suite-default_ctx">default_ctx</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-suite-expected-attributes">Expected attributes</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-suite-operation">operation</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-suite-key_in_params">key_in_params</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-suite-assert_pass">assert_pass</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-suite-assert_fail">assert_fail</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-suite-minitest-test">Minitest::Test</a>
+    
+  
+    <a class="block px-2 leading-8" href="#testing-with-trailblazer-minitest-ctx-helper">Ctx Helper</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-ctx-helper-merge">Merge</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-ctx-helper-params-merge">Params Merge</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-ctx-helper-exclude">Exclude</a>
+    
+  
+    <a class="block px-2 leading-8" href="#testing-with-trailblazer-minitest-mock_step">Mock_step</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-mock_step-nesting">Nesting</a>
+    
+  
+    <a class="block px-2 leading-8" href="#testing-with-trailblazer-minitest-assert_exposes">Assert_exposes</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_exposes-reader">Reader</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#testing-with-trailblazer-minitest-assert_exposes-lambda">Lambda</a>
+    
   
 </div>
 
 
-<div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-trailblazer-test-operation-unit-tests">
+<div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-testing-with-trailblazer-rspec">
   <h4 class="font-base font-bold leading-10 pl-2">
-     Operation unit tests
+     Rspec
   </h4>
 
-  
-    <a class="block px-2 leading-8" href="#trailblazer-test-operation-unit-tests-base-class">Base class</a>
-
-    
-  
-    <a class="block px-2 leading-8" href="#trailblazer-test-operation-unit-tests-assert_pass">Assert_pass</a>
-
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_pass-return-value">Return value</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_pass-block-style">Block style</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_pass-model-assertions">Model assertions</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_pass-model_at">model_at</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_pass-wtf-">WTF?</a>
-    
-  
-    <a class="block px-2 leading-8" href="#trailblazer-test-operation-unit-tests-assert_fail">Assert_fail</a>
-
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_fail-return-value">Return value</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_fail-block-style">Block style</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_fail-contract-errors">Contract errors</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_fail-wtf-">WTF?</a>
-    
-  
-    <a class="block px-2 leading-8" href="#trailblazer-test-operation-unit-tests-suite">Suite</a>
-
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-suite-installation">Installation</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-suite-default_ctx">default_ctx</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-suite-expected-attributes">Expected attributes</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-suite-operation">operation</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-suite-key_in_params">key_in_params</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-suite-assert_pass">assert_pass</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-suite-assert_fail">assert_fail</a>
-    
-  
-    <a class="block px-2 leading-8" href="#trailblazer-test-operation-unit-tests-ctx-helper">Ctx Helper</a>
-
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-ctx-helper-merge">Merge</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-ctx-helper-params-merge">Params Merge</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-ctx-helper-exclude">Exclude</a>
-    
-  
-    <a class="block px-2 leading-8" href="#trailblazer-test-operation-unit-tests-mock_step">Mock_step</a>
-
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-mock_step-nesting">Nesting</a>
-    
-  
-    <a class="block px-2 leading-8" href="#trailblazer-test-operation-unit-tests-assert_exposes">Assert_exposes</a>
-
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_exposes-reader">Reader</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#trailblazer-test-operation-unit-tests-assert_exposes-lambda">Lambda</a>
-    
   
 </div>
 
