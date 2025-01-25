@@ -24,7 +24,7 @@ namespace :site do
 
       # puts "== Creating public/dist =="
 
-      puts "=== Commiting dist/"
+      puts "=== Committing dist/"
       commit_message = "Publishing dist/"
       system("git add dist && git commit -m '#{commit_message}'")
 
