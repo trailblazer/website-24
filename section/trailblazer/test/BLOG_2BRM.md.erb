@@ -31,5 +31,81 @@ In short, when invoking the `Memo::Operation::Create` operation, the three examp
 
 If you're keen to learn more about operations and the internal railway model, check our [extensive docs] or simply watch a [5 minute video].
 
+<%= h3 "Minitest or RSpec?" %>
 
+These examples are using `Minitest`, as we think it's much more readable than RSpec. RSpec on the other hand is providing a great toolset but, whatsoever, is putting too much effort into a test _DSL_ that's extremely verbose.
+
+As a matter of fact, this is a matter of taste - no holy wars here: we also have [RSpec support].
+
+<%= h3 "Asserting success" %>
+
+Now, to show you a very simple test case, let's create a test file, configure it, and run the `Create` operation with a particular input to assert that it terminates successfully.
+
+~~~ruby
+# test/operation/memo_test.rb
+
+require "test_helper"
+
+class MemoOperationTest < Minitest::Spec
+  Trailblazer::Test.module!(self) # install our helpers.
+
+  it "passes with valid input" do
+    input = {params: {memo: {content: "Stock up beer"}}}
+
+    assert_pass Memo::Operation::Create, input
+  end
+end
+~~~
+
+Using `Test.module!` you include the `#assert_pass` assertion into the test class. In its simplest form, it takes the operation constant, and any kind of input hash.
+
+Internally, the assertion runs the operation with the specified input and then tests if the outcome was successful. This roughly translates to the following snippet, which I've seen throughout many TRB projects.
+
+~~~ruby
+it "passes with valid input" do
+  # ...
+  result = Memo::Operation::Create.(input)
+
+  assert_equal result.success?, true
+end
+~~~
+
+There is nothing wrong with doing the above manually, but our assertions bring a (hopefully!) much better developer experience that we're about to discover.
+
+<%= h3 "Debugging? You're welcome!" %>
+
+A typical issue for developers when writing or changing tests is that an operation supposed to be passing actually *fails*. Most of the times, this is due to validation errors. Given that you're using a contract with an errors object, a failing `#assert_pass` will automatically give the the validation errors.
+
+<%= image_tag "assert-pass-message" %>
+
+If that is not enough, you can simply add a question mark to the assertion.
+
+~~~ruby
+it "passes with valid input" do
+  # ...
+  assert_pass? Memo::Operation::Create, input
+end
+~~~
+
+This gives you the `#wtf?` trace on the console
+
+<%= image_tag "assert-pass-failing-wtf" %>
+
+Those two debugging features have been suggested by several TRB users over the years, as both checking the contract errors as well as turning on tracing (`#wtf?`) are the first things done manually by many developers.
+
+<%= h3 "Testing the model" %>
+
+First of all, our assertions bla standard
+
+
+~~~ruby
+it "passes with valid input" do
+    input = {params: {memo: {content: "Stock up beer"}}}
+
+    assert_pass Memo::Operation::Create, input,
+        content:    "Stock up beer",
+        persisted?: true,
+        id:         ->(asserted:, **) { asserted.id > 0 }
+  end
+~~~
 mock_step
