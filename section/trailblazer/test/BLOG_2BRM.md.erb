@@ -95,17 +95,35 @@ Those two debugging features have been suggested by several TRB users over the y
 
 <%= h3 "Testing the model" %>
 
-First of all, our assertions bla standard
+While checking if an operation ran successfully is a great thing to do, bringing joy and happiness to the team, the product managers, and the clients, a good test needs to do a bit more.
 
+In most cases, an operation produces or alters a model, which is usually found under `ctx[:model]`. After running, you may want to check if model attributes match your high expectations.
+
+One way would be to use the block style and do the testing yourself.
 
 ~~~ruby
 it "passes with valid input" do
-    input = {params: {memo: {content: "Stock up beer"}}}
-
-    assert_pass Memo::Operation::Create, input,
-        content:    "Stock up beer",
-        persisted?: true,
-        id:         ->(asserted:, **) { asserted.id > 0 }
-  end
+  # ...
+  assert_pass Memo::Operation::Create, input do |result|
+    assert_equal result[:model].content, "Stock up beer"
+    # ...
+end
 ~~~
+
+The block simply yields the `Result` object (or, when using an Activity, the `ctx`), and it's up to you what gets asserted inside.
+
+Alternatively, you can use the built-in attributes test of `#assert_pass`.
+
+~~~ruby
+it "passes with valid input" do
+  # ...
+  assert_pass Memo::Operation::Create, input,
+      content:    "Stock up beer",
+      persisted?: true,
+      id:         ->(asserted:, **) { asserted.id > 0 }
+end
+~~~
+
+Your new best friend `#assert_pass` takes keywords as its third argument. Those are automatically matched against `result[:model]`. As you can see for `:id`, even dynamic assertions are possible.
+
 mock_step
