@@ -87,11 +87,11 @@ it "passes with valid input" do
 end
 ~~~
 
-This gives you the `#wtf?` trace on the console
+This gives you the highly popular [`#wtf?` trace] on the console
 
 <%= image_tag "assert-pass-failing-wtf" %>
 
-Those two debugging features have been suggested by several TRB users over the years, as both checking the contract errors as well as turning on tracing (`#wtf?`) are the first things done manually by many developers.
+Those two incredibly helpful features for debugging have been suggested by several TRB users over the years, as both checking the contract errors as well as turning on tracing (`#wtf?`) are the first things immediately done manually by many developers when hitting an issue.
 
 <%= h3 "Testing the model" %>
 
@@ -118,12 +118,74 @@ Alternatively, you can use the built-in attributes test of `#assert_pass`.
 it "passes with valid input" do
   # ...
   assert_pass Memo::Operation::Create, input,
-      content:    "Stock up beer",
-      persisted?: true,
-      id:         ->(asserted:, **) { asserted.id > 0 }
+    content:    "Stock up beer",
+    persisted?: true,
+    id:         ->(asserted:, **) { asserted.id > 0 }
 end
 ~~~
 
 Your new best friend `#assert_pass` takes keywords as its third argument. Those are automatically matched against `result[:model]`. As you can see for `:id`, even dynamic assertions are possible.
 
+The combination of the block style and the built-in model assertions provides a rich interface for testing any successful outcome of your operations.
+
+<%= h3 "When things go wrong" %>
+
+So far, we learned how to test scenarios when things work out. And for the other part, when things don't play and operations are supposed to actually fail, we provide `#assert_fail` - you already guessed that method name, right?
+
+In many cases, an operation will fail if its validations aren't met. You can simply check if the operation terminated on the `failure` terminus by using the new assertion with one argument, only.
+
+~~~ruby
+it "fails with invalid input" do
+  invalid_input = {params: {memo: {}}}
+
+  assert_fail Memo::Operation::Create, invalid_input
+end
+~~~
+
+In rare cases, this might be a sufficient test, but most of the times you want to assert errors more detailed.
+
+<%= h3 "Testing error messages" %>
+
+Given that you're using a [contract in the operation], you can ask `#assert_fail` to check for specific validation error messages.
+
+~~~ruby
+it "fails with invalid input" do
+  # ...
+  assert_fail Memo::Operation::Create, invalid_input,
+    [:title, :content] # erroring fields.
+end
+~~~
+
+The assertion will now check if the internal contract errors object contains the erroring fields you provided, resulting in a manual test that could look like so.
+
+~~~ruby
+it "fails with invalid input" do
+  # ...
+  assert_equal result["contract.default"].errors.messages.keys,
+    [:title, :content]
+end
+~~~
+
+To write an even stricter test, you can provide the error messages as an additional constraint.
+
+~~~ruby
+it "fails with invalid input" do
+  # ...
+  assert_fail Memo::Operation::Create, invalid_input,
+    {
+      title: ["must be filled"],
+      content: ["must be filled", "size cannot be less than 8"]
+    }
+end
+~~~
+
+When expected error messages do not match the actual ones, the assertion automatically shows you the latter.
+
+<%= image_tag "assert-fail-message" %>
+
+Again, optimizing your experience and shortcutting ways to help you debug.
+
+All assertions provide the [block syntax] and [return the result], in case you have to add more test code.
+
+suite
 mock_step
