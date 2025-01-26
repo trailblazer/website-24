@@ -47,6 +47,11 @@ The very basic version of `#assert_pass` runs an operation and asserts the reach
 
 You need to pass the operation constant and the entire input hash yourself.
 
+Note that if the assertion _fails_, it will help debugging right away by giving you the contract errors.
+
+<%= image_tag "assert-pass-message" %>
+
+
 <%= h4 "Return value" %>
 
 The assertion helper returns the operation's result object (or `ctx` when testing an `Activity`) allowing you to write your own assertions per test case.
