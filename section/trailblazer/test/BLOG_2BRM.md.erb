@@ -1,0 +1,35 @@
+<%= h2 "All eyes on the edge case: Unit tests in Trailblazer" %>
+
+_by Nick Sutterer @apotonick_
+
+When programming software, writing and maintaining automated tests is the most hated part. Everyone reading this is nodding right now.
+
+It's not only the pain to set up the environment needed for testing a specific case, but also the amount of work and actually written lines of code to make sure you're covering "everything" that could be affected by the new chunk of code you introduced.
+
+In this post, I want to focus on the second part of this bold statement and quickly show you how the just released `trailblazer-test` gem allows writing very concise unit tests for Trailblazer operations. A lot of work has been put into it to make covering edge cases as simple as possible.
+
+<%= h3 "What is an operation?" %>
+
+Trailblazer provides a service object called _operation_. It's the place where you put the business logic for a particular use case you are working on. With it's very simple DSL, logic can be organized in chunks and executed step-wise.
+
+~~~ruby
+module Memo::Operation
+  class Create < Trailblazer::Operation
+    step :check_data
+    step :validate
+    step :save
+    # ...
+
+    def save(ctx, params:, **)
+      Memo.create(params[:memo])
+    end
+  end
+end
+~~~
+
+In short, when invoking the `Memo::Operation::Create` operation, the three examplary steps will be executed in the order you defined them. If a step fails (by returning false), the remaining steps are skipped and the operation terminates, indicating a _failure_.
+
+If you're keen to learn more about operations and the internal railway model, check our [extensive docs] or simply watch a [5 minute video].
+
+
+mock_step
