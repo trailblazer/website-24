@@ -185,7 +185,82 @@ When expected error messages do not match the actual ones, the assertion automat
 
 Again, optimizing your experience and shortcutting ways to help you debug.
 
-All assertions provide the [block syntax] and [return the result], in case you have to add more test code.
+<%= h3 "What about extendability?" %>
 
-suite
+Both assertions shipped with `trailblazer-test` provide the [block syntax](#testing-with-trailblazer-minitest-assert_pass-block-style) and [return the result](#testing-with-trailblazer-minitest-assert_pass-return-value), in case you need to add more test code.
+
+Also, keep in mind that the assertions described here are what *we* needed to minimize time, code and brain when writing tests. Feel free to [ping us](https://trailblazer.zulipchat.com) for discussing any extensions of the gem.
+
+<%= h3 "Suite: Minimizing code" %>
+
+The assertions described so far are designed to take away pain in your testing, but they require you to repeat arguments over and over again. The ["Suite" mode](https://trailblazer.to/2.1/docs/test/index.html#testing-with-trailblazer-minitest-suite) targets defaulting, so the written code is even less.
+
+Imagine you're testing our `Create` operation and you want to make sure that all validations are actually working, each one in a separate test case. Here's how that could look using the suite feature.
+
+~~~ruby
+# test/memo/operation_test.rb
+class MemoOperationTest < Minitest::Spec
+  Trailblazer::Test.module!(self, suite: true)
+
+  describe "Create" do
+    # insert defaulting here, see below...
+
+    it "{content} works" do
+      assert_pass({content: "chill beer"}, {content: "chill beer"})
+    end
+
+    it "{tag_list} is converted to array" do
+      assert_pass(
+        {tag_list: "fridge,todo"},      # input
+        {tag_list: ["fridge", "todo"]}  # model value.
+      )
+    end
+  end
+end
+~~~
+
+In suite mode, arguments such as operation, the incoming "default ctx" and expected attributes on the model can be set (and overwritten!) on the class and `describe` level.
+
+You can do this by simply defining special-named `let()` blocks on any level.
+
+~~~ruby
+# test/memo/operation_test.rb
+class MemoOperationTest < Minitest::Spec
+  Trailblazer::Test.module!(self, suite: true)
+
+  describe "Create" do
+
+  end
+~~~
+
 mock_step
+    # The default ctx passed into the tested operation.
+    #:default-ctx
+    let(:default_ctx) do
+      {
+        params: {
+          memo: { # Note the {:memo} key here!
+            title:   "Todo",
+            content: "Stock up beer",
+          }
+        }
+      }
+    end
+    #:default-ctx end
+
+    #:expected-attrs
+    # What will the model look like after running the operation?
+    let(:expected_attributes) do
+      {
+        title:   "Todo",
+        content:  "Stock up beer",
+      }
+    end
+    #:expected-attrs end
+
+    #:let-operation
+    let(:operation)     { Memo::Operation::Create }
+    #:let-operation end
+    #:let-key-in-params
+    let(:key_in_params) { :memo }
+    #:let-key-in-params end
