@@ -219,23 +219,18 @@ class MemoOperationTest < Minitest::Spec
 end
 ~~~
 
-In suite mode, arguments such as operation, the incoming "default ctx" and expected attributes on the model can be set (and overwritten!) on the class and `describe` level.
+In suite mode, assertion arguments such as operation, the incoming ctx and expected attributes on the model can be set (and overwritten!) on the class and `describe` level.
 
-You can do this by simply defining special-named `let()` blocks on any level.
+<%= h3 "Defaulting over verbosity" %>
+
+You can default arguments by simply defining special-named `let()` blocks on any level.
 
 ~~~ruby
 # test/memo/operation_test.rb
 class MemoOperationTest < Minitest::Spec
-  Trailblazer::Test.module!(self, suite: true)
-
+  # ...
   describe "Create" do
-
-  end
-~~~
-
-mock_step
-    # The default ctx passed into the tested operation.
-    #:default-ctx
+    let (:operation) { Memo::Operation::Create }
     let(:default_ctx) do
       {
         params: {
@@ -246,21 +241,48 @@ mock_step
         }
       }
     end
-    #:default-ctx end
+    let(:expected_attributes) { ... }
+  end
+~~~
 
-    #:expected-attrs
-    # What will the model look like after running the operation?
-    let(:expected_attributes) do
-      {
-        title:   "Todo",
-        content:  "Stock up beer",
-      }
-    end
-    #:expected-attrs end
+Instead of having to repeat those values, the suite-enabled assertions will use and accordingly merge arguments for you. A desired side-effect is that `#assert_pass` always checks *all* attributes on the model as it merges `expected_attributes` with the second hash you provided.
 
-    #:let-operation
-    let(:operation)     { Memo::Operation::Create }
-    #:let-operation end
-    #:let-key-in-params
-    let(:key_in_params) { :memo }
-    #:let-key-in-params end
+[Check the docs](https://trailblazer.to/2.1/docs/test/index.html#testing-with-trailblazer-minitest-suite) to dive into this simple yet helpful feature.
+
+<%= h3 "Stop mocking me!" %>
+
+While it's usually good practice to test the entire stack of logic, meaning your tests also cover complex system parts like external services, sometimes it's necessary to stub a component.
+
+Replacing a particular step can easily be done using `#mock_step`. You are correct when objecting that this method should be named `#stub_step`, but that's too close to `dub_step` and we haven't added an alias, yet. Note that a "step" could be an entire, nested operation using `Subprocess()`, anything modeled as a step can be stubbed.
+
+~~~ruby
+it "runs fine" do
+  stubbed_create = mock_step(Memo::Operation::Create, path: [:save]) do |ctx, **|
+    # new logic for {save}.
+    ctx[:saved] = true
+  end
+
+  assert_pass stubbed_create, ...
+end
+~~~
+
+The `:path` option allows targeting either a first-level step sitting directly in `Create`, or a deeply nested step somewhere 6 levels down in your nested operation graph. [Check the docs](https://trailblazer.to/2.1/docs/test/index.html#testing-with-trailblazer-minitest-mock_step) for some more detailed examples.
+
+The `#mock_step` helper returns a new operation class which can then be passed to the assertions, or even returned from `let(:operation)` if using suite mode.
+
+Maybe this post is a good place to mention that the entire stubbing logic is simply using the [patch feature](https://trailblazer.to/2.1/docs/operation/index.html#operation-step-dsl-patching) of Trailblazer internally - implementing this for the `trailblazer-test` gem was nothing more but applying the patching mechanics with three lines of code.
+
+<%= h3 "RSpec and more" %>
+
+In the next post we're going to introduce the RSpec matchers that are based on this gem.
+
+~~~ruby
+it "passes with manual attributes" do
+  input = {params: {memo: {title: "Reminder", content: "Do not forget"}}}
+
+  expect(run(Memo::Operation::Create, input)).
+    to pass_with(title: "Reminder")
+end
+~~~
+
+Being a bit more verbose, they provide the exact same behavior that we ship for Minitest. If you have suggestions or ideas, never hesitate to discuss those with us! Now, have fun testing. Or at least, try to!
