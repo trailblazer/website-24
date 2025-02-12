@@ -9,34 +9,37 @@
 
 <%= h2 "Controller" %>
 
-The layer helping you in controllers provides the canonical invoke via the `#invoke` method, and it gives you a super simple and customizable DSL to configure injected options.
+The layer helping you in controllers provides the canonical invoke via the `#invoke` method, and offers a super simple and customizable DSL to configure injected options.
+
+<%= h3 "Installation" %>
+
+Include the `Controller` module into your `ApplicationController` to use the endpoint controller layer across your app.
+
+<%= code "application-controller", zoom: "include" %>
+
+Your controller and all subclasses are now ready to configure and run endpoints.
 
 <%= h3 "Invoke" %>
 
 To use the [canonical invoke](#endpoint-canonical-invoke) along with all its mechanics, use the `#invoke` method in your controller actions. It will automatically inject the well-defined options for each operation call, and accepts an optional block to handle different outcomes.
 
+<%= code "controller", zoom: "create" %>
+
+In the example above, input for the operation, such as `:params`, needs to be handed manually into `#invoke`.
+
+Also, every possible outcome has to be defined by hand in the matcher block, cluttering the simple controller action with verbose code.
+
+However, it's actually very simple to move the reappearing options and matchers one level up using the [configuration DSL](#endpoint-controller-configuration).
 
 <%= h3 "Configuration" %>
 
-
-
-To use endpoint's runtime tool `#invoke` and its configuration directives, include the `Controller` module in your `ApplicationController`.
-
-<%= code "application-controller-include", file: "../../app/controllers/application_controller.rb" %>
-
-Your controller and all subclasses are now ready to configure and run endpoints. Move all generic, reusable configuration to the uppermost controller - usually that'd be the `ApplicationController`.
-
-The easiest way to configure is using the `::endpoint` block DSL.
+You can predefine endpoint-specific options within the `endpoint` block of every controller. Usually, that would be done on the `ApplicationController` level.
 
 <%= code :ruby do %>
 class ApplicationController < ActionController::Base
   include Trailblazer::Endpoint::Controller.module
 
   endpoint do
-    options do
-      # ...
-    end
-
     ctx do
       # ...
     end
@@ -44,5 +47,25 @@ class ApplicationController < ActionController::Base
     default_matcher do
       # ...
     end
+
+    flow_options do
+      # ...
+    end
   end
 <% end %>
+
+The various directives are discussed in the following sections.
+
+<%= h4 "ctx" %>
+
+Use the `ctx` block to define what ctx variables always get passed into the operation invocation.
+
+<%= code "b-endpoint-dsl", zoom: "ctx" %>
+
+Note that you have access to `:controller` and `:activity` as block keyword arguments. Any number of ctx variables may be added, such as the `current_user`.
+
+Now, the controller action doesn't need to pass `params` anymore.
+
+<%= code "b-create", collapse: "skip" %>
+
+Variables being passed manually to `#invoke` are merged with the `endpoint.ctx` hash.
