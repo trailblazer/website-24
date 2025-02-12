@@ -1,0 +1,48 @@
+  Controller
+    ctx {} config bla
+    #invoke
+
+  Protocol layer
+
+
+
+
+<%= h2 "Controller" %>
+
+The layer helping you in controllers provides the canonical invoke via the `#invoke` method, and it gives you a super simple and customizable DSL to configure injected options.
+
+<%= h3 "Invoke" %>
+
+To use the [canonical invoke](#endpoint-canonical-invoke) along with all its mechanics, use the `#invoke` method in your controller actions. It will automatically inject the well-defined options for each operation call, and accepts an optional block to handle different outcomes.
+
+
+<%= h3 "Configuration" %>
+
+
+
+To use endpoint's runtime tool `#invoke` and its configuration directives, include the `Controller` module in your `ApplicationController`.
+
+<%= code "application-controller-include", file: "../../app/controllers/application_controller.rb" %>
+
+Your controller and all subclasses are now ready to configure and run endpoints. Move all generic, reusable configuration to the uppermost controller - usually that'd be the `ApplicationController`.
+
+The easiest way to configure is using the `::endpoint` block DSL.
+
+<%= code :ruby do %>
+class ApplicationController < ActionController::Base
+  include Trailblazer::Endpoint::Controller.module
+
+  endpoint do
+    options do
+      # ...
+    end
+
+    ctx do
+      # ...
+    end
+
+    default_matcher do
+      # ...
+    end
+  end
+<% end %>

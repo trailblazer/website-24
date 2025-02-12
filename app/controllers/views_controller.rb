@@ -655,6 +655,7 @@ class ViewsController < ApplicationController
         "mock_step.md.erb" => {snippet_file: "mock_step_test.rb"},
         "assertions/expose.md.erb" => {snippet_file: "assertions/expose_test.rb"},
         "rspec.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
+        "BLOG_2BRM.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
         # "system.md.erb" => {snippet_file: "helpers/mocking_test.rb"},
       }
     },
@@ -719,6 +720,8 @@ class ViewsController < ApplicationController
         target_url:  "/2.1/docs/endpoint/index.html",
 
         "overview.md.erb"      => {snippet_file: "memo_controller_test.rb"},
+        "controller.md.erb"      => {snippet_file: "memo_controller_test.rb"},
+        "protocol.md.erb"      => {snippet_file: "memo_controller_test.rb"},
         # "api.md.erb"           => {snippet_file: "basics_test.rb"},
         # "web.md.erb"           => {snippet_file: "basics_test.rb"},
 
