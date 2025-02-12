@@ -68,4 +68,28 @@ Now, the controller action doesn't need to pass `params` anymore.
 
 <%= code "b-create", collapse: "skip" %>
 
-Variables being passed manually to `#invoke` are merged with the `endpoint.ctx` hash.
+Variables passed manually to `#invoke` are merged with the `endpoint.ctx` hash.
+
+<%= h4 "default_matcher" %>
+
+Using the `endpoint` DSL, you can keep controller actions lean by defining generic handlers once, on the `ApplicationController` level using the `default_matcher` block.
+
+<%= code "b-endpoint-dsl", zoom: "default_matcher" %>
+
+The hash defines handlers keyed by terminus names. The handler block receives the `ctx` along with keyword arguments, returned by the operation.
+
+The block is executed in the controller context, allowing you to use its internal API, e.g. `#render` or `#head`.
+
+With the above configuration, the controller action now only needs one matcher.
+
+<%= code "b-create" %>
+
+Note that a default `success` handler is overridden by the block passed to `#invoke`.
+
+<%= h4 "Inheritance" %>
+
+Per default, all configuration options are inherited, allowing you very lean concrete controllers that only override specific directives.
+
+<%= code "controller", collapse: "create" %>
+
+`MemosController` inherits all `endpoint` options from `ApplicationController` and allows overriding those.
