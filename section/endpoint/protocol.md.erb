@@ -1,1 +1,45 @@
 <%= h2 "Protocol" %>
+
+Whenever you need an operation *"around"* your actual business operation, to add authentication, policy checks, finding models, or other steps before or after your domain code, you want to start using a _protocol_ endpoint. We usually call those simply _endpoint_.
+
+<%= h3 "Overview" %>
+
+A protocol endpoint is defined per *use case*, which usually corresponds to a particular controller action and operation. In this example, an `Update` operation is embraced by its endpoint. You may add arbitrary steps to the endpoint, such as authentication, authorization or data filtering that is unrelated to your business domain.
+
+<%= image_tag "endpoint-update.png" %>
+
+Here, two exemplary steps `authenticate` and `policy` are placed before the actual business operation `Memo::Operation::Update`. Also note how both "protocol steps" lead to their own terminus. However, the layout of the endpoint is completely up to you.
+
+Endpoints define a fixed set of possible outcomes: besides `success` and `failure` there might be additional, more fine-grained termini like `not_found` or even `credit_card_invalid`. It's the job of your team to decide which generic, reusable termini to introduce.
+
+The key idea of a fixed set of outcomes is a fixed set of handlers. You implement the handlers for each terminus once, and override those in specific cases per controller or controller action. In other words, `not_found` renders a 404 error automatically, but you can customize the rendering in a `success` outcome manually.
+
+<%= h4 "Protocol" %>
+
+Endpoints can be used anywhere, in controllers, tests, background jobs, or wherever you need to invoke an operation. This example showcases a typical Rails controllers using an operation `Memo::Operation::Create` along with our self-tailored protocol. The latter might look like so.
+
+<%= code "protocol" %>
+
+The `Protocol`, for obvious reasons, needs to be an `Activity` subclass like `Railway` or `FastTrack`. The steps involved, the termini exposed, all that is up to the designer. Only one step named `:domain_activity` is mandatory as this step gets replaced with the actual business operation.
+
+<%= h4 "Defining" %>
+
+Use the controller method `::endpoint` to compile an actual endpoint with your `Protocol` and a concrete operation.
+
+<%= code "endpoint-controller", zoom: "define" %>
+
+This is done on the class level so it's compiled and stored once.
+
+<%= h4 "Invocation" %>
+
+To run the protocol with your operation, use `#invoke`. This part is (almost) identical to when running an [operation without a protocol](#endpoint-controller-invoke).
+
+<%= code "endpoint-controller", zoom: "create" %>
+
+With `protocol: true`, the invocation logic will grab the endpoint you created earlier. Check the `#wtf?` trace to understand what happens here.
+
+<%= image_tag "protocol-wtf" %>
+
+As planned, the business operation is run as one step of the protocol.
+
+Nevertheless, this example is very verbose. You can move many options onto the controller level. This is discussed in the following sections.

@@ -721,10 +721,7 @@ class ViewsController < ApplicationController
 
         "overview.md.erb"      => {snippet_file: "memo_controller_test.rb"},
         "controller.md.erb"      => {snippet_file: "no_protocol_test.rb"},
-        "protocol.md.erb"      => {snippet_file: "memo_controller_test.rb"},
-        # "api.md.erb"           => {snippet_file: "basics_test.rb"},
-        # "web.md.erb"           => {snippet_file: "basics_test.rb"},
-
+        "protocol.md.erb"      => {snippet_file: "protocol_test.rb"},
       }
     },
 
