@@ -43,3 +43,37 @@ With `protocol: true`, the invocation logic will grab the endpoint you created e
 As planned, the business operation is run as one step of the protocol.
 
 Nevertheless, this example is very verbose. You can move many options onto the controller level. This is discussed in the following sections.
+
+<%= h3 "Configuration" %>
+
+Any [configuration directive](#endpoint-controller-configuration) from the controller layer can be used in combination with a protocol. Anyhow, we do have additional options to fine-tune the compilation of your protocol endpoints.
+
+<%= h4 "options" %>
+
+Use the `options` directive to default options used when defining endpoints on the controller level.
+
+<%= code "controller-options", zoom: "endpoint" %>
+
+With the above setting, you can skip the `:protocol` option.
+
+<%= code "controller-options", zoom: "define" %>
+
+Note that you can still manually override the class-wide option when defining the endpoint.
+
+<%= h4 "fast_track_to_railway" %>
+
+If you're not interested in handling your operation's `pass_fast` and `fail_fast` termination separately, you can use the `:fast_track_to_railway` shortcut in `options` to wire the two fast track termini to their railway friends.
+
+<%= code "controller-fast-track", zoom: "endpoint", collapse: "skip" %>
+
+This will result in a flow diagram similar to this.
+
+<%= image_tag "endpoint-fast-track-rw.png" %>
+
+Here, the distinction between `failure` and `fail_fast` gets lost after the endpoint has been run. In most scenarios, this is desired, as this mimics querying the result object via `result.success?`.
+
+However, in some cases, you might want to deal with a `fail_fast` or `pass_fast` termination of your operation. Simply override it when defining the specific endpoint.
+
+<%#= code "b-controller", zoom: "fast-track" %>
+
+Your endpoint now needs to define those two additional termini, so they can be properly connected.
