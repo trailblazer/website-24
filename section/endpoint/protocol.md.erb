@@ -16,11 +16,15 @@ The key idea of a fixed set of outcomes is a fixed set of handlers. You implemen
 
 <%= h4 "Protocol" %>
 
-Endpoints can be used anywhere, in controllers, tests, background jobs, or wherever you need to invoke an operation. This example showcases a typical Rails controllers using an operation `Memo::Operation::Create` along with our self-tailored protocol. The latter might look like so.
+Endpoints can be used anywhere, in controllers, tests, background jobs, or wherever you need to invoke an operation. This example showcases a typical Rails controller using an operation `Memo::Operation::Create` along with our self-tailored protocol. The latter might look like so.
 
 <%= code "protocol" %>
 
-The `Protocol`, for obvious reasons, needs to be an `Activity` subclass like `Railway` or `FastTrack`. The steps involved, the termini exposed, all that is up to the designer. Only one step named `:domain_activity` is mandatory as this step gets replaced with the actual business operation.
+The `Protocol`, for obvious reasons, needs to be an `Activity` subclass like `Railway` or `FastTrack`.
+
+<%= image_tag "endpoint-protocol-railway.png" %>
+
+The steps involved, the termini exposed, all that is up to the designer. Only one step named `:domain_activity` is mandatory as this step gets replaced with the actual business operation.
 
 <%= h4 "Defining" %>
 
@@ -43,6 +47,34 @@ With `protocol: true`, the invocation logic will grab the endpoint you created e
 As planned, the business operation is run as one step of the protocol.
 
 Nevertheless, this example is very verbose. You can move many options onto the controller level. This is discussed in the following sections.
+
+<%= h3 "Layout" %>
+
+One main reasons to use protocols is a fixed set of termini, which allows you to create default matchers to handle outcomes generically. This reduces application code in your controllers and saves developers from having to think about possible outcomes.
+
+<%= h4 "Terminus" %>
+
+When creating a protocol for a component of your application, you can use any feature of the [Wiring API](/2.1/docs/operation/index.html#operation-wiring-api) - in the end, a protocol is just another "operation".
+
+<%= code "protocol-terminus", collapse: "skip" %>
+
+The above example protocol exposes five termini. Three extra termini are added using [`#terminus`](/2.1/docs/operation/index.html#operation-wiring-api-terminus) to Railway's `success` and `failure` tuple.
+
+To re-route the `failure` output of the `authenticate` step, the Wiring API is leveraged and connects it straight to the new terminus `not_authenticated`.
+
+<%= image_tag "endpoint-protocol-termini" %>
+
+Five termini to rule them all.
+
+1. `success` obviously indicates everything went fine.
+2. `failure` informs the caller of a validation error.
+3. `not_found` could be terminated on when a model wasn't found.
+4. If the `current_user` couldn't be computed, due to invalid credentials, the `not_authenticated` terminus is hit.
+5. Any kind of policy breach could be routed to `not_authorized`.
+
+Now, exposing this kind of layout is only helpful if you actually handle each case in a specific way. For a better understanding, here's an example default matcher.
+
+
 
 <%= h3 "Configuration" %>
 
@@ -72,8 +104,8 @@ This will result in a flow diagram similar to this.
 
 Here, the distinction between `failure` and `fail_fast` gets lost after the endpoint has been run. In most scenarios, this is desired, as this mimics querying the result object via `result.success?`.
 
-However, in some cases, you might want to deal with a `fail_fast` or `pass_fast` termination of your operation. Simply override it when defining the specific endpoint.
+In some cases you might want to deal with a `fail_fast` or `pass_fast` termination of your operation. Simply override the option when defining the specific endpoint.
 
-<%#= code "b-controller", zoom: "fast-track" %>
+<%= code "controller-fast-track-false", zoom: "define" %>
 
 Your endpoint now needs to define those two additional termini, so they can be properly connected.
