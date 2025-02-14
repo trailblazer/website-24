@@ -1,6 +1,6 @@
 <%= h2 "Protocol" %>
 
-Whenever you need an operation *"around"* your actual business operation, to add authentication, policy checks, finding models, or other steps before or after your domain code, you want to start using a _protocol_ endpoint. We usually call those simply _endpoint_.
+Whenever you need an operation *"around"* your actual business operation, to add authentication, policy checks, finding models, or other steps before or after your domain code, you want to start using a _protocol_ endpoint. We usually simply call those _endpoint_.
 
 <%= h3 "Overview" %>
 
@@ -8,7 +8,7 @@ A protocol endpoint is defined per *use case*, which usually corresponds to a pa
 
 <%= image_tag "endpoint-update.png" %>
 
-Here, two exemplary steps `authenticate` and `policy` are placed before the actual business operation `Memo::Operation::Update`. Also note how both "protocol steps" lead to their own terminus. However, the layout of the endpoint is completely up to you.
+Here, two exemplary steps `authenticate` and `policy` are placed before the actual business operation `Memo::Operation::Update`. Also note how both "protocol steps" have their `failure` output connected to their own terminus. However, the layout of the endpoint is completely up to you.
 
 Endpoints define a fixed set of possible outcomes: besides `success` and `failure` there might be additional, more fine-grained termini like `not_found` or even `credit_card_invalid`. It's the job of your team to decide which generic, reusable termini to introduce.
 
@@ -32,7 +32,7 @@ Use the controller method `::endpoint` to compile an actual endpoint with your `
 
 <%= code "endpoint-controller", zoom: "define" %>
 
-This is done on the class level so it's compiled and stored once.
+A new activity is created where the `Protocol` now contains `Memo::Operation::Create` as its `:domain_activity` step. This is done on the class level so it's compiled and stored once.
 
 <%= h4 "Invocation" %>
 
@@ -46,15 +46,15 @@ With `protocol: true`, the invocation logic will grab the endpoint you created e
 
 As planned, the business operation is run as one step of the protocol.
 
-Nevertheless, this example is very verbose. You can move many options onto the controller level. This is discussed in the following sections.
+Nevertheless, this example is very verbose. You can move many options onto the controller level. This is discussed in the [Configuration](#endpoint-protocol-configuration) section.
 
 <%= h3 "Layout" %>
 
-One main reasons to use protocols is a fixed set of termini, which allows you to create default matchers to handle outcomes generically. This reduces application code in your controllers and saves developers from having to think about possible outcomes.
+One main reasons to use protocols is a fixed set of termini, which allows you to create generic default matchers to handle outcomes. This reduces application code in your controllers and saves developers from having to think about possible outcomes.
 
 <%= h4 "Terminus" %>
 
-When creating a protocol for a component of your application, you can use any feature of the [Wiring API](/2.1/docs/operation/index.html#operation-wiring-api) - in the end, a protocol is just another "operation".
+When creating a protocol for a component of your application, most of the thinking will be about which termini to expose and how to connect them. You can use any feature of the [Wiring API](/2.1/docs/operation/index.html#operation-wiring-api) - in the end, a protocol is just another "operation".
 
 <%= code "protocol-terminus", collapse: "skip" %>
 
