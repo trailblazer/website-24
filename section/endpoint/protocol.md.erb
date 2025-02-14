@@ -72,7 +72,13 @@ Five termini to rule them all.
 4. If the `current_user` couldn't be computed, due to invalid credentials, the `not_authenticated` terminus is hit.
 5. Any kind of policy breach could be routed to `not_authorized`.
 
-Now, exposing this kind of layout is only helpful if you actually handle each case in a specific way. For a better understanding, here's an example default matcher.
+<%= h4 "Handlers" %>
+
+Now, exposing this kind of layout is only helpful if you actually handle each case in a specific way. For a better understanding, here's an example matcher block.
+
+<%= code "handler-controller", zoom: "handler-five" %>
+
+This `#create` controller action illustrates nicely how endpoint's matcher interface allows dealing with outcomes (or different termini). Check the [`default_matcher` directive](#endpoint-controller-configuration-default_matcher) to learn how to reduce redundancy and be less verbose with your matchers.
 
 
 
