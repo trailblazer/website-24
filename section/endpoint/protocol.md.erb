@@ -80,7 +80,27 @@ Now, exposing this kind of layout is only helpful if you actually handle each ca
 
 This `#create` controller action illustrates nicely how endpoint's matcher interface allows dealing with outcomes (or different termini). Check the [`default_matcher` directive](#endpoint-controller-configuration-default_matcher) to learn how to reduce redundancy and be less verbose with your matchers.
 
+<%= h4 "Wiring" %>
 
+When compiling an endpoint with `MyProtocol`, every "known" terminus of the business operation is automatically connected.
+
+<%= code "handler-controller", zoom: "update" %>
+
+For example, if `Update` was exposing a `not_found` terminus, it's linked to its respective terminus in the protocol.
+
+<%= image_tag "endpoint-protocol-update" %>
+
+In case you need to connect an output to another arbitrary track or terminus, you can use the Wiring API in an optional block when compiling the endpoint.
+
+Let's assume the `Update` operation was terminating on its built-in `fail_fast` terminus when the updated model couldn't be found. You can wire that very terminus to the `not_found` track in the protocol using the Wiring API.
+
+<%= code "protocol-wiring", zoom: "update" %>
+
+The returned hash of wiring instructions is executed when the `:domain_activity` placeholder step is replaced with the actual business operation at compile time, making the diagram look as follows.
+
+<%= image_tag "protocol-fail-fast" %>
+
+This trick allows you to "translate" any kind of operation layout to your protocol's. For instance, you could even move legacy operations into endpoints and connect their termini to corresponding tracks in the protocol.
 
 <%= h3 "Configuration" %>
 
