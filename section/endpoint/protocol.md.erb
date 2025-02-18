@@ -6,6 +6,8 @@ Whenever you need an operation *"around"* your actual business operation, to add
 
 A protocol endpoint is defined per *use case*, which usually corresponds to a particular controller action and operation. In this example, an `Update` operation is embraced by its endpoint. You may add arbitrary steps to the endpoint, such as authentication, authorization or data filtering that is unrelated to your business domain.
 
+Usually, a bunch of use cases share the same protocol.
+
 <%= image_tag "endpoint-update.png" %>
 
 Here, two exemplary steps `authenticate` and `policy` are placed before the actual business operation `Memo::Operation::Update`. Also note how both "protocol steps" have their `failure` output connected to their own terminus. However, the layout of the endpoint is completely up to you.
@@ -28,11 +30,11 @@ The steps involved, the termini exposed, all that is up to the designer. Only on
 
 <%= h4 "Defining" %>
 
-Use the controller method `::endpoint` to compile an actual endpoint with your `Protocol` and a concrete operation.
+Use the controller method `::endpoint` to compile an actual endpoint with your `MyProtocol` and a concrete operation.
 
 <%= code "endpoint-controller", zoom: "define" %>
 
-A new activity is created where the `Protocol` now contains `Memo::Operation::Create` as its `:domain_activity` step. This is done on the class level so it's compiled and stored once.
+A new activity is created where `MyProtocol` now contains `Memo::Operation::Create` as its `:domain_activity` step. This is done on the class level so it's compiled and stored once.
 
 <%= h4 "Invocation" %>
 
@@ -54,13 +56,13 @@ One main reasons to use protocols is a fixed set of termini, which allows you to
 
 <%= h4 "Terminus" %>
 
-When creating a protocol for a component of your application, most of the thinking will be about which termini to expose and how to connect them. You can use any feature of the [Wiring API](/2.1/docs/operation/index.html#operation-wiring-api) - in the end, a protocol is just another "operation".
+When creating a protocol for a segment of your application, most of the thinking will be about which termini to expose and how to connect them. You can use any feature of the [Wiring API](/2.1/docs/operation/index.html#operation-wiring-api) - in the end, a protocol is just another "operation".
 
 <%= code "protocol-terminus", collapse: "skip" %>
 
 The above example protocol exposes five termini. Three extra termini are added using [`#terminus`](/2.1/docs/operation/index.html#operation-wiring-api-terminus) to Railway's `success` and `failure` tuple.
 
-To re-route the `failure` output of the `authenticate` step, the Wiring API is leveraged and connects it straight to the new terminus `not_authenticated`.
+To re-route the `failure` output of the `authenticate` step, the Wiring API is leveraged and connects it directly to the new terminus `not_authenticated`.
 
 <%= image_tag "endpoint-protocol-termini" %>
 
@@ -78,7 +80,7 @@ Now, exposing this kind of layout is only helpful if you actually handle each ca
 
 <%= code "handler-controller", zoom: "handler-five" %>
 
-This `#create` controller action illustrates nicely how endpoint's matcher interface allows dealing with outcomes (or different termini). Check the [`default_matcher` directive](#endpoint-controller-configuration-default_matcher) to learn how to reduce redundancy and be less verbose with your matchers.
+This `#create` controller action illustrates nicely how endpoint's matcher interface allows dealing with outcomes (or different termini). Check the [`default_matcher`](#endpoint-controller-configuration-default_matcher) directive to learn how to reduce redundancy and be less verbose with your matchers.
 
 <%= h4 "Wiring" %>
 
@@ -108,7 +110,7 @@ Any [configuration directive](#endpoint-controller-configuration) from the contr
 
 <%= h4 "options" %>
 
-Use the `options` directive to default options used when defining endpoints on the controller level.
+Use the `options` directive to default options when you create a new endpoint on the controller level.
 
 <%= code "controller-options", zoom: "endpoint" %>
 
