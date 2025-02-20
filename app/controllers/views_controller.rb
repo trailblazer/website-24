@@ -125,6 +125,7 @@ class ViewsController < ApplicationController
           "trailblazer-endpoint" => ["trailblazer-endpoint", "https://github.com/trailblazer/trailblazer-endpoint"],
           "trailblazer-test" => ["trailblazer-test", "https://github.com/trailblazer/trailblazer-test"],
           "rspec-trailblazer" => ["rspec-trailblazer", "https://github.com/trailblazer/rspec-trailblazer"],
+          "trailblazer-activity" => ["trailblazer-activity", "https://github.com/trailblazer/trailblazer-activity"],
 
         }
 

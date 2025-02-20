@@ -137,3 +137,19 @@ In some cases you might want to deal with a `fail_fast` or `pass_fast` terminati
 <%= code "controller-fast-track-false", zoom: "define" %>
 
 Your endpoint now needs to define those two additional termini, so they can be properly connected.
+
+<%= h4 "protocol_block" %>
+
+You can define a default block for the [wiring](#endpoint-protocol-layout-wiring) of the domain operation.
+
+<%= code "protocol-block", zoom: "endpoint" %>
+
+When compiling an endpoint, you don't need to specify the custom wiring anymore.
+
+<%= code "protocol-block", zoom: "compile" %>
+
+It's even possible to have a dynamic `:protocol_block`. The block is executed in the context of the domain operation.
+
+<%= code "protocol-block-dynamic", zoom: "endpoint" %>
+
+In this example, the block is evaluated in context of `Memo::Operation::Update`. Within this block, you may use the [`Introspect` API](/2.1/docs/operation/index.html#operation-internals-introspection-api) or any method of the domain operation. Here, `to_h`  translates to `Memo::Operation::Update.to_h`, allowing you to add custom wiring as it applies.
