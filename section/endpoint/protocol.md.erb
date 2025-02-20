@@ -1,6 +1,6 @@
 <%= h2 "Protocol" %>
 
-Whenever you need an operation *"around"* your actual business operation, to add authentication, policy checks, finding models, or other steps before or after your domain code, you want to start using a _protocol_ endpoint. We usually simply call those _endpoint_.
+Whenever you need an operation *"around"* your actual business operation, to add authentication, policy checks, finding models, or other steps before and after your domain code, you want to start using a _protocol_ endpoint. We usually simply call those _endpoint_.
 
 <%= h3 "Overview" %>
 
@@ -10,11 +10,11 @@ Usually, a bunch of use cases share the same protocol.
 
 <%= image_tag "endpoint-update.png" %>
 
-Here, two exemplary steps `authenticate` and `policy` are placed before the actual business operation `Memo::Operation::Update`. Also note how both "protocol steps" have their `failure` output connected to their own terminus. However, the layout of the endpoint is completely up to you.
+Here, two exemplary steps `authenticate` and `policy` are placed before the actual business operation `Memo::Operation::Update`. Also note how both "protocol steps" have their `failure` output connected to their own terminus. The layout of the endpoint, nevertheless, is completely up to you.
 
 Endpoints define a fixed set of possible outcomes: besides `success` and `failure` there might be additional, more fine-grained termini like `not_found` or even `credit_card_invalid`. It's the job of your team to decide which generic, reusable termini to introduce.
 
-The key idea of a fixed set of outcomes is a fixed set of handlers. You implement the handlers for each terminus once, and override those in specific cases per controller or controller action. In other words, `not_found` renders a 404 error automatically, but you can customize the rendering in a `success` outcome manually.
+The key idea of a *fixed set* of outcomes is a *fixed set* of handlers. You implement the handlers for each terminus once, and override those in specific cases per controller or controller action. In other words, `not_found` renders a 404 error automatically, but you can customize the rendering in a `success` outcome manually.
 
 <%= h4 "Protocol" %>
 
@@ -48,7 +48,9 @@ With `protocol: true`, the invocation logic will grab the endpoint you created e
 
 As planned, the business operation is run as one step of the protocol.
 
-Nevertheless, this example is very verbose. You can move many options onto the controller level. This is discussed in the [Configuration](#endpoint-protocol-configuration) section.
+<%= info do %>
+  This example is very verbose. You can move many options onto the controller level. This is discussed in the [Configuration](#endpoint-protocol-configuration) section.
+<% end %>
 
 <%= h3 "Layout" %>
 
@@ -106,7 +108,7 @@ This trick allows you to "translate" any kind of operation layout to your protoc
 
 <%= h3 "Configuration" %>
 
-Any [configuration directive](#endpoint-controller-configuration) from the controller layer can be used in combination with a protocol. Anyhow, we do have additional options to fine-tune the compilation of your protocol endpoints.
+Any [configuration directive](#endpoint-controller-configuration) from the controller layer can be used in combination with a protocol. In addition to that, we do have some extra options to fine-tune the compilation of your protocol endpoints.
 
 <%= h4 "options" %>
 
@@ -144,7 +146,7 @@ You can define a default block for the [wiring](#endpoint-protocol-layout-wiring
 
 <%= code "protocol-block", zoom: "endpoint" %>
 
-When compiling an endpoint, you don't need to specify the custom wiring anymore.
+The `:protocol_block` option is used when compiling an endpoint, you don't need to specify the custom wiring anymore.
 
 <%= code "protocol-block", zoom: "compile" %>
 
