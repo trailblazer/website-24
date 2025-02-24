@@ -183,20 +183,14 @@
       
         
         <!-- FIXME: link should know its IDs. -->
-        <div class="flex items-center" id="left-toc-endpoint-overview">
-          <a href="#endpoint-overview" class="pl-8">Overview</a>
+        <div class="flex items-center" id="left-toc-endpoint-canonical-invoke">
+          <a href="#endpoint-canonical-invoke" class="pl-8">Canonical invoke</a>
         </div>
       
         
         <!-- FIXME: link should know its IDs. -->
         <div class="flex items-center" id="left-toc-endpoint-controller">
           <a href="#endpoint-controller" class="pl-8">Controller</a>
-        </div>
-      
-        
-        <!-- FIXME: link should know its IDs. -->
-        <div class="flex items-center" id="left-toc-endpoint-runtime">
-          <a href="#endpoint-runtime" class="pl-8">Runtime</a>
         </div>
       
         
@@ -334,116 +328,120 @@
 
       <div class="xl:flex xl:gap-0.5 mt-5">
         <div class="max-w-3xl lg:p-8 lg:pb-14 p-4 bg-white text-bg-blue space-y-9" id="documentation">
-          
-<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
-  <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
-  <div class="space-y-3">
-    
-<p class="">The stable <code class="text-purple">endpoint</code> gem will be released November 2024.</p>
-
-  </div>
-</div>
-
-<p class=""><span class="flex max-w-fit max-h-7 border border-grey uppercase text-grey text-xs pt-1 pb-1 pl-2 pr-2 pr-1 ml-4 rounded">
+          <p class=""><span class="flex max-w-fit max-h-7 border border-grey uppercase text-grey text-xs pt-1 pb-1 pl-2 pr-2 pr-1 ml-4 rounded">
             <svg class="fill-grey mt-[2px]" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M168.5 72L256 165l87.5-93h-175zM383.9 99.1L311.5 176h129L383.9 99.1zm50 124.9H256 78.1L256 420.3 433.9 224zM71.5 176h129L128.1 99.1 71.5 176zm434.3 40.1l-232 256c-4.5 5-11 7.9-17.8 7.9s-13.2-2.9-17.8-7.9l-232-256c-7.7-8.5-8.3-21.2-1.5-30.4l112-152c4.5-6.1 11.7-9.8 19.3-9.8H376c7.6 0 14.8 3.6 19.3 9.8l112 152c6.8 9.2 6.1 21.9-1.5 30.4z"></path></svg>
             <a href="https://github.com/trailblazer/trailblazer-endpoint/tree/v0.1.0" class="ml-1" title="This feature was introduced in trailblazer-endpoint v0.1.0.">trailblazer-endpoint 0.1.0</a>
           </span></p>
 
-<p class="">Whenever you need an <em>operation “around”</em> your actual business operation, to add authentication, policy checks or more steps before or after your domain code, you want to start using endpoints.</p>
+<p class="">The endpoint gem provides abstractions to invoke operations, configure injected options, and gives the invoker a matcher-like interface to deal with the outcome.</p>
 
-<p class="">Instead of you manually calling operations, endpoints are planned to become the canonical way of invoking operations in controllers, jobs and tests.</p>
+<p class="">It also introduces a separate layer allowing to maintain “operations around” your actual business operation. This is called <a href="#endpoint-protocol" class="underline text-purple"><em>protocol</em></a>.</p>
 
-<ul class="space-y-2">
-  <li class="list-image-disc ml-10">Endpoints provide a simple way of defining possible outcomes of an operation</li>
-  <li class="list-image-disc ml-10">They come with a simple runtime API that allows you to provide matchers for each outcome. For example, you can handle a “model not found” outcome generically, but override how a success outcome is handled.</li>
-  <li class="list-image-disc ml-10">Endpoints are a much better abstraction to customize how your operations are run, and what gets injected. In current projects, many users override <code class="text-purple">Operation.call_with_public_method</code> to add aliases or tweak standard variables in the ctx. This now becomes nothing but another step in the endpoint, before the domain operation.</li>
-</ul>
+<h2 id="endpoint-canonical-invoke" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Canonical invoke</span></h2>
 
-<h2 id="endpoint-overview" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Overview</span></h2>
+<p class="">In many TRB-driven projects, developers override <code class="text-purple">Operation.call_with_public_method</code> to inject options and tweak the way an operation is invoked on the top-level. For example, adding ctx aliases or setting standard variables in the ctx can be achieved with a monkey-patch.</p>
 
-<p class="">An endpoint is defined per <em>use case</em>, which usually corresponds to a particular controller action and operation. In this example, an <code class="text-purple">Update</code> operation is embraced by its endpoint. You may add arbitrary steps to the endpoint, such as authentication, authorization or data filtering that is unrelated to your business domain.</p>
+<p class="">However, this patch is limited and not the recommended way to configure the invocation. With <code class="text-purple">endpoint</code>, we’re introducing a canonical abstraction for invoking operations and activities, and customizing their options.</p>
 
-<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/endpoint-update-77fb5217bf95f2a5828617e1568281c109b5f1e17a740ad39397daeb044bf7d5.png" /></p>
+<p class="">This has three major advantages.</p>
 
-<p class="">Endpoints define a set of possible outcomes: besides <code class="text-purple">success</code> and <code class="text-purple">failure</code> there might be additional, more fine-grained termini like <code class="text-purple">not_found</code> or even <code class="text-purple">credit_card_invalid</code>. It’s the job of your team to decide which generic, reusable termini to introduce.</p>
+<ol>
+  <li class="list-image-disc ml-10">You don’t have to maintain a monkey-patch.</li>
+  <li class="list-image-disc ml-10">Operations and activities, in controllers, tests, tasks, or on the CLI, are all invoked with the same configuration.</li>
+  <li class="list-image-disc ml-10">You may use a matcher-like block to handle the outcome directly, if needed.</li>
+</ol>
 
-<p class="">The key idea is to have specific handlers for all outcomes that you write once, while allowing to override specifc cases. In other words, <code class="text-purple">not_found</code> renders a 404 error automatically, but you deal with <code class="text-purple">success</code> manually.</p>
+<pre class=""><code class="rounded">signal, result = __(Memo::Operation::Create, params: {memo: {}}) do
+  failure { |ctx, contract:, **| puts contract.errors }
+end</code></pre>
 
-<h3 id="endpoint-overview-example" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Example</span></h3>
+<p class="">TODO:
+  :default_matcher
+  :flow_options
+  how to use in tests via trailblazer-test.</p>
 
-<p class="">Endpoints and the matcher interface can be used anywhere, in controllers, tests, background jobs, or wherever you need to invoke an operation. This example showcases a typical Rails controllers.</p>
+<h3 id="endpoint-canonical-invoke-configuration" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Configuration</span></h3>
 
-<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  endpoint Memo::Operation::Create # define endpoint.
+<p class="">In order to use the “canonical invoke”, you need to define the <code class="text-purple">#__()</code> method (or whatever name you want) and configure its keyword arguments.</p>
 
-  def create
-    invoke Memo::Operation::Create do # call the endpoint, use matchers:
-      success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
-      # failure is inherited
-      # not_found is inherited
-    end
-  end
+<pre class=""><code class="rounded"># config/initializers/trailblazer.to
+
+include Trailblazer::Endpoint::Runtime::TopLevel
+
+def __(operation, ctx, flow_options: GLOBAL_FLOW_OPTIONS, **, &amp;block)
+  super
 end
-</code></pre>
 
-<p class="">Endpoints (currently!) have to be defined on the controller class level using the <code class="text-purple">::endpoint</code> method. Additional options allow configuring how the operation is wired in the endpoint.</p>
+# put whatever is needed here.
+GLOBAL_FLOW_OPTIONS = {
+  context_options: {
+    aliases: {"model": :record},
+    container_class: Trailblazer::Context::Container::WithAliases,
+  }
+}</code></pre>
 
-<p class="">Actually calling the endpoint (along with your operation) works via the <code class="text-purple">#invoke</code> instance method, which you typically place in a controller action.</p>
-
-<p class="">The block handed to <code class="text-purple">#invoke</code> is where it gets interesting. The matcher interface allows to provide code blocks to handle different outcomes. However, the beautiful part is that you can inherit generic matchers from the <code class="text-purple">ApplicationController</code> (or wherever you inherit from).</p>
-
-<pre class=""><code class="rounded">class ApplicationController &lt; ActionController::Base
-  include Trailblazer::Endpoint::Controller.module
-  # ...
-  endpoint do
-    # ...
-    default_matcher do
-      {
-        failure: -&gt;(ctx, **) { head 401 }, # handles {failure} outcome.
-        not_found: -&gt;(ctx, params:, **) do
-          render html: "ID #{params[:id]} not found.", status: 404
-        end
-      }
-    end
-
-  end
-end
-</code></pre>
-
-<p class="">Here, using <code class="text-purple">default_block</code>, generic matchers can be defined, saving you tons of code in the controller, and making nested <code class="text-purple">rescue</code> shenanigans in your application controller unnecessary.</p>
-
-<p class="">The <code class="text-purple">Controller</code> module from the <code class="text-purple">endpoint</code> gem ships with several configuration directives, like what to pass into the <code class="text-purple">ctx</code>, default matchers, or whether or not fast-track termini should be wired to the standard railway termini.</p>
+<p class="">Your entire application can now use <code class="text-purple">#__()</code> and <code class="text-purple">#__?()</code> to invoke operations that have set a ctx alias <code class="text-purple">:record</code> for <code class="text-purple">:model</code>.</p>
 
 <div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
   <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
   <div class="space-y-3">
     
-<p class="">The <code class="text-purple">endpoint</code> gem can be used in frameworks other than Rails (for instance, Grape). Being the mainstream choice of many, these docs focus on Rails.</p>
+<p class="">This might change in the future as we’re considering overriding <code class="text-purple">#call_with_public_interface</code> directly.</p>
 
   </div>
 </div>
 
+
 <h2 id="endpoint-controller" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Controller</span></h2>
 
-<p class="">To use endpoint’s runtime tool <code class="text-purple">#invoke</code> and its configuration directives, include the <code class="text-purple">Controller</code> module in your <code class="text-purple">ApplicationController</code>.</p>
+<p class="">The layer helping you in controllers provides the canonical invoke via the <code class="text-purple">#invoke</code> method, and offers a super simple and customizable DSL to configure injected options.</p>
+
+<h3 id="endpoint-controller-installation" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Installation</span></h3>
+
+<p class="">Include the <code class="text-purple">Controller</code> module into your <code class="text-purple">ApplicationController</code> to use the endpoint controller layer across your app.</p>
 
 <pre class=""><code class="rounded">class ApplicationController &lt; ActionController::Base
+  # ...
   include Trailblazer::Endpoint::Controller.module
+  # ...
+end
 </code></pre>
 
-<p class="">Your controller and all subclasses are now ready to configure and run endpoints. Move all generic, reusable configuration to the uppermost controller - usually that’d be the <code class="text-purple">ApplicationController</code>.</p>
+<p class="">Your controller and all subclasses are now ready to configure and run endpoints.</p>
 
-<p class="">The easiest way to configure is using the <code class="text-purple">::endpoint</code> block DSL.</p>
+<h3 id="endpoint-controller-invoke" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Invoke</span></h3>
+
+<p class="">To use the <a href="#endpoint-canonical-invoke" class="underline text-purple">canonical invoke</a> along with all its mechanics, use the <code class="text-purple">#invoke</code> method in your controller actions. It will automatically inject the well-defined options for each operation call, and accepts an optional block to handle different outcomes.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  def create
+    invoke Memo::Operation::Create, params: params, protocol: false do #  FIXME: protocol should be false per default.
+      success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
+      failure { |ctx, contract:, **|
+        render partial: "form", locals: {contract: contract}
+      }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">In the example above, input for the operation, such as <code class="text-purple">:params</code>, needs to be handed manually into <code class="text-purple">#invoke</code>.</p>
+
+<p class="">Also, every possible outcome has to be defined by hand in the matcher block, cluttering the simple controller action with verbose code.</p>
+
+<p class="">However, it’s actually very simple to move the reappearing options and matchers one level up using the <a href="#endpoint-controller-configuration" class="underline text-purple">configuration DSL</a>.</p>
+
+<h3 id="endpoint-controller-configuration" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Configuration</span></h3>
+
+<p class="">You can predefine endpoint-specific options within the <code class="text-purple">endpoint</code> block of a controller. Usually, that would be done on the <code class="text-purple">ApplicationController</code> level.</p>
 
 <pre class=""><code class="rounded">
 class ApplicationController &lt; ActionController::Base
   include Trailblazer::Endpoint::Controller.module
 
   endpoint do
-    options do
-      # ...
-    end
-
     ctx do
       # ...
     end
@@ -451,140 +449,351 @@ class ApplicationController &lt; ActionController::Base
     default_matcher do
       # ...
     end
+
+    flow_options do
+      # ...
+    end
   end</code></pre>
 
-<h3 id="endpoint-controller-inheritance" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Inheritance</span></h3>
+<p class="">The various directives are discussed in the following sections.</p>
 
-<p class="">Per default, all configuration options are inherited, allowing you very lean concrete controllers that only override specific directives.</p>
-
-<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-</code></pre>
-
-<p class="">(We’re planning to allow merging <em>and</em> overriding for each directive.)</p>
-
-<h3 id="endpoint-controller-configuration" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Configuration</span></h3>
-
-<p class="">Setting default values for endpoints on the controller level can be done in two ways.</p>
-
-<ol>
-  <li class="list-image-disc ml-10">The recommended way is to use the configuration DSL provided in the <code class="text-purple">::endpoint</code> block. This section explains each option. Note that <code class="text-purple">::endpoint</code> can also be used without a block, to define individual endpoints.</li>
-  <li class="list-image-disc ml-10">Another way would be to <a href="https://github.com/trailblazer/trailblazer-endpoint/blob/1273ddac56dc7c7192540707b3e56712a6830f27/test/controller_test.rb#L290" class="underline text-purple">override particular methods</a> in the controller. This is undocumented and should only be done if you’re using anything else but Rails.</li>
-</ol>
-
-<h4 id="endpoint-controller-configuration-overview" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
-                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Overview</span>
+<h4 id="endpoint-controller-configuration-ctx" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">ctx</span>
 
                   </h4>
 
-<p class="">Use the <code class="text-purple">::endpoint</code> block DSL on the controller class level to configure how endpoints are built and run.</p>
+<p class="">Use the <code class="text-purple">ctx</code> block to define what ctx variables always get passed into the operation invocation.</p>
 
-<pre class=""><code class="rounded">class ApplicationController &lt; ActionController::Base
+<pre class=""><code class="rounded">endpoint do
   # ...
-  endpoint do
-    options do
-      {
-        protocol: Endpoint::Protocol,
-        # connect fast track outputs to success/failure:
-        fast_track_to_railway: true,
-      }
-    end
-
-    ctx do |controller:, **| # this block is executed in controller instance context.
-      {
-        params:       controller.params,
-        current_user: controller.current_user,
-      }
-    end
-
-    flow_options do |controller:, activity:, **|
-      {
-        context_options: {
-          aliases: {"contract.default": :contract},
-          container_class: Trailblazer::Context::Container::WithAliases,
-        }
-      }
-    end
-
-    default_matcher do
-      {
-        failure: -&gt;(ctx, **) { head 401 }, # handles {failure} outcome.
-        not_found: -&gt;(ctx, params:, **) do
-          render html: "ID #{params[:id]} not found.", status: 404
-        end
-      }
-    end
-
+  ctx do |controller:, **|
+    {
+      params: controller.params,
+    }
   end
   # ...
 end
 </code></pre>
 
-<p class="">Available options are explained in the following sections.</p>
+<p class="">Note that you have access to <code class="text-purple">:controller</code> and <code class="text-purple">:activity</code> as block keyword arguments. Any number of ctx variables may be added, such as the <code class="text-purple">current_user</code>.</p>
+
+<p class="">Now, the controller action doesn’t need to pass <code class="text-purple">params</code> anymore.</p>
+
+<pre class=""><code class="rounded">def create
+  invoke Memo::Operation::Create, protocol: false do
+    # ...
+  end
+end
+</code></pre>
+
+<p class="">Variables passed manually to <code class="text-purple">#invoke</code> are merged with the <code class="text-purple">endpoint.ctx</code> hash.</p>
 
 <h4 id="endpoint-controller-configuration-default_matcher" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">default_matcher</span>
 
                   </h4>
 
-<p class="">You can keep controller actions very lean by defining generic handlers once, on the <code class="text-purple">ApplicationController</code> level using the <code class="text-purple">default_matcher</code> block.</p>
+<p class="">Using the <code class="text-purple">endpoint</code> DSL, you can keep controller actions lean by defining generic handlers once, on the <code class="text-purple">ApplicationController</code> level using the <code class="text-purple">default_matcher</code> block.</p>
 
 <pre class=""><code class="rounded">endpoint do
   # ...
   default_matcher do
     {
-      failure: -&gt;(ctx, **) { head 401 }, # handles {failure} outcome.
-      not_found: -&gt;(ctx, params:, **) do
-        render html: "ID #{params[:id]} not found.", status: 404
-      end
+      failure: -&gt;(ctx, contract:, **) {
+        render partial: "form", locals: {contract: contract}
+      },
+      not_found: -&gt;(ctx, **) { head 404 }
     }
   end
   # ...
 end
 </code></pre>
 
-<p class="">The returned hash may provide matchers for any possible outcome.</p>
+<p class="">The hash defines handlers keyed by terminus names. The handler block receives the <code class="text-purple">ctx</code> along with keyword arguments, returned by the operation.</p>
 
-<p class="">The blocks receive the <code class="text-purple">ctx</code> after your endpoint is run, along with keyword arguments, exactly what you’re used to from operation steps. Note that the block is executed in the controller context, allowing to use its API, e.g. <code class="text-purple">#render</code> or <code class="text-purple">#head</code>.</p>
+<p class="">The block is executed in the controller context, allowing you to use its internal API, e.g. <code class="text-purple">#render</code> or <code class="text-purple">#head</code>.</p>
 
-<p class="">You can override specific handlers in controller actions.</p>
+<p class="">With the above configuration, the controller action now only needs one matcher.</p>
 
-<h4 id="endpoint-controller-configuration-options" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+<pre class=""><code class="rounded">def create
+  invoke Memo::Operation::Create, protocol: false do
+    success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
+  end
+end
+</code></pre>
+
+<p class="">Note that a default <code class="text-purple">success</code> handler is overridden by the block passed to <code class="text-purple">#invoke</code>.</p>
+
+<h4 id="endpoint-controller-configuration-invoke" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">invoke</span>
+
+                  </h4>
+
+<p class="">TODO</p>
+
+<h4 id="endpoint-controller-configuration-inheritance" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Inheritance</span>
+
+                  </h4>
+
+<p class="">Per default, all configuration options are inherited, allowing you very lean concrete controllers that only override specific directives.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+end
+</code></pre>
+
+<p class=""><code class="text-purple">MemosController</code> inherits all <code class="text-purple">endpoint</code> options from <code class="text-purple">ApplicationController</code> and allows overriding those.</p>
+
+<h2 id="endpoint-protocol" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Protocol</span></h2>
+
+<p class="">Whenever you need an operation <em>“around”</em> your actual business operation, to add authentication, policy checks, finding models, or other steps before and after your domain code, you want to start using a <em>protocol</em> endpoint. We usually simply call those <em>endpoint</em>.</p>
+
+<h3 id="endpoint-protocol-overview" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Overview</span></h3>
+
+<p class="">A protocol endpoint is defined per <em>use case</em>, which usually corresponds to a particular controller action and operation. In this example, an <code class="text-purple">Update</code> operation is embraced by its endpoint. You may add arbitrary steps to the endpoint, such as authentication, authorization or data filtering that is unrelated to your business domain.</p>
+
+<p class="">Usually, a bunch of use cases share the same protocol.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/endpoint-update-77fb5217bf95f2a5828617e1568281c109b5f1e17a740ad39397daeb044bf7d5.png" /></p>
+
+<p class="">Here, two exemplary steps <code class="text-purple">authenticate</code> and <code class="text-purple">policy</code> are placed before the actual business operation <code class="text-purple">Memo::Operation::Update</code>. Also note how both “protocol steps” have their <code class="text-purple">failure</code> output connected to their own terminus. The layout of the endpoint, nevertheless, is completely up to you.</p>
+
+<p class="">Endpoints define a fixed set of possible outcomes: besides <code class="text-purple">success</code> and <code class="text-purple">failure</code> there might be additional, more fine-grained termini like <code class="text-purple">not_found</code> or even <code class="text-purple">credit_card_invalid</code>. It’s the job of your team to decide which generic, reusable termini to introduce.</p>
+
+<p class="">The key idea of a <em>fixed set</em> of outcomes is a <em>fixed set</em> of handlers. You implement the handlers for each terminus once, and override those in specific cases per controller or controller action. In other words, <code class="text-purple">not_found</code> renders a 404 error automatically, but you can customize the rendering in a <code class="text-purple">success</code> outcome manually.</p>
+
+<h4 id="endpoint-protocol-overview-protocol" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Overview
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Protocol</span>
+
+                  </h4>
+
+<p class="">Endpoints can be used anywhere, in controllers, tests, background jobs, or wherever you need to invoke an operation. This example showcases a typical Rails controller using an operation <code class="text-purple">Memo::Operation::Create</code> along with our self-tailored protocol. The latter might look like so.</p>
+
+<pre class=""><code class="rounded">class MyProtocol &lt; Trailblazer::Activity::Railway # two termini.
+  step :authenticate              # our imaginary logic to find {current_user}.
+  step nil, id: :domain_activity  # {Memo::Operation::Create} gets placed here.
+
+  def authenticate(ctx, request:, **)
+    ctx[:current_user] = AuthorizeFromJWT.(request)
+  end
+end
+</code></pre>
+
+<p class="">The <code class="text-purple">Protocol</code>, for obvious reasons, needs to be an <code class="text-purple">Activity</code> subclass like <code class="text-purple">Railway</code> or <code class="text-purple">FastTrack</code>.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/endpoint-protocol-railway-6c2af8090a8a4ffa2435378cb32c984186795099c679f00bb47eaecb1fee697e.png" /></p>
+
+<p class="">The steps involved, the termini exposed, all that is up to the designer. Only one step named <code class="text-purple">:domain_activity</code> is mandatory as this step gets replaced with the actual business operation.</p>
+
+<h4 id="endpoint-protocol-overview-defining" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Overview
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Defining</span>
+
+                  </h4>
+
+<p class="">Use the controller method <code class="text-purple">::endpoint</code> to compile an actual endpoint with your <code class="text-purple">MyProtocol</code> and a concrete operation.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Create, protocol: MyProtocol # define endpoint.
+  # ...
+end
+</code></pre>
+
+<p class="">A new activity is created where <code class="text-purple">MyProtocol</code> now contains <code class="text-purple">Memo::Operation::Create</code> as its <code class="text-purple">:domain_activity</code> step. This is done on the class level so it’s compiled and stored once.</p>
+
+<h4 id="endpoint-protocol-overview-invocation" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Overview
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Invocation</span>
+
+                  </h4>
+
+<p class="">To run the protocol with your operation, use <code class="text-purple">#invoke</code>. This part is (almost) identical to when running an <a href="#endpoint-controller-invoke" class="underline text-purple">operation without a protocol</a>.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  def create
+    invoke Memo::Operation::Create, protocol: true, request: request, params: params do
+      success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
+      failure { |ctx, params:, **| head 401 }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">With <code class="text-purple">protocol: true</code>, the invocation logic will grab the endpoint you created earlier. Check the <code class="text-purple">#wtf?</code> trace to understand what happens here.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/protocol-wtf-db73f61b151d42f22e5d41e2011e09aff8dac233654b52072ce8c45affc19622.png" /></p>
+
+<p class="">As planned, the business operation is run as one step of the protocol.</p>
+
+<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
+  <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
+  <div class="space-y-3">
+    
+<p class="">This example is very verbose. You can move many options onto the controller level. This is discussed in the <a href="#endpoint-protocol-configuration" class="underline text-purple">Configuration</a> section.</p>
+
+  </div>
+</div>
+
+<h3 id="endpoint-protocol-layout" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Layout</span></h3>
+
+<p class="">One main reasons to use protocols is a fixed set of termini, which allows you to create generic default matchers to handle outcomes. This reduces application code in your controllers and saves developers from having to think about possible outcomes.</p>
+
+<h4 id="endpoint-protocol-layout-terminus" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Layout
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Terminus</span>
+
+                  </h4>
+
+<p class="">When creating a protocol for a segment of your application, most of the thinking will be about which termini to expose and how to connect them. You can use any feature of the <a href="/2.1/docs/operation/index.html#operation-wiring-api" class="underline text-purple">Wiring API</a> - in the end, a protocol is just another “operation”.</p>
+
+<pre class=""><code class="rounded">class MyProtocol &lt; Trailblazer::Activity::Railway
+  # add additional termini.
+  terminus :not_found
+  terminus :not_authenticated
+  terminus :not_authorized
+
+  step :authenticate, Output(:failure) =&gt; Track(:not_authenticated)
+  step nil, id: :domain_activity  # {Memo::Operation::Create} gets placed here.
+
+  def authenticate(ctx, params:, **)
+    # ...
+  end
+end
+</code></pre>
+
+<p class="">The above example protocol exposes five termini. Three extra termini are added using <a href="/2.1/docs/operation/index.html#operation-wiring-api-terminus" class="underline text-purple"><code class="text-purple">#terminus</code></a> to Railway’s <code class="text-purple">success</code> and <code class="text-purple">failure</code> tuple.</p>
+
+<p class="">To re-route the <code class="text-purple">failure</code> output of the <code class="text-purple">authenticate</code> step, the Wiring API is leveraged and connects it directly to the new terminus <code class="text-purple">not_authenticated</code>.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/endpoint-protocol-termini-bcbc6af91391b62ba4e480e3ac6b5ed27397927609b85c3d02f08e7883c66e37.png" /></p>
+
+<p class="">Five termini to rule them all.</p>
+
+<ol>
+  <li class="list-image-disc ml-10"><code class="text-purple">success</code> obviously indicates everything went fine.</li>
+  <li class="list-image-disc ml-10"><code class="text-purple">failure</code> informs the caller of a validation error.</li>
+  <li class="list-image-disc ml-10"><code class="text-purple">not_found</code> could be terminated on when a model wasn’t found.</li>
+  <li class="list-image-disc ml-10">If the <code class="text-purple">current_user</code> couldn’t be computed, due to invalid credentials, the <code class="text-purple">not_authenticated</code> terminus is hit.</li>
+  <li class="list-image-disc ml-10">Any kind of policy breach could be routed to <code class="text-purple">not_authorized</code>.</li>
+</ol>
+
+<h4 id="endpoint-protocol-layout-handlers" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Layout
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Handlers</span>
+
+                  </h4>
+
+<p class="">Now, exposing this kind of layout is only helpful if you actually handle each case in a specific way. For a better understanding, here’s an example matcher block.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Create, protocol: MyProtocol
+
+  def create
+    invoke Memo::Operation::Create, protocol: true, params: params do
+      success   { |ctx, model:, **| redirect_to memo_path(model.id) }
+      failure   { |ctx, contract:, **| render partial: "form", object: contract }
+      not_authorized { |**| head 403 }
+      not_authenticated { |**| head 401 }
+      not_found { |ctx, **| render file: PAGE_404, status: :not_found }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">This <code class="text-purple">#create</code> controller action illustrates nicely how endpoint’s matcher interface allows dealing with outcomes (or different termini). Check the <a href="#endpoint-controller-configuration-default_matcher" class="underline text-purple"><code class="text-purple">default_matcher</code></a> directive to learn how to reduce redundancy and be less verbose with your matchers.</p>
+
+<h4 id="endpoint-protocol-layout-wiring" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Layout
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Wiring</span>
+
+                  </h4>
+
+<p class="">When compiling an endpoint with <code class="text-purple">MyProtocol</code>, every “known” terminus of the business operation is automatically connected.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Update, protocol: MyProtocol
+  # ...
+end
+</code></pre>
+
+<p class="">For example, if <code class="text-purple">Update</code> was exposing a <code class="text-purple">not_found</code> terminus, it’s linked to its respective terminus in the protocol.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/endpoint-protocol-update-94310330cd249cf3747d1b4542852f2bf2ec4e826c5c29a249d662adfc497b52.png" /></p>
+
+<p class="">In case you need to connect an output to another arbitrary track or terminus, you can use the Wiring API in an optional block when compiling the endpoint.</p>
+
+<p class="">Let’s assume the <code class="text-purple">Update</code> operation was terminating on its built-in <code class="text-purple">fail_fast</code> terminus when the updated model couldn’t be found. You can wire that very terminus to the <code class="text-purple">not_found</code> track in the protocol using the Wiring API.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Update, protocol: MyProtocol do
+    {
+      Output(:fail_fast) =&gt; Track(:not_found)
+    }
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">The returned hash of wiring instructions is executed when the <code class="text-purple">:domain_activity</code> placeholder step is replaced with the actual business operation at compile time, making the diagram look as follows.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/protocol-fail-fast-a104f0d29198b16e50d89c6ed472607c447acd8d0f1863b7718f4d06a5bba75d.png" /></p>
+
+<p class="">This trick allows you to “translate” any kind of operation layout to your protocol’s. For instance, you could even move legacy operations into endpoints and connect their termini to corresponding tracks in the protocol.</p>
+
+<h3 id="endpoint-protocol-configuration" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Configuration</span></h3>
+
+<p class="">Any <a href="#endpoint-controller-configuration" class="underline text-purple">configuration directive</a> from the controller layer can be used in combination with a protocol. In addition to that, we do have some extra options to fine-tune the compilation of your protocol endpoints.</p>
+
+<h4 id="endpoint-protocol-configuration-options" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">options</span>
 
                   </h4>
 
-<p class="">The compilation of your controller’s endpoints can be configured using <code class="text-purple">options</code>.</p>
+<p class="">Use the <code class="text-purple">options</code> directive to default options when you create a new endpoint on the controller level.</p>
 
-<pre class=""><code class="rounded">endpoint do
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
   # ...
-  options do
-    {
-      protocol: Endpoint::Protocol,
-      # connect fast track outputs to success/failure:
-      fast_track_to_railway: true,
-    }
+  endpoint do
+    options do
+      {
+        protocol: MyProtocol,
+      }
+    end
   end
   # ...
 end
 </code></pre>
 
-<p class="">Make sure you provide a <code class="text-purple">:protocol</code> as this is the only requirement in this directive. # TODO: link to protocol.</p>
+<p class="">With the above setting, you can skip the <code class="text-purple">:protocol</code> option.</p>
 
-<h4 id="endpoint-controller-configuration-fast_track_to_railway" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Create # no :protocol needed!
+  # ...
+end
+</code></pre>
+
+<p class="">Note that you can still manually override the class-wide option when defining the endpoint.</p>
+
+<h4 id="endpoint-protocol-configuration-fast_track_to_railway" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">fast_track_to_railway</span>
 
                   </h4>
 
 <p class="">If you’re not interested in handling your operation’s <code class="text-purple">pass_fast</code> and <code class="text-purple">fail_fast</code> termination separately, you can use the <code class="text-purple">:fast_track_to_railway</code> shortcut in <code class="text-purple">options</code> to wire the two fast track termini to their railway friends.</p>
 
-<pre class=""><code class="rounded">endpoint do
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
   # ...
-  options do
-    {
-      # ...
-      # connect fast track outputs to success/failure:
-      fast_track_to_railway: true,
-    }
+  endpoint do
+    options do
+      {
+        # ...
+        fast_track_to_railway: true,
+      }
+    end
   end
   # ...
 end
@@ -596,311 +805,71 @@ end
 
 <p class="">Here, the distinction between <code class="text-purple">failure</code> and <code class="text-purple">fail_fast</code> gets lost after the endpoint has been run. In most scenarios, this is desired, as this mimics querying the result object via <code class="text-purple">result.success?</code>.</p>
 
-<p class="">However, in some cases, you might want to deal with a <code class="text-purple">fail_fast</code> or <code class="text-purple">pass_fast</code> termination of your operation. Simply override it when defining the specific endpoint.</p>
+<p class="">In some cases you might want to deal with a <code class="text-purple">fail_fast</code> or <code class="text-purple">pass_fast</code> termination of your operation. Simply override the option when defining the specific endpoint.</p>
 
 <pre class=""><code class="rounded">class MemosController &lt; ApplicationController
   # ...
-  endpoint Memo::Operation::Create, fast_track_to_railway: false
+  endpoint Memo::Operation::Update,
+    fast_track_to_railway: false
   # ...
 end
 </code></pre>
 
 <p class="">Your endpoint now needs to define those two additional termini, so they can be properly connected.</p>
 
-<h4 id="endpoint-controller-configuration-ctx" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
-                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">ctx</span>
-
-                  </h4>
-
-<p class="">Use the <code class="text-purple">ctx</code> block to define what ctx variables to pass into the endpoint (and operation) invocation by default.</p>
-
-<pre class=""><code class="rounded">endpoint do
-  # ...
-  ctx do |controller:, **| # this block is executed in controller instance context.
-    {
-      params:       controller.params,
-      current_user: controller.current_user,
-    }
-  end
-  # ...
-end
-</code></pre>
-
-<p class="">The block is executed in controller instance context and allows you to access the environment you have within a controller action, e.g. <code class="text-purple">params</code> or <code class="text-purple">request</code>.</p>
-
-<p class="">You can override this directive per controller (on the class level), or add variables in the controller action <a href="#endpoint-runtime-invoke" class="underline text-purple">via <code class="text-purple">#invoke</code></a>.</p>
-
-<h4 id="endpoint-controller-configuration-protocol_block" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+<h4 id="endpoint-protocol-configuration-protocol_block" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">protocol_block</span>
 
                   </h4>
 
-<p class="">It is possible to set a default wiring for your domain operations in their endpoint using the <code class="text-purple">:protocol_block</code>. The following example connects the <code class="text-purple">not_found</code> terminus to the endpoint’s <code class="text-purple">not_found</code> track. As this is not a standard railway/fast-track terminus, it’s not wired automatically.</p>
+<p class="">You can define a default block for the <a href="#endpoint-protocol-layout-wiring" class="underline text-purple">wiring</a> of the domain operation.</p>
 
-<pre class=""><code class="rounded">class ApplicationController &lt; ActionController::Base
-    # ...
-    options do
-      {
-        # ...
-        fast_track_to_railway: true, # FIXME: test this!
-        # default wiring, applied to all endpoints:
-        protocol_block: -&gt; do
-          {Output(:not_found) =&gt; End(:not_found)}
-        end
-      }
-    end
-    # ...
-end
-</code></pre>
-
-<p class="">The block simply needs to return a hash that contains <a href="/2.1/docs/operation/index.html#operation-wiring-api" class="underline text-purple">Wiring API</a> instructions. Here is the resulting diagram of that endpoint part.</p>
-
-<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/endpoint-protocol-block-8fa825071f730269bad543527fe874d8223c76b67a7c79219c0ff15fc88adc9f.png" /></p>
-
-<p class="">Keep in mind, though, that this wiring is applied to all operations in this controller. If a particular operation doesn’t expose a <code class="text-purple">not_found</code> output, this will raise an exception!</p>
-
-<pre class=""><code class="rounded">
-`No "not_found" output found for :domain_activity`...</code></pre>
-
-<p class="">In this case, <a href="#endpoint-controller-endpoint-wiring" class="underline text-purple">override the wiring</a> for the respective endpoint.</p>
-
-<p class="">Alternatively, you may use conditional code leveraging the operation’s introspection API. The <code class="text-purple">protocol_block</code> is executed in the respective operation context each time you’re adding a concrete endpoint.</p>
-
-<pre class=""><code class="rounded">class ApplicationController &lt; ActionController::Base
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
   # ...
   endpoint do
     options do
       {
-        # ...
-        # default wiring, applied to all endpoints:
+        protocol_block: -&gt; do
+          {Output(:fail_fast) =&gt; Track(:not_found)}
+        end,
+      }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">The <code class="text-purple">:protocol_block</code> option is used when compiling an endpoint, you don’t need to specify the custom wiring anymore.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Update, protocol: MyProtocol # {fail_fast} =&gt; {not_found}
+  # ...
+end
+</code></pre>
+
+<p class="">It’s even possible to have a dynamic <code class="text-purple">:protocol_block</code>. The block is executed in the context of the domain operation.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint do
+    options do
+      {
         protocol_block: -&gt; do
           if to_h[:outputs].find { |output| output.semantic == :not_found }
             {Output(:not_found) =&gt; End(:not_found)}
           else
-            {}
+            {} # no custom wiring.
           end
-        end
+        end,
       }
     end
-    # ...
   end
   # ...
 end
 </code></pre>
 
-<h4 id="endpoint-controller-configuration-flow_options" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
-                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">flow_options</span>
-
-                  </h4>
-
-<p class="">You can set <code class="text-purple">flow_options</code> that are injected into the endpoint (or operation) invocation using the same-named block. This is where you would set ctx aliases, for instance.</p>
-
-<pre class=""><code class="rounded">endpoint do
-  # ...
-  flow_options do |controller:, activity:, **|
-    {
-      context_options: {
-        aliases: {"contract.default": :contract},
-        container_class: Trailblazer::Context::Container::WithAliases,
-      }
-    }
-  end
-  # ...
-end
-</code></pre>
-
-<h3 id="endpoint-controller-endpoint" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Endpoint</span></h3>
-
-<p class="">While the <a href="#endpoint-controller-configuration" class="underline text-purple">block version of <code class="text-purple">::endpoint</code></a> allows to configure the build process and some runtime variables, most of the time you will be using this method to define endpoints per controller action in a concrete controller.</p>
-
-<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
-  endpoint Memo::Operation::Create # define endpoint.
-  # ...
-end
-</code></pre>
-
-<p class="">This will, at compile time, build and store a dedicated endpoint for your <code class="text-purple">Memo::Operation::Create</code> operation. You can now use that endpoint in your controller actions using <code class="text-purple">#invoke</code>.</p>
-
-<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
-  <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
-  <div class="space-y-3">
-    
-<p class="">Currently, this is a required step, as compiling an endpoint takes time and technically only has to be done once - at compile time.</p>
-
-<p class="">However, we might come up with a solution that makes defining endpoints redundant in the future.</p>
-
-  </div>
-</div>
-
-<h4 id="endpoint-controller-endpoint-wiring" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Endpoint
-                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Wiring</span>
-
-                  </h4>
-
-<p class="">You may add arbitrary wiring for your operation when defining the concrete endpoint. This is done by passing a block after the endpoint’s constant.</p>
-
-<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
-  endpoint Memo::Operation::Update do
-    {
-      Output(:not_found) =&gt; End(:failure)
-    }
-  end
-  # ...
-end
-</code></pre>
-
-<p class="">This wiring block will override any <code class="text-purple">:protocol_block</code> in an inherited controller.</p>
-
-<p class="">Keep in mind that you can also “turn off” the wiring from a super-controller by returning an empty hash.</p>
-
-<pre class=""><code class="rounded">endpoint Memo::Operation::Create do
-  {} # override ApplicationController's wiring.
-end
-</code></pre>
-
-<h4 id="endpoint-controller-endpoint-name" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Endpoint
-                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Name</span>
-
-                  </h4>
-
-<p class="">If you need one distinct operation in several endpoints, pass a name instead of the class.</p>
-
-<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
-  endpoint "create", domain_activity: Memo::Operation::Create
-  endpoint "create/admin",
-    domain_activity: Memo::Operation::Create,
-    protocol: Protocol::Admin
-  # ...
-end
-</code></pre>
-
-<p class="">The actual operation to be embedded in the endpoint is specified via <code class="text-purple">:domain_activity</code>. Note that you may pass additional build options here.</p>
-
-<p class="">In the controller action, you now need to pass the <em>name</em> to <code class="text-purple">#invoke</code>.</p>
-
-<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
-  def create
-    invoke "create" do # endpoint name
-      # ...
-    end
-  end
-  # ...
-end
-</code></pre>
-
-<h2 id="endpoint-runtime" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Runtime</span></h2>
-
-<p class="">The real fun starts when using endpoints in a controller action. This is when the endpoint and your business logic is executed and the respective matcher is run.</p>
-
-<h3 id="endpoint-runtime-invoke" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Invoke</span></h3>
-
-<p class="">You can invoke the controller’s endpoints using <code class="text-purple">#invoke</code>. Just pass the endpoint’s name, which is usually the class constant.</p>
-
-<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
-  def create
-    invoke Memo::Operation::Create do # call the endpoint, use matchers:
-      success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
-      # failure is inherited
-      # not_found is inherited
-    end
-  end
-  # ...
-end
-</code></pre>
-
-<p class="">This will run the endpoint, along with your embedded domain operation. Using the matcher block, you can override specific handlers ad-hoc, in case the inherited default matchers don’t suit the controller action.</p>
-
-<h4 id="endpoint-runtime-invoke-variables" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Invoke
-                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Variables</span>
-
-                  </h4>
-
-<p class="">Keep in mind that, per default, only the variables configured in the <a href="/2.1/docs/endpoint/index.html#endpoint-controller-configuration-ctx" class="underline text-purple"><code class="text-purple">ctx {}</code> block</a> are passed into the endpoint, and the operation.</p>
-
-<pre class=""><code class="rounded">endpoint do
-  # ...
-  ctx do |controller:, **| # this block is executed in controller instance context.
-    {
-      params:       controller.params,
-      current_user: controller.current_user,
-    }
-  end
-  # ...
-end
-</code></pre>
-
-<p class="">In the operation, you will only see the variables configured above.</p>
-
-<pre class=""><code class="rounded">module Memo::Operation
-  class Update &lt; Trailblazer::Operation
-    step :find_model
-    # ...
-    def find_model(ctx, **)
-      p ctx.keys.inspect # =&gt; [:params, :current_user]
-    end
-  end
-end
-</code></pre>
-
-<p class="">If you need additional variables, simply pass them to <code class="text-purple">#invoke</code>.</p>
-
-<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
-  # ...
-  def update_with_runtime_variables
-    invoke Memo::Operation::Update, storage: MyBucket do
-      # ...
-    end
-  end
-  # ...
-end
-</code></pre>
-
-<p class="">Your operation can now see the <code class="text-purple">:storage</code> variable, too.</p>
-
-<pre class=""><code class="rounded">def find_model(ctx, **)
-  p ctx.keys.inspect # =&gt; [:params, :current_user, :storage]
-end
-</code></pre>
-
-<p class="">Variables handed to <code class="text-purple">#invoke</code> will override default variables from the <a href="/2.1/docs/endpoint/index.html#endpoint-controller-configuration-ctx" class="underline text-purple"><code class="text-purple">ctx {}</code> block</a>.</p>
-
-<h3 id="endpoint-runtime-no-protocol" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">No protocol</span></h3>
-
-<h2 id="endpoint-protocol" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Protocol</span></h2>
-
-<p class="">Inheritance</p>
-
-<!--
-As visible in this illustreous diagram, invoking an endpoint usually involves two steps.
-
-1. Running authentication and authorization, allowing to move this logic from the controller's `before_filter`s to a traceable activity.
-2. Running the actual domain code, your `Update` operation.
-
-The key of the endpoint is to specify generic outcomes to be reused across the entire application: `not_found` or `not_authorized` are well-defined outcomes that can now be handled by generic code you write once.
-
-
-<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
-  <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
-  <div class="space-y-3">
-    
-<p class="">Letting the endpoint handle the authentication, policy checks and more is completely up to you. If desired, or during a refactoring, leave this code in your <code class="text-purple">before_filter</code>s.</p>
-
-  </div>
-</div>
-
-
-
-
-
-
-Endpoints will be the canonical, recommended way to running operations.
-
- -->
+<p class="">In this example, the block is evaluated in context of <code class="text-purple">Memo::Operation::Update</code>. Within this block, you may use the <a href="/2.1/docs/operation/index.html#operation-internals-introspection-api" class="underline text-purple"><code class="text-purple">Introspect</code> API</a> or any method of the domain operation. Here, <code class="text-purple">to_h</code>  translates to <code class="text-purple">Memo::Operation::Update.to_h</code>, allowing you to add custom wiring as it applies.</p>
 
         </div>
 
@@ -908,13 +877,13 @@ Endpoints will be the canonical, recommended way to running operations.
         <div class="bg-white h-screen w-56 sticky top-[5.5rem]" id="right-toc">
           <div id="docsearch" class="flex flex-col w-[203px] pt-5"></div>
 
-          <div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-endpoint-overview">
+          <div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-endpoint-canonical-invoke">
   <h4 class="font-base font-bold leading-10 pl-2">
-     Overview
+     Canonical invoke
   </h4>
 
   
-    <a class="block px-2 leading-8" href="#endpoint-overview-example">Example</a>
+    <a class="block px-2 leading-8" href="#endpoint-canonical-invoke-configuration">Configuration</a>
 
     
   
@@ -927,53 +896,24 @@ Endpoints will be the canonical, recommended way to running operations.
   </h4>
 
   
-    <a class="block px-2 leading-8" href="#endpoint-controller-inheritance">Inheritance</a>
+    <a class="block px-2 leading-8" href="#endpoint-controller-installation">Installation</a>
+
+    
+  
+    <a class="block px-2 leading-8" href="#endpoint-controller-invoke">Invoke</a>
 
     
   
     <a class="block px-2 leading-8" href="#endpoint-controller-configuration">Configuration</a>
 
     
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-overview">Overview</a>
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-ctx">ctx</a>
     
       <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-default_matcher">default_matcher</a>
     
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-options">options</a>
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-invoke">invoke</a>
     
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-fast_track_to_railway">fast_track_to_railway</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-ctx">ctx</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-protocol_block">protocol_block</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-flow_options">flow_options</a>
-    
-  
-    <a class="block px-2 leading-8" href="#endpoint-controller-endpoint">Endpoint</a>
-
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-endpoint-wiring">Wiring</a>
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-endpoint-name">Name</a>
-    
-  
-</div>
-
-
-<div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-endpoint-runtime">
-  <h4 class="font-base font-bold leading-10 pl-2">
-     Runtime
-  </h4>
-
-  
-    <a class="block px-2 leading-8" href="#endpoint-runtime-invoke">Invoke</a>
-
-    
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-runtime-invoke-variables">Variables</a>
-    
-  
-    <a class="block px-2 leading-8" href="#endpoint-runtime-no-protocol">No protocol</a>
-
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-inheritance">Inheritance</a>
     
   
 </div>
@@ -984,6 +924,36 @@ Endpoints will be the canonical, recommended way to running operations.
      Protocol
   </h4>
 
+  
+    <a class="block px-2 leading-8" href="#endpoint-protocol-overview">Overview</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-overview-protocol">Protocol</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-overview-defining">Defining</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-overview-invocation">Invocation</a>
+    
+  
+    <a class="block px-2 leading-8" href="#endpoint-protocol-layout">Layout</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-layout-terminus">Terminus</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-layout-handlers">Handlers</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-layout-wiring">Wiring</a>
+    
+  
+    <a class="block px-2 leading-8" href="#endpoint-protocol-configuration">Configuration</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-configuration-options">options</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-configuration-fast_track_to_railway">fast_track_to_railway</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-configuration-protocol_block">protocol_block</a>
+    
   
 </div>
 

@@ -406,6 +406,10 @@ end
 
 <p class="">You need to pass the operation constant and the entire input hash yourself.</p>
 
+<p class="">Note that if the assertion <em>fails</em>, it will help debugging right away by giving you the contract errors.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/assert-pass-message-6fac3146e919593c2e3f4e91cd978805336df49152639c98ad536bd05b3f22d8.png" /></p>
+
 <h4 id="testing-with-trailblazer-minitest-assert_pass-return-value" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Assert_pass
                   <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Return value</span>
 
@@ -593,7 +597,7 @@ end
 <p class="">A typical operation test case might look as follows.</p>
 
 <pre class=""><code class="rounded">  # ...
-  Trailblazer::Test::Assertion.module!(self, suite: true)
+  Trailblazer::Test.module!(self, suite: true)
 
   # The default ctx passed into the tested operation.
   let(:default_ctx) do
@@ -637,7 +641,7 @@ end
 <p class="">If you want to use the Suite logic to save typing, instruct our <code class="text-purple">Test.module</code> using the <code class="text-purple">:suite</code> option (you could’ve guessed that!).</p>
 
 <pre class=""><code class="rounded">class MemoOperationTest &lt; Minitest::Spec  # test/memo/operation_test.rb
-  Trailblazer::Test::Assertion.module!(self, suite: true)
+  Trailblazer::Test.module!(self, suite: true)
 </code></pre>
 
 <p class="">This will initialize merging logic along with <code class="text-purple">default_ctx</code>, <code class="text-purple">expected_attributes</code>, <code class="text-purple">operation</code> and <code class="text-purple">key_in_params</code>. However, you still need to configure those defaults yourself.</p>
@@ -790,7 +794,7 @@ end
 <p class="">You don’t have to use <code class="text-purple">Minitest::Spec</code>. If you fancy the rather cumbersome <code class="text-purple">Minitest::Test</code> style, pass the <code class="text-purple">spec: false</code> option when adding helpers.</p>
 
 <pre class=""><code class="rounded">class MemoCreateTest &lt; Minitest::Test
-  Trailblazer::Test::Assertion.module!(self, suite: true, spec: false)
+  Trailblazer::Test.module!(self, suite: true, spec: false)
   # ...
   def operation; Memo::Operation::Create end
   def default_ctx; {params: {memo: {title: "Note to self", content: "Remember me!"}}} end
@@ -1053,6 +1057,289 @@ end
 
   </div>
 </div>
+
+<h1 id="all-eyes-on-the-edge-case-unit-tests-in-trailblazer">“All eyes on the edge case: Unit tests in Trailblazer”</h1>
+
+<p class=""><em>by Nick Sutterer @apotonick</em></p>
+
+<p class="">Writing and maintaining automated tests for code is the most hated part for every developer. You might find yourself nodding to this as you’re reading.</p>
+
+<p class="">It’s not only the pain to set up the environment needed for testing a specific case, but also the amount of work and actually written lines of code to make sure you’re covering “everything” that could be affected by the new chunk of code you introduced.</p>
+
+<p class="">In this post, I want to focus on the second part of this bold statement and quickly show you how the just released <code class="text-purple">trailblazer-test</code> gem allows writing very concise unit tests for Trailblazer operations. A lot of work has been put into it to make covering edge cases as simple as possible.</p>
+
+<h2 id="what-is-an-operation">What is an operation?</h2>
+
+<p class="">Trailblazer provides a service object called <em>operation</em>. It’s the place where you put the business logic for a particular use case you are working on. With it’s very simple DSL, logic can be organized in chunks and executed step-wise.</p>
+
+<p class="">```ruby
+module Memo::Operation
+  class Create &lt; Trailblazer::Operation
+    step :check_data
+    step :validate
+    step :save
+    # …</p>
+
+<pre><code>def save(ctx, params:, **)
+  Memo.create(params[:memo])
+end   end end ```
+</code></pre>
+
+<p class="">In short, when invoking the <code class="text-purple">Memo::Operation::Create</code> operation, the three examplary steps will be executed in the order you defined them. If a step fails (by returning false), the remaining steps are skipped and the operation terminates, indicating a <em>failure</em>.</p>
+
+<p class="">If you’re keen to learn more about operations and the internal railway model, check our [extensive docs] or simply watch a [5 minute video].</p>
+
+<h2 id="minitest-or-rspec">Minitest or RSpec?</h2>
+
+<p class="">These examples are using <code class="text-purple">Minitest</code>, as we think it’s much more readable than RSpec. RSpec on the other hand is providing a great toolset but, whatsoever, is putting too much effort into a test <em>DSL</em> that’s extremely verbose.</p>
+
+<p class="">As a matter of fact, this is a matter of taste - no holy wars here: we do provide <a href="" class="underline text-purple">RSpec support</a>, too.</p>
+
+<h2 id="asserting-success">Asserting success</h2>
+
+<p class="">Now, to show you a very simple test case, let’s create a test file, configure it, and run the <code class="text-purple">Create</code> operation with a particular input to assert that it terminates successfully.</p>
+
+<p class="">```ruby
+# test/operation/memo_test.rb</p>
+
+<p class="">require “test_helper”</p>
+
+<p class="">class MemoOperationTest &lt; Minitest::Spec
+  Trailblazer::Test.module!(self) # install our helpers.</p>
+
+<p class="">it “passes with valid input” do
+    input = {params: {memo: {content: “Stock up beer”}}}</p>
+
+<pre><code>assert_pass Memo::Operation::Create, input   end end ```
+</code></pre>
+
+<p class="">Using <code class="text-purple">Test.module!</code> you include the <code class="text-purple">#assert_pass</code> assertion into the test class. In its simplest form, it takes the operation constant, and any kind of input hash.</p>
+
+<p class="">Internally, the assertion runs the operation with the specified input and then tests if the outcome was successful. This roughly translates to the following snippet, which I’ve seen throughout many TRB projects.</p>
+
+<p class="">```ruby
+it “passes with valid input” do
+  # …
+  result = Memo::Operation::Create.(input)</p>
+
+<p class="">assert_equal result.success?, true
+end
+```</p>
+
+<p class="">There is nothing wrong with doing the above manually, but our assertions bring a (hopefully!) much better developer experience that we’re about to discover.</p>
+
+<h2 id="debugging-youre-welcome">Debugging? You’re welcome!</h2>
+
+<p class="">A typical issue for developers when writing or changing tests is that an operation supposed to be passing actually <em>fails</em>. Most of the times, this is due to validation errors. Given that you’re using a contract with an errors object, a failing <code class="text-purple">#assert_pass</code> will automatically give the the validation errors.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/assert-pass-message-6fac3146e919593c2e3f4e91cd978805336df49152639c98ad536bd05b3f22d8.png" /></p>
+
+<p class="">If that is not enough, you can simply add a question mark to the assertion.</p>
+
+<p class=""><code class="text-purple">ruby
+it "passes with valid input" do
+  # ...
+  assert_pass? Memo::Operation::Create, input
+end
+</code></p>
+
+<p class="">This gives you the highly popular [<code class="text-purple">#wtf?</code> trace] on the console</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/assert-pass-failing-wtf-8bd1d8c28f88d0259def97ca4450ef3f6f5ba7a0a684863391bb4e3f1af75a9b.png" /></p>
+
+<p class="">Those two incredibly helpful features for debugging have been suggested by several TRB users over the years, as both checking the contract errors as well as turning on tracing (<code class="text-purple">#wtf?</code>) are the first things immediately done manually by many developers when hitting an issue.</p>
+
+<h2 id="testing-the-model">Testing the model</h2>
+
+<p class="">While checking if an operation ran successfully is a great thing to do, bringing joy and happiness to the team, the product managers, and the clients, a good test needs to do a bit more.</p>
+
+<p class="">In most cases, an operation produces or alters a model, which is usually found under <code class="text-purple">ctx[:model]</code>. After running, you may want to check if model attributes match your high expectations.</p>
+
+<p class="">One way would be to use the block style and do the testing yourself.</p>
+
+<p class=""><code class="text-purple">ruby
+it "passes with valid input" do
+  # ...
+  assert_pass Memo::Operation::Create, input do |result|
+    assert_equal result[:model].content, "Stock up beer"
+    # ...
+end
+</code></p>
+
+<p class="">The block simply yields the <code class="text-purple">Result</code> object (or, when using an Activity, the <code class="text-purple">ctx</code>), and it’s up to you what gets asserted inside.</p>
+
+<p class="">Alternatively, you can use the built-in attributes test of <code class="text-purple">#assert_pass</code>.</p>
+
+<p class=""><code class="text-purple">ruby
+it "passes with valid input" do
+  # ...
+  assert_pass Memo::Operation::Create, input,
+    content:    "Stock up beer",
+    persisted?: true,
+    id:         -&gt;(asserted:, **) { asserted.id &gt; 0 }
+end
+</code></p>
+
+<p class="">Your new best friend <code class="text-purple">#assert_pass</code> takes keywords as its third argument. Those are automatically matched against <code class="text-purple">result[:model]</code>. As you can see for <code class="text-purple">:id</code>, even dynamic assertions are possible.</p>
+
+<p class="">The combination of the block style and the built-in model assertions provides a rich interface for testing any successful outcome of your operations.</p>
+
+<h2 id="when-things-go-wrong">When things go wrong</h2>
+
+<p class="">So far, we learned how to test scenarios when things work out. And for the other part, when things don’t play and operations are supposed to actually fail, we provide <code class="text-purple">#assert_fail</code> - you already guessed that method name, right?</p>
+
+<p class="">In many cases, an operation will fail if its validations aren’t met. You can simply check if the operation terminated on the <code class="text-purple">failure</code> terminus by using the new assertion with one argument, only.</p>
+
+<p class="">```ruby
+it “fails with invalid input” do
+  invalid_input = {params: {memo: {}}}</p>
+
+<p class="">assert_fail Memo::Operation::Create, invalid_input
+end
+```</p>
+
+<p class="">In rare cases, this might be a sufficient test, but most of the times you want to assert errors more detailed.</p>
+
+<h2 id="testing-error-messages">Testing error messages</h2>
+
+<p class="">Given that you’re using a [contract in the operation], you can ask <code class="text-purple">#assert_fail</code> to check for specific validation error messages.</p>
+
+<p class=""><code class="text-purple">ruby
+it "fails with invalid input" do
+  # ...
+  assert_fail Memo::Operation::Create, invalid_input,
+    [:title, :content] # erroring fields.
+end
+</code></p>
+
+<p class="">The assertion will now check if the internal contract errors object contains the erroring fields you provided, resulting in a manual test that could look like so.</p>
+
+<p class=""><code class="text-purple">ruby
+it "fails with invalid input" do
+  # ...
+  assert_equal result["contract.default"].errors.messages.keys,
+    [:title, :content]
+end
+</code></p>
+
+<p class="">To write an even stricter test, you can provide the error messages as an additional constraint.</p>
+
+<p class=""><code class="text-purple">ruby
+it "fails with invalid input" do
+  # ...
+  assert_fail Memo::Operation::Create, invalid_input,
+    {
+      title: ["must be filled"],
+      content: ["must be filled", "size cannot be less than 8"]
+    }
+end
+</code></p>
+
+<p class="">When expected error messages do not match the actual ones, the assertion automatically shows you the latter.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/assert-fail-message-2dc084595fdf20855aa867df1b573a325fa447891f996fad287c5e1ceea1b6ce.png" /></p>
+
+<p class="">Again, optimizing your experience and shortcutting ways to help you debug.</p>
+
+<h2 id="what-about-extendability">What about extendability?</h2>
+
+<p class="">Both assertions shipped with <code class="text-purple">trailblazer-test</code> provide the <a href="#testing-with-trailblazer-minitest-assert_pass-block-style" class="underline text-purple">block syntax</a> and <a href="#testing-with-trailblazer-minitest-assert_pass-return-value" class="underline text-purple">return the result</a>, in case you need to add more test code.</p>
+
+<p class="">Also, keep in mind that the assertions described here are what <em>we</em> needed to minimize time, code and brain when writing tests. Feel free to <a href="https://trailblazer.zulipchat.com" class="underline text-purple">ping us</a> for discussing any extensions of the gem.</p>
+
+<h2 id="suite-minimizing-code">Suite: Minimizing code</h2>
+
+<p class="">The assertions described so far are designed to take away pain in your testing, but they require you to repeat arguments over and over again. The <a href="https://trailblazer.to/2.1/docs/test/index.html#testing-with-trailblazer-minitest-suite" class="underline text-purple">“Suite” mode</a> targets defaulting, so the written code is even less.</p>
+
+<p class="">Imagine you’re testing our <code class="text-purple">Create</code> operation and you want to make sure that all validations are actually working, each one in a separate test case. Here’s how that could look using the suite feature.</p>
+
+<p class="">```ruby
+# test/memo/operation_test.rb
+class MemoOperationTest &lt; Minitest::Spec
+  Trailblazer::Test.module!(self, suite: true)</p>
+
+<p class="">describe “Create” do
+    # insert defaulting here, see below…</p>
+
+<pre><code>it "{content} works" do
+  assert_pass({content: "chill beer"}, {content: "chill beer"})
+end
+
+it "{tag_list} is converted to array" do
+  assert_pass(
+    {tag_list: "fridge,todo"},      # input
+    {tag_list: ["fridge", "todo"]}  # model value.
+  )
+end   end end ```
+</code></pre>
+
+<p class="">In suite mode, assertion arguments such as operation, the incoming ctx and expected attributes on the model can be set (and overwritten!) on the class and <code class="text-purple">describe</code> level.</p>
+
+<h2 id="defaulting-over-verbosity">Defaulting over verbosity</h2>
+
+<p class="">You can default arguments by simply defining special-named <code class="text-purple">let()</code> blocks on any level.</p>
+
+<p class=""><code class="text-purple">ruby
+# test/memo/operation_test.rb
+class MemoOperationTest &lt; Minitest::Spec
+  # ...
+  describe "Create" do
+    let (:operation) { Memo::Operation::Create }
+    let(:default_ctx) do
+      {
+        params: {
+          memo: { # Note the {:memo} key here!
+            title:   "Todo",
+            content: "Stock up beer",
+          }
+        }
+      }
+    end
+    let(:expected_attributes) { ... }
+  end
+</code></p>
+
+<p class="">Instead of having to repeat those values, the suite-enabled assertions will use and accordingly merge arguments for you. A desired side-effect is that <code class="text-purple">#assert_pass</code> always checks <em>all</em> attributes on the model as it merges <code class="text-purple">expected_attributes</code> with the second hash you provided.</p>
+
+<p class=""><a href="https://trailblazer.to/2.1/docs/test/index.html#testing-with-trailblazer-minitest-suite" class="underline text-purple">Check the docs</a> to dive into this simple yet helpful feature.</p>
+
+<h2 id="stop-mocking-me">Stop mocking me!</h2>
+
+<p class="">While it’s usually good practice to test the entire stack of logic, meaning your tests also cover complex system parts like external services, sometimes it’s necessary to stub a component.</p>
+
+<p class="">Replacing a particular step can easily be done using <code class="text-purple">#mock_step</code>. You are correct when objecting that this method should be named <code class="text-purple">#stub_step</code>, but that’s too close to <code class="text-purple">dub_step</code> and we haven’t added an alias, yet. Note that a “step” could be an entire, nested operation using <code class="text-purple">Subprocess()</code>, anything modeled as a step can be stubbed.</p>
+
+<p class="">```ruby
+it “runs fine” do
+  stubbed_create = mock_step(Memo::Operation::Create, path: [:save]) do |ctx, **|
+    # new logic for {save}.
+    ctx[:saved] = true
+  end</p>
+
+<p class="">assert_pass stubbed_create, …
+end
+```</p>
+
+<p class="">The <code class="text-purple">:path</code> option allows targeting either a first-level step sitting directly in <code class="text-purple">Create</code>, or a deeply nested step somewhere 6 levels down in your nested operation graph. <a href="https://trailblazer.to/2.1/docs/test/index.html#testing-with-trailblazer-minitest-mock_step" class="underline text-purple">Check the docs</a> for some more detailed examples.</p>
+
+<p class="">The <code class="text-purple">#mock_step</code> helper returns a new operation class which can then be passed to the assertions, or even returned from <code class="text-purple">let(:operation)</code> if using suite mode.</p>
+
+<p class="">Maybe this post is a good place to mention that the entire stubbing logic is simply using the <a href="https://trailblazer.to/2.1/docs/operation/index.html#operation-step-dsl-patching" class="underline text-purple">patch feature</a> of Trailblazer internally - implementing this for the <code class="text-purple">trailblazer-test</code> gem was nothing more but applying the patching mechanics with three lines of code.</p>
+
+<h2 id="rspec-and-more">RSpec and more</h2>
+
+<p class="">In the next post we’re going to introduce the RSpec matchers that are based on this gem.</p>
+
+<p class="">```ruby
+it “passes with manual attributes” do
+  input = {params: {memo: {title: “Reminder”, content: “Do not forget”}}}</p>
+
+<p class="">expect(run(Memo::Operation::Create, input)).
+    to pass_with(title: “Reminder”)
+end
+```</p>
+
+<p class="">Being a bit more verbose, they provide the exact same behavior that we ship for Minitest. If you have suggestions or ideas, never hesitate to discuss those with us! Now, have fun testing. Or at least, try to!</p>
 
         </div>
 
