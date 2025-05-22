@@ -15,7 +15,7 @@ gem "puma"
 gem "importmap-rails"
 
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
-gem "tailwindcss-rails", "~> 3.3.1"
+gem "tailwindcss-rails"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
