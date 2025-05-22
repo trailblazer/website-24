@@ -23,17 +23,17 @@ In order to provide the generic interface, scoping and debugging capabilities, t
 <%= code 'ctx-indifferent-access' %>
 
 All keys are stored as Symbols by default in order to allow them to be accessible as keyword arguments.
-Note that `ctx` doesn't provide interchangeable keys for any nested hashes because of the performance reasons. 
+Note that `ctx` doesn't provide interchangeable keys for any nested hashes because of the performance reasons.
 
 <%= h4 "Aliases" %>
 
-Most commonly found keys in `ctx` are `'contract.default', 'contract.default.params', 'policy.default'` etc. It sometimes becomes cumbersome to access them from `ctx` as they can't be defined as keyword arguments in steps. 
+Most commonly found keys in `ctx` are `'contract.default', 'contract.default.params', 'policy.default'` etc. It sometimes becomes cumbersome to access them from `ctx` as they can't be defined as keyword arguments in steps.
 
-To overcome this, it is possible to define a shorter versions of context keys using `aliases`. By providing aliases mapping in `flow_options[:context_options]`, context will maintain any mutations being made on the origianl keys with 
+To overcome this, it is possible to define a shorter versions of context keys using `aliases`. By providing aliases mapping in `flow_options[:context_options]`, context will maintain any mutations being made on the origianl keys with
 the aliases and vice versa.
 
-<%= code 'ctx-aliases' %>
+<%# code 'ctx-aliases' %>
 
 `flow_options` are passed to the nested operations via `Subprocess` and all given aliases will also be applied in them by default.
 
-<%= code 'ctx-aliases-step', collapse: "flow" %>
+<%# code 'ctx-aliases-step', collapse: "flow" %>
