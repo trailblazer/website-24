@@ -71,7 +71,7 @@
   --spacing-22: 5.5rem;
 
   /* List Style Images */
-  --list-image-disc: url('@/images/list-circle-full.svg');
+  --list-style-image-disc: url('@/images/list-circle-full.svg');
 }
 
 @utility mobile-section-width {
