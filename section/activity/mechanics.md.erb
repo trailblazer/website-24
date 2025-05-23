@@ -68,7 +68,7 @@ Keep in mind that the above is the default behavior. You may configure what come
 
 When being invoked with `#call`, the operation works off its steps in the order they were defined with `#step`. This is called the "happy path", or the success track.
 
-<%= image_tag "memo-create.png" %>
+<%= vite_image_tag "images/memo-create.png" %>
 
 
 Once a step returns a "failure", the operation will deviate to the "failure track" and skip the remaining steps on the success track. Instead, the remaining steps added using `#left` (formerly `#fail`) will be executed.
@@ -113,7 +113,7 @@ Using tools the Wiring API provides, this adds new connections plus an entire ne
 
 Here, `#notify` encountering a disastrous network error will make the operation stop the execution in a third terminus called `network_error`.
 
-<%= image_tag "memo-network-error.png" %>
+<%= vite_image_tag "images/memo-network-error.png" %>
 
 <%= h4 "Semantic" %>
 

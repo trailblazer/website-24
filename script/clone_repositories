@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+repositories = [
+  "trailblazer-activity",
+  "trailblazer-activity-dsl-linear",
+  "trailblazer-developer",
+  "trailblazer-endpoint",
+  "trailblazer-macro",
+  "trailblazer-macro-contract",
+  "trailblazer-operation",
+  "trailblazer-option",
+  "trailblazer-rails",
+  "trailblazer-test",
+]
+
+Dir.chdir("..")
+
+repositories.each do |repository|
+  puts "Cloning repository: #{repository}"
+  `git clone git@github.com:trailblazer/#{repository}.git`
+end
+
+
+
+
+
+
+
+
+
+
+

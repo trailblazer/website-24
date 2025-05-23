@@ -12,7 +12,7 @@ Use `Subprocess()` to nest it into the `Create` operation.
 
 The macro automatically wires all of `Validate`'s termini to the known counter-part tracks.
 
-<%= image_tag "subprocess.png" %>
+<%= vite_image_tag "images/subprocess.png" %>
 
 The `Subprocess` macro will go through all outputs of the nested operation, fetch their semantics and search for tracks with the same semantic - it's that simple.
 
@@ -26,7 +26,7 @@ You can use the familiar Wiring DSL to reconnect termini of the nested operation
 
 For demonstration purposes, the nested's `failure` output now goes straight to `#notify`.
 
-<%= image_tag "subprocess-output.png" %>
+<%= vite_image_tag "images/subprocess-output.png" %>
 
 This is identical to connecting a "normal" step's output and allows to treat particular outcomes of a nested operation in a non-standard way - for example, routing a "failed" terminus to a success path.
 
@@ -44,7 +44,7 @@ The `Validate` operation could expose a third terminus `:invalid` to indicate th
 
 The new special terminus is now wired to the `failure` track of the containing `Create` operation.
 
-<%= image_tag "subprocess-terminus.png" %>
+<%= vite_image_tag "images/subprocess-terminus.png" %>
 
 You may connect the custom terminus using any of the Wiring's API helpers.
 
@@ -64,6 +64,6 @@ When nesting another operation (or `Activity::FastTrack`), its fast-track temini
 
 By providing `fast_track: true`, the nested termini will be connected to the matching outer tracks.
 
-<%= image_tag "wiring-subprocess-fast-track.png" %>
+<%= vite_image_tag "images/wiring-subprocess-fast-track.png" %>
 
 Omitting this option is usually the source for an `IllegalSignalError` at run-time.

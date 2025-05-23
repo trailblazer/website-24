@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>Trailblazer - The advanced business logic framework - Trailblazer</title>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    
+    
+
+    <script src="/vite-dev/@vite/client" crossorigin="anonymous" type="module"></script>
+    <script src="/vite-dev/entrypoints/application.js" crossorigin="anonymous" type="module"></script>
+    <link rel="stylesheet" href="/vite-dev/entrypoints/application.css" />
+
+    <script>pageIdentifier = "landing";</script>
+  </head>
+  <body>
+    <nav class=" text-base z-[50] top-0 absolute w-full lg:h-[5.5rem] lg:px-[5.6rem] py-3 lg:flex lg:justify-between lg:items-center " id="navbar">
+  <a href="/2.1" class="block shrink-0 w-fit mx-auto lg:mx-0">
+    <img class="w-40 lg:my-0" src="/vite-dev/images/logo_white_ruby.svg" />
+  </a>
+  <div class="lg:hidden absolute right-4 top-2 flex w-9 h-9 items-center" id="hamburgerIcon">
+    <div class="pointer-events-none w-full h-0.5 bg-blue transition-all duration-150
+                  before:content-[''] before:absolute before:w-full before:h-0.5 before:bg-blue before:-translate-y-2.5 before:transition-all before:duration-150
+                  after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-blue after:translate-y-2.5 after:transition-all after:duration-150"></div>
+  </div>
+  <div class="lg:hidden flex flex-col text-center hidden" id="navList">
+    <div class="lg:absolute flex flex-col mt-15 gap-10 uppercase">
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold underline decoration-[5px] underline-offset-[15px] decoration-purple text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="/2.1/docs/trailblazer">Documentation</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold underline decoration-[5px] underline-offset-[15px] decoration-purple text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="https://dev.to/trailblazer">Blog</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold underline decoration-[5px] underline-offset-[15px] decoration-purple text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="/2.1/about.html">About</a>
+      
+      <!-- <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold underline decoration-[5px] underline-offset-[15px] decoration-purple text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="/2.1/pro.html">PRO</a> -->
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold underline decoration-[5px] underline-offset-[15px] decoration-purple text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="https://trailblazer.zulipchat.com">Chat with us</a>
+    </div>
+  </div>
+  <div class="lg:flex hidden gap-10 items-center">
+    <div class="flex gap-7">
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="/2.1/docs/trailblazer">Documentation</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="https://dev.to/trailblazer">Blog</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="/2.1/about.html">About</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="/2.0/">→ 2.0</a>
+      
+      <!-- <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  text-white hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-white " href="/2.1/pro.html">PRO</a> -->
+    </div>
+
+    <a class="base-button text-base w-[12.5rem] h-[3.25rem] bg-light-purple text-blue hover:text-white hover:bg-purple" href="https://trailblazer.zulipchat.com">Chat with us</a>
+  </div>
+</nav>
+
+<!-- {h-screen} in this SECTION makes it take the entire screen height. note that h-screen is also set on the parallax overflow -->
+<section class="pt-[5.5rem] pb-40 h-screen bg-black">
+  <div class="lg:w-[1440px] z-40 sm:flex sm:justify-end sm:pr-10">
+    <div class="w-fit bg-bg-blue/70 py-12 px-8 sm:mx-0 lg:max-w-[30rem] z-40 h-fit">
+      <h1 class="text-white font-bold text-4xl lg:text-5xl">
+        The advanced
+        <br />
+        <span class="text-purple">business logic</span>
+        framework
+      </h1>
+      <p class="mt-6 text-xl text-white lg:mt-8 lg:text-2xl">
+        A powerful set of gems that
+        <br />
+        simplifies the implementation
+        <br /> of clean Ruby applications.
+      </p>
+      <a class="base-button text-white bg-purple mt-10 lg:text-2xl uppercase hover:bg-light-purple hover:text-blue" href="#some-code">SOME CODE?</a>
+    </div>
+  </div>
+
+  <div class="overflow-hidden top-0 bottom-0 left-0 right-0 absolute w-full h-screen">
+    <div class="z-30 bg-[url('@/images/parallax/front.webp')]  -bottom-[210px] top-0 left-0 right-0 absolute bg-right-bottom bg-no-repeat bg-cover" data-parallax="{&quot;y&quot; : -600}"></div>
+    <div class="z-20 bg-[url('@/images/parallax/middle.webp')] -bottom-[35px]  top-0 left-0 right-0 absolute bg-right-bottom bg-no-repeat bg-cover" data-parallax="{&quot;y&quot; : -300}"></div>
+    <div class="z-10 bg-[url('@/images/parallax/back.webp')]   -bottom-[30px]  top-0 left-0 right-0 absolute bg-right-bottom bg-no-repeat bg-cover" data-parallax="{&quot;y&quot; : -150}"></div>
+  </div>
+</section>
+
+<div id="docsearch" style="display: none">
+</div>
+
+
+<section class="bg-selected text-center py-20 px-10">
+  <h2 class="mx-auto text-purple-text text-4xl sm:text-5xl sm:max-w-[27rem] lg:text-7xl lg:max-w-[44rem]">
+    A mature and battle tested framework
+    <br />
+    <span class="text-white">
+      used in thousands of applications
+    </span>
+  </h2>
+  <div class="mx-auto mt-10 max-w-[50rem] lg:mt-15">
+    <div class="relative h-0 pb-[56.25%]">
+      <iframe class="absolute t-0 left-0 w-full h-full" src="https://www.youtube.com/embed/9elpobV4HSw"></iframe>
+    </div>
+  </div>
+</section>
+
+<section class="bg-bg-blue pt-20 pb-32 px-10">
+  <h2 class="section-header text-white font-bold text-4xl lg:text-6xl">
+    We streamline
+    <span class="text-purple-text">code organization</span>
+  </h2>
+  <p class="text-white text-lg text-center mt-10 mx-auto max-w-[45rem]">
+    <span class="font-bold uppercase text-purple-text">Trailblazer</span>
+    is a framework-agnostic set of gems helping to improve your app's code structure.
+    It is used in hundreds of commercial Rails apps and was often introduced later on, after many years of extensive development, to reduce technical debt.
+
+  </p>
+  <div class="max-w-[63rem] section-content-wrapper md:py-0">
+    <div class="md:text-left md:flex-row md:justify-between md:mt-[5.5rem] flex flex-col mt-10 text-center">
+      <div class="order-last w-full mt-10 mx-auto md:order-none md:mt-0 md:mx-0">
+        <lottie-player src="/vite-dev/images/lottie/1-A.json" background="transparent" speed="4" class="" loop="" autoplay=""></lottie-player>
+      </div>
+
+      
+      <div class="md:max-w-[28rem] flex flex-col">
+        <div class="text-white">
+          <h3 class="lg:text-3xl font-bold text-3xl">
+            <span class="text-purple-text">Missing</span>
+            abstractions
+          </h3>
+          <p class="mt-4 text-lg lg:mt-5">
+            Most web frameworks have excellent abstractions for routing, rendering, and databases.
+            When it comes to organizing <span class="font-bold uppercase text-purple-text">business logic</span>, however, you're left alone.
+          </p>
+          <p class="mt-4 text-lg lg:mt-5">
+            The existing places, such as controller actions, models, callbacks and hand-tailored service objects, lead to codebases hard to maintain.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:text-left md:flex-row md:justify-between md:mt-[5.5rem] flex flex-col mt-10 text-center">
+      <div class="md:max-w-[28rem] flex flex-col">
+        <div class="text-white">
+          <h3 class="lg:text-3xl font-bold text-3xl">
+            <span class="text-purple-text">Our</span>
+            toolbox
+          </h3>
+          <p class="mt-4 text-lg lg:mt-5">
+            Instead of cluttering your code over the entire MVC framework,
+            <span class="font-bold uppercase text-purple-text">Trailblazer</span> introduces a bunch of new abstractions, with a standard service object leading the way: the operation.
+          </p>
+
+          <p class="mt-4 text-lg lg:mt-5">
+            Code is organized into small chunks we call <i>steps</i>. The operation helps to structure your logic and takes over flow control.
+          </p>
+        </div>
+      </div>
+      <div class="order-last w-full mt-10 mx-auto md:order-none md:mt-0 md:mx-0">
+        <lottie-player src="/vite-dev/images/lottie/2-A.json" background="transparent" speed="4" class="" loop="" autoplay=""></lottie-player>
+      </div>
+    </div>
+
+    <div class="md:text-left md:flex-row md:justify-between md:mt-[5.5rem] flex flex-col mt-10 text-center">
+      <div class="order-last h-[22rem] mt-10 mx-auto md:order-none md:mt-0 md:mx-0">
+        <lottie-player src="/vite-dev/images/lottie/3-A.json" background="transparent" speed="3" class="" loop="" autoplay=""></lottie-player>
+      </div>
+
+      
+      <div class="md:max-w-[28rem] flex flex-col">
+        <div class="text-white">
+          <h3 class="lg:text-3xl font-bold text-3xl">
+            <span class="text-purple-text">Bullet-proof</span>
+            conventions
+          </h3>
+          <p class="mt-4 text-lg lg:mt-5">
+            While you can focus on developing your app and writing code that matters,
+            <span class="font-bold uppercase text-purple-text">Trailblazer</span> gives you automatic error handling by letting you apply the Railway pattern to your logic.
+
+          </p>
+          <p class="mt-4 text-lg lg:mt-5">
+            This not only saves you tons of <code class="text-purple-text font-bold">if</code> and <code class="text-purple-text font-bold">else</code>s but provides clever ways to reuse huge parts of your code by supplying inheritance and composition mechanics to structure your application.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a class="base-button bg-purple hover:bg-light-purple hover:text-blue text-white mt-15 mx-auto" href="/2.1/docs/operation/index.html">Learn about operations</a>
+</section>
+
+<section class="section-content-wrapper">
+  <h2 class="section-header font-bold">
+    Who can use
+    <span class="text-purple-text uppercase">Trailblazer</span>?
+  </h2>
+  <div class="mt-10 lg:flex lg:justify-between lg:gap-6">
+    <div class="lg:w-[55%]">
+      <div class="mt-1">
+        <div class="bg-purple text-white text-lg font-semibold py-4 px-5 hover:bg-light-purple user-group" data-selected-class="bg-purple text-white hover:bg-purple">Developers and Teams</div>
+        <ul class="list-image-disc pl-8 hidden space-y-6">
+          <li class="">Developers who work on Ruby applications, especially those built using frameworks like Rails, Hanami, Roda, Grape, or Sinatra.</li>
+          <li class="">Development teams working on complex applications with intricate business logic who don't want to reinvent the wheel.</li>
+          <li class="">Teams that value code organization, maintainability, and testability enforced by a library and not by internal documentation.</li>
+        </ul>
+      </div>
+
+      <div class="mt-1">
+        <div class="border border-purple text-lg font-semibold py-4 px-5 lg:border-none hover:bg-light-purple user-group" data-selected-class="bg-purple text-white hover:bg-purple">Companies with Legacy Codebase</div>
+        <ul class="hidden list-image-disc pl-8 space-y-6">
+          <li class="">Trailblazer is designed to be introduced in existing, complex projects. Most TRB gems support Ruby 2.1 and above.</li>
+          <li class="">Step-wise, old code can be replaced with much cleaner operations, new functions can be built using TRB.</li>
+          <li class="">Missing tests are easily added around our new abstractions. No need to write slow integration tests for every edge case.</li>
+        </ul>
+      </div>
+      <div class="mt-1">
+        <div class="border border-purple text-lg font-semibold py-4 px-5 lg:border-none hover:bg-light-purple user-group" data-selected-class="bg-purple text-white hover:bg-purple">Startups and Fast-Growing Companies</div>
+        <ul class="hidden list-image-disc pl-8 space-y-6">
+          <li class="">Using more abstractions doesn't contradict rapid prototyping. In fact, more conventions mean less guessing and faster decisions.</li>
+          <li class="">With a solid architecture, new features and changes are implemented faster and much more consistent than following the vanilla Rails Way.</li>
+          <li class="">TRB's robust conventions empower developers to concentrate on feature development, while the Rails Way often presents an abundance of divergent approaches.</li>
+        </ul>
+      </div>
+      <div class="mt-1">
+        <div class="border border-purple text-lg font-semibold py-4 px-5 lg:border-none hover:bg-light-purple user-group" data-selected-class="bg-purple text-white hover:bg-purple">Growing Teams</div>
+        <ul class="hidden list-image-disc pl-8 space-y-6">
+          <li class="">The learning curve of TRB is quickly outweighed by the onboarding speed for new developers.</li>
+          <li class="">Our architecture encourages strong interfaces and encapsulation which help big teams designing big applications and keeping those maintainable.</li>
+          <li class="">Trailblazer is built for reusability. Most our abstractions encourage inheritance and composition. Complex components can be shared across teams or even apps.</li>
+        </ul>
+      </div>
+      <div class="mt-1">
+        <div class="border border-purple text-lg font-semibold py-4 px-5 lg:border-none hover:bg-light-purple user-group" data-selected-class="bg-purple text-white hover:bg-purple">Companies Emphasizing Test-Driven Development</div>
+        <ul class="hidden list-image-disc pl-8 space-y-6">
+          <li class="">Encapsulation in TRB is key. That makes unit-tests a walk in the park.</li>
+          <li class="">We maintain test gems that help writing bullet-proof assertions.</li>
+          <li class="">Operations are single entry points for functions. That makes it much easier to design tests before you write code.</li>
+        </ul>
+      </div>
+      <div class="mt-1">
+        <div class="border border-purple text-lg font-semibold py-4 px-5 lg:border-none hover:bg-light-purple user-group" data-selected-class="bg-purple text-white hover:bg-purple">Companies Prioritizing Long-Term Support</div>
+        <ul class="hidden list-image-disc pl-8 space-y-6">
+          <li class="">We've been around for more than a decade. And we will stay for at least another one.</li>
+          <li class="">With TRB 2.1, we provide long-term support (LTS) and don't change public API without thorough deprecation.</li>
+          <li class="">And if you're still stuck: we also offer consulting services! Engage us for a day or two, we are passionate about helping your team and learning about problems you're facing. This often contributes to the enhancement of Trailblazer itself.</li>
+        </ul>
+      </div>
+    </div>
+
+<!--    container for desktop list content- handle with JS-->
+    <div class="lg:block lg:basis-0 lg:grow pt-5" id="users-content">
+      <div></div>
+    </div>
+  </div>
+</section>
+
+<p class=""><a name="some-code"></a></p>
+
+<section class="bg-bg-blue pt-20 pb-32 px-10">
+  <h2 class="section-header text-white font-bold text-4xl lg:text-6xl">
+    Our
+    <span class="text-purple-text">abstraction</span>
+    layers
+  </h2>
+  <p class="text-white text-lg text-center mt-10 mx-auto max-w-[45rem]">
+    Trailblazer's main objective: <span class="font-bold uppercase text-purple-text">keep software maintainable</span>. We do so by providing a range of additional abstraction layers, where code is moved from conservative "MVC" to new layers and objects.
+  </p>
+  <div class="max-w-[63rem] section-content-wrapper md:py-0">
+    <div class="md:text-left md:flex-row md:gap-16 lg:gap-20 md:justify-between md:mt-[5.5rem] flex flex-col mt-10 text-center">
+
+      <div>
+        <pre><code class="rounded border-light-purple border">class MemosController &lt; ApplicationController
+  def create
+    if Memo::Operation::Create.(params: params)
+      render
+    end
+  end</code></pre>
+
+      <pre><code class="rounded  border-light-purple border mt-4">class Memo &lt; ApplicationRecord
+  belongs_to :user
+  has_many :memos
+end</code></pre>
+
+      </div>
+
+      <div class="md:max-w-[28rem] flex flex-col">
+        <div class="text-white">
+          <h3 class="lg:text-3xl font-bold text-3xl">
+            <span class="text-purple-text">Lean</span>
+            MVC
+          </h3>
+          <p class="mt-4 text-lg lg:mt-5">
+            Move your
+            <span class="text-purple-text">business logic</span>
+            out of controllers and models.
+            </p>
+          <p class="mt-4 text-lg lg:mt-5">
+            Let controllers do routing and rendering, let models be SQL abstractions instead
+            of being dumps for all sorts of application code. Your messy callback chains go to operations.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:text-left md:flex-row md:gap-16 lg:gap-20 md:justify-between md:mt-24 flex flex-col mt-10 text-center">
+      <div class="md:max-w-[28rem] flex flex-col">
+        <div class="text-white">
+          <h3 class="lg:text-3xl font-bold text-3xl">
+            A place for
+            <span class="text-purple-text">business logic</span>
+
+          </h3>
+          <p class="mt-4 text-lg lg:mt-5">
+            Our service object <span class="text-purple-text">operation</span> takes over control flow, maximizes reusability with <a class="underline text-purple-text" href="/2.1/docs/operation/index.html#operation-mechanics-inheritance">inheritance</a> and <a class="underline text-purple-text" href="/2.1/docs/operation/index.html#operation-wiring-api-subprocess">composition</a>, and lets your team focus on writing features.
+          </p>
+        </div>
+      </div>
+      <div>
+        <pre><code class="rounded  border-light-purple border">module Memo::Operation
+  class Create &lt; Trailblazer::Operation
+    step :validate
+    step :save
+    step :send_email
+    step :increase_counter
+    fail :errors</code></pre>
+
+      </div>
+    </div>
+
+    <div class="md:text-left md:flex-row md:gap-16 lg:gap-20 md:justify-between md:mt-24 flex flex-col mt-10 text-center">
+
+      <div>
+        <pre><code class="rounded  border-light-purple border">module Memo::Contract
+  class Create &lt; Reform::Form
+    property :text
+    property :author
+
+    validates :text, presence: true
+  end</code></pre>
+      </div>
+
+      <div class="md:max-w-[28rem] flex flex-col">
+        <div class="text-white">
+          <h3 class="lg:text-3xl font-bold text-3xl">
+            <span class="text-purple-text">Tackling</span>
+            Problems
+          </h3>
+          <p class="mt-4 text-lg lg:mt-5">
+            Our self-contained solutions include <a href="/2.1/docs/reform" class="underline text-purple-text">form objects</a>, <a href="/2.1/docs/reform" class="underline text-purple-text">representers</a> for parsing and rendering, and our popular <a href="/2.1/docs/reform" class="underline text-purple-text">view component</a> library.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-blue">
+  <div class="section-content-wrapper lg:max-w-none">
+    <h2 class="section-header text-white font-bold">
+      Our
+      <span class="text-purple-text">main features</span>
+    </h2>
+    <div class="flex flex-col gap-20 mx-auto mt-32 lg:flex-row lg:gap-10 lg:justify-center">
+      <div class="relative border border-white rounded-lg text-white text-center px-8 pb-15 mx-auto max-w-[26rem] lg:max-w-[23rem] lg:mx-0">
+        <div class="w-20 h-20 rounded-full bg-bg-purple-1 absolute -top-10 left-0 right-0 m-auto flex justify-center"><img class="w-[45px]" src="/vite-dev/images/trb-ruby-white.svg" /></div>
+        <div class="mt-15 font-semibold text-xl">Multiple abstractions</div>
+        <div class="mt-6 text-lg">
+          In Trailblazer, we provide a set of solutions aiming for different problems. Our <span class="text-purple-text">stand-alone gems</span> range from structuring business logic to form objects, view components and much more. You pick what you need.
+        </div>
+      </div>
+      <div class="relative border border-white rounded-lg text-white text-center px-8 pb-15 mx-auto max-w-[26rem] lg:max-w-[23rem] lg:mx-0">
+        <div class="w-20 h-20 rounded-full bg-bg-purple-1 absolute -top-10 left-0 right-0 m-auto flex justify-center"><img class="w-[45px]" src="/vite-dev/images/trb-ruby-white.svg" /></div>
+        <div class="mt-15 font-semibold text-xl">Legacy Ready</div>
+        <div class="mt-6 text-lg">
+          You can start using TRB in <span class="text-purple-text">complex existing applications</span> today. Refactorings can be applied step-wise,
+          legacy code can be minimized as you go. Remember: Rome wasn't build in one day, either.
+        </div>
+      </div>
+      <div class="relative border border-white rounded-lg text-white text-center px-8 pb-15 mx-auto max-w-[26rem] lg:max-w-[23rem] lg:mx-0">
+        <div class="w-20 h-20 rounded-full bg-bg-purple-1 absolute -top-10 left-0 right-0 m-auto flex justify-center"><img class="w-[45px]" src="/vite-dev/images/trb-ruby-white.svg" /></div>
+        <div class="mt-15 font-semibold text-xl">Long-Term Support (LTS)</div>
+        <div class="mt-6 text-lg">
+          TRB is in use in thousands of production applications. That's why we promise:
+          Trailblazer 2.1 is long-term supported.
+          Easy upgrades and <span class="text-purple-text">stable APIs</span> allow us to innovate and keep you covered.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-content-wrapper lg:max-w-none">
+  <a name="testimonials"></a>
+  <h2 class="section-header text-blue font-bold">
+    What others say about
+    <br />
+    <span class="text-purple-text uppercase font-bold">Trailblazer?</span>
+  </h2>
+  <div class="flex flex-col gap-20 mx-auto mt-20 lg:flex-row lg:gap-14 lg:justify-center">
+    <div class="relative flex flex-col justify-between border border-blue rounded-lg text-blue text-center px-8 pb-12 mx-auto max-w-[22rem] lg:max-w-[23rem] lg:mx-0">
+      <p class="mt-12 text-lg">
+        <span class="uppercase text-purple-text">Trailblazer</span> has been a game-changer for our development team.
+        It has revolutionized the way we handle complex business logic in our Ruby applications. With <span class="uppercase text-purple-text">Trailblazer</span>,
+        we've experienced a significant improvement in code organization, maintainability, and overall productivity.
+      </p>
+      <div class="font-bold text-purple mt-10 text-xl">
+        Frankie, CEO Codebase
+      </div>
+    </div>
+    <div class="relative flex flex-col justify-between border border-blue rounded-lg text-blue text-center px-8 pb-12 mx-auto max-w-[22rem] lg:max-w-[23rem] lg:mx-0">
+      <p class="mt-12 text-lg">
+        The architecture provided by <span class="uppercase text-purple-text">Trailblazer</span> has allowed us to separate concerns effectively, making our codebase cleaner and easier to understand while providing an intuitive way to handle errors using the railway pattern.
+      </p>
+      <p class="mt-2 text-lg">
+        It's refreshing to see business logic extracted from controllers and models into dedicated operations, resulting in more focused and testable code.
+      </p>
+      <div class="font-bold text-purple mt-10 text-xl">
+        Richard Böhme, Ruby Developer, webit! GmbH
+      </div>
+    </div>
+    <div class="relative flex flex-col justify-between border border-blue rounded-lg text-blue text-center px-8 pb-12 mx-auto max-w-[22rem] lg:max-w-[23rem] lg:mx-0">
+      <p class="mt-12 text-lg">
+        One of the standout features of <span class="uppercase text-purple-text">Trailblazer</span> is its workflow- oriented approach.
+        The ability to define and orchestrate activities in a clear and structured manner has greatly simplified our application's complex workflows.
+        We can easily visualize and manage the sequence of steps, making it easier to reason about and maintain.
+      </p>
+      <div class="font-bold text-purple mt-10 text-xl">
+        Brooke, Developer
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-blue py-20">
+  <div class="flex flex-col gap-10 mobile-section-width max-w-[24rem] mx-auto lg:flex-row lg:max-w-none lg:gap-20 lg:justify-center">
+    <a href="https://leanpub.com/buildalib/">
+      <img class="w-full mx-auto lg:w-auto lg:mx-0" src="/vite-dev/images/buildalib-cover.webp" />
+    </a>
+    <div class="flex flex-col gap-10 justify-center px-10 py-10 bg-white text-center rounded-3xl lg:max-w-[25rem]">
+      <h2 class="text-purple-text font-black text-3xl uppercase lg:text-4xl">A beginner's guide!</h2>
+      <p class="lg:text-left">
+        <span class="font-semibold">Our new tutorial book is published!</span>
+        Building an authentication library similar to Devise we discuss everything from software design
+        basics to tools and library functions of Trailblazer 2.1.
+      </p>
+      <a class="base-button text-white bg-blue hover:bg-light-purple hover:text-blue lg:text-2xl mx-auto" href="https://leanpub.com/buildalib/">Learn more</a>
+    </div>
+  </div>
+</section>
+
+<section class="px-10 py-22 bg-bg-purple-3" id="callout-section">
+  <h1 class="section-header font-bold">
+    Subscribe to our
+    <span class="font-black">
+      newsletter
+    </span>!
+
+    <p class="font-normal text-lg">
+      2-3 mails per year with news about releases and things we're up to.
+    </p>
+
+    <form action="https://trailblazerb.us8.list-manage.com/subscribe/post?u=bbe5021ab6fbdc94a16f0d036&amp;id=a69f6e4652" method="post" class="" target="_blank">
+      <div class="flex justify-center space-x-4 mt-6">
+        <div class="h-full items-center flex"> <!-- items-center to center vertically, justify-center to center horizonally. -->
+          <input type="email" name="EMAIL" class="h-[64px] rounded" placeholder="your@email.com" required="" />
+        </div>
+        <div class="">
+          <button type="submit" class="base-button bg-purple text-white mx-auto h-[64px] hover:bg-light-grey hover:text-blue">Subscribe</button>
+        </div>
+      </div>
+    </form>
+  </h1>
+</section>
+
+
+<footer class="lg:text-left bg-bg-blue py-16 text-white text-center text-base">
+  <div class="lg:flex justify-between w-11/12 max-w-[80rem] mx-auto">
+    <div class="lg:flex lg:flex-col lg:justify-between">
+      <a href="/2.1/" class="block shrink-0 w-fit mx-auto lg:mx-0">
+        <img class="w-48" src="/vite-dev/images/logo_white_ruby.svg" />
+      </a>
+      <div class="lg:block hidden">
+        © 2023 Trailblazer GmbH
+
+      </div>
+    </div>
+    <div class="lg:flex lg:gap-20 xl:gap-40">
+      <div class="lg:mt-0 flex flex-col gap-5 mt-15">
+        <a class="font-bold text-xl" href="/2.1/docs/trailblazer/">Documentation</a>
+        <a href="/2.1/docs/trailblazer/#trailblazer-learn-trailblazer-tales">Videos</a>
+        <a href="/2.1/docs/trailblazer/">API</a>
+        <a href="/2.1/docs/operation/">Operation</a>
+      </div>
+      <div class="lg:mt-0 flex flex-col gap-5 mt-15">
+        <a class="font-bold text-xl" href="/2.1/about/">About us</a>
+        <div class="flex items-center">
+          <a href="https://www.linkedin.com/company/trailblazer-gmbh/">LinkedIn</a>
+          <a href="https://www.linkedin.com/company/trailblazer-gmbh/">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="fill-white pl-2" height="1.3em"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z" /></svg>
+          </a>
+        </div>
+        <a href="https://dev.to/trailblazer">Blog</a>
+        <a href="/2.1/about/">Trailblazer GmbH</a>
+        <a href="/2.1/pro/">Trailblazer PRO</a>
+      </div>
+      <div class="lg:mt-0 flex flex-col gap-5 mt-15">
+        <a class="font-bold text-xl" href="https://trailblazer.zulipchat.com">Help</a>
+        <a href="https://trailblazer.zulipchat.com">Chat</a>
+        <a href="http://eepurl.com/hHE3a5">Newsletter</a>
+      </div>
+    </div>
+  </div>
+  <div class="lg:hidden mt-15">
+    © 2023 Trailblazer GmbH
+  </div>
+</footer>
+
+  </body>
+</html>

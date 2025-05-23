@@ -8,7 +8,7 @@ A protocol endpoint is defined per *use case*, which usually corresponds to a pa
 
 Usually, a bunch of use cases share the same protocol.
 
-<%= image_tag "endpoint-update.png" %>
+<%= vite_image_tag "images/endpoint-update.png" %>
 
 Here, two exemplary steps `authenticate` and `policy` are placed before the actual business operation `Memo::Operation::Update`. Also note how both "protocol steps" have their `failure` output connected to their own terminus. The layout of the endpoint, nevertheless, is completely up to you.
 
@@ -24,7 +24,7 @@ Endpoints can be used anywhere, in controllers, tests, background jobs, or where
 
 The `Protocol`, for obvious reasons, needs to be an `Activity` subclass like `Railway` or `FastTrack`.
 
-<%= image_tag "endpoint-protocol-railway.png" %>
+<%= vite_image_tag "images/endpoint-protocol-railway.png" %>
 
 The steps involved, the termini exposed, all that is up to the designer. Only one step named `:domain_activity` is mandatory as this step gets replaced with the actual business operation.
 
@@ -44,7 +44,7 @@ To run the protocol with your operation, use `#invoke`. This part is (almost) id
 
 With `protocol: true`, the invocation logic will grab the endpoint you created earlier. Check the `#wtf?` trace to understand what happens here.
 
-<%= image_tag "protocol-wtf" %>
+<%= vite_image_tag "images/protocol-wtf" %>
 
 As planned, the business operation is run as one step of the protocol.
 
@@ -66,7 +66,7 @@ The above example protocol exposes five termini. Three extra termini are added u
 
 To re-route the `failure` output of the `authenticate` step, the Wiring API is leveraged and connects it directly to the new terminus `not_authenticated`.
 
-<%= image_tag "endpoint-protocol-termini" %>
+<%= vite_image_tag "images/endpoint-protocol-termini" %>
 
 Five termini to rule them all.
 
@@ -92,7 +92,7 @@ When compiling an endpoint with `MyProtocol`, every "known" terminus of the busi
 
 For example, if `Update` was exposing a `not_found` terminus, it's linked to its respective terminus in the protocol.
 
-<%= image_tag "endpoint-protocol-update" %>
+<%= vite_image_tag "images/endpoint-protocol-update" %>
 
 In case you need to connect an output to another arbitrary track or terminus, you can use the Wiring API in an optional block when compiling the endpoint.
 
@@ -102,7 +102,7 @@ Let's assume the `Update` operation was terminating on its built-in `fail_fast` 
 
 The returned hash of wiring instructions is executed when the `:domain_activity` placeholder step is replaced with the actual business operation at compile time, making the diagram look as follows.
 
-<%= image_tag "protocol-fail-fast" %>
+<%= vite_image_tag "images/protocol-fail-fast" %>
 
 This trick allows you to "translate" any kind of operation layout to your protocol's. For instance, you could even move legacy operations into endpoints and connect their termini to corresponding tracks in the protocol.
 
@@ -130,7 +130,7 @@ If you're not interested in handling your operation's `pass_fast` and `fail_fast
 
 This will result in a flow diagram similar to this.
 
-<%= image_tag "endpoint-fast-track-rw.png" %>
+<%= vite_image_tag "images/endpoint-fast-track-rw.png" %>
 
 Here, the distinction between `failure` and `fail_fast` gets lost after the endpoint has been run. In most scenarios, this is desired, as this mimics querying the result object via `result.success?`.
 

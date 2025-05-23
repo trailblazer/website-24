@@ -10,7 +10,7 @@ The `:pass_fast` option wires the `:success` output straight to the new `pass_fa
 
 If `validate` returns a true value, it will skip the remaining tasks on the success track and terminate in the `pass_fast` terminus.
 
-<%= image_tag "pass_fast.png" %>
+<%= vite_image_tag "images/pass_fast.png" %>
 
 Note that in the example, the `#save` step not accessable anymore, so maybe it's a good idea to refrain from such a layout.
 
@@ -22,7 +22,7 @@ The counter-part for `:pass_fast` is `:fail_fast` and allows to instantly stop t
 
 A falsey return value from `#validate` will deviate the flow and go straight to the `fail_fast` terminus.
 
-<%= image_tag "fail_fast.png" %>
+<%= vite_image_tag "images/fail_fast.png" %>
 
 Even though `#handle_errors` is on the failure track, it won't be reached from `#validate`.
 
@@ -40,6 +40,6 @@ When using the slimmer `Activity::FastTrack` layout, you won't have access to `R
 
 Note that you don't have to use both outputs.
 
-<%= image_tag "fast_track.png" %>
+<%= vite_image_tag "images/fast_track.png" %>
 
 The fast-track layout is an attempt to implement best practices. Most of the times, however, you can achieve a similar result using a [separate track](#operation-wiring-api-track-) or terminus.

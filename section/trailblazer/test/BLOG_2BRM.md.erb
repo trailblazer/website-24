@@ -76,7 +76,7 @@ There is nothing wrong with doing the above manually, but our assertions bring a
 
 A typical issue for developers when writing or changing tests is that an operation supposed to be passing actually *fails*. Most of the times, this is due to validation errors. Given that you're using a contract with an errors object, a failing `#assert_pass` will automatically give the the validation errors.
 
-<%= image_tag "assert-pass-message" %>
+<%= vite_image_tag "images/assert-pass-message" %>
 
 If that is not enough, you can simply add a question mark to the assertion.
 
@@ -89,7 +89,7 @@ end
 
 This gives you the highly popular [`#wtf?` trace] on the console
 
-<%= image_tag "assert-pass-failing-wtf" %>
+<%= vite_image_tag "images/assert-pass-failing-wtf" %>
 
 Those two incredibly helpful features for debugging have been suggested by several TRB users over the years, as both checking the contract errors as well as turning on tracing (`#wtf?`) are the first things immediately done manually by many developers when hitting an issue.
 
@@ -181,7 +181,7 @@ end
 
 When expected error messages do not match the actual ones, the assertion automatically shows you the latter.
 
-<%= image_tag "assert-fail-message" %>
+<%= vite_image_tag "images/assert-fail-message" %>
 
 Again, optimizing your experience and shortcutting ways to help you debug.
 

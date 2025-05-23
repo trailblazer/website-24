@@ -15,7 +15,7 @@ Without additional configuration, when using `#step` the following happens.
 3. As, in a railway, a step typically has two logical outcomes, the step's `success` output is connected to the following step on the success track. Usually, this would be the `success` terminus.
 4. The exact same thing happens for the step's `failure` output.
 
-<%= image_tag "memo-create.png" %>
+<%= vite_image_tag "images/memo-create.png" %>
 
 Looking closer at a step, the orange circle on a step's edge represents the `failure` output. The outgoing line without any circle is the `success` output.
 
@@ -45,7 +45,7 @@ In a railway-based activity, such as `Trailblazer::Operation`, each step exposes
 
 With this customization, you're building a bullet-proof `#save` step, that even in case of failure goes back to the success track. Hopefully, your `#save` logic is failsafe.
 
-<%= image_tag "wiring-output.png" %>
+<%= vite_image_tag "images/wiring-output.png" %>
 
 This, by the way, is how `#pass` is implemented.
 
@@ -57,7 +57,7 @@ If needed, a step can have more than two outcomes. For instance, `#save` could d
 
 To add an output, you call `Output()` with two arguments: the signal to indicate, and the semantic of that new output. Note that the signal has to be derived from `Trailblazer::Activity::Signal`.
 
-<%= image_tag "wiring-explicit-output.png" %>
+<%= vite_image_tag "images/wiring-explicit-output.png" %>
 
 In this example, the new output `:database_error` is routed straight to the failure track. When the operation teminates, you might not be able to see why it failed: it might be better to introduce a separate terminus.
 
@@ -69,7 +69,7 @@ It might be worth noting that all steps in a railway have two standard outputs, 
 
 If the `#handle_errors` step returns a truthy value, the operation goes back to the success track.
 
-<%= image_tag "wiring-left.png" %>
+<%= vite_image_tag "images/wiring-left.png" %>
 
 This pattern can be used for error handling, deciders, or alternate routes.
 
@@ -83,7 +83,7 @@ You can use the `End()` helper to connect an output directly to either an existi
 
 Two things happen here: first, the new terminus `:db_error` is added to the operation as it represents an unknown, new terminus. Then, the `failure` output of `#save` gets connected to it.
 
-<%= image_tag "wiring-end.png" %>
+<%= vite_image_tag "images/wiring-end.png" %>
 
 You may use `End()` multiple times in one operation. This will connect the steps to the same terminus.
 
@@ -96,7 +96,7 @@ Instead of `End()` you may add additional termini to an operation using `#termin
 
 The `CRUD` class here acts as an abstract template for concrete operations.
 
-<%= image_tag "wiring-terminus.png" %>
+<%= vite_image_tag "images/wiring-terminus.png" %>
 
 In a subclass, you could then connect steps to this new terminus using `End()`.
 
@@ -117,7 +117,7 @@ For instance, a step (or terminus) sitting on the success track will be attracti
 
 `Track()` expects the track name, or the "polarization", as we call it sometimes.
 
-<%= image_tag "wiring-output.png" %>
+<%= vite_image_tag "images/wiring-output.png" %>
 
 Here, the wiring algorith will connect the `:failure` output of the `#save` step to the next available step on the `:success` track, which is `#notify`.
 
@@ -135,7 +135,7 @@ To manually place a step onto that new track, you need to use `:magnetic_to` and
 
 This will compile the following operation circuit.
 
-<%= image_tag "wiring-custom-track" %>
+<%= vite_image_tag "images/wiring-custom-track" %>
 
 <%= h3 "Id()" %>
 
@@ -145,6 +145,6 @@ To explicitly connect an output to a particular step, use `Id()`.
 
 This will, for whatever reasons, connect the failure output of `#validate` straight to `#notify`.
 
-<%= image_tag "wiring-id.png" %>
+<%= vite_image_tag "images/wiring-id.png" %>
 
 Keep in mind that using `Id()` won't allow inserting another step between the two just connected. If you want to insert more steps on that connection at a later point, or in a subclass, use `Track()`.
