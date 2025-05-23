@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>Endpoint - Trailblazer</title>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    
+    
+
+    <script src="/vite-dev/@vite/client" crossorigin="anonymous" type="module"></script>
+    <script src="/vite-dev/entrypoints/application.js" crossorigin="anonymous" type="module"></script>
+    <link rel="stylesheet" href="/vite-dev/entrypoints/application.css" />
+
+    <script>pageIdentifier = "docs";</script>
+  </head>
+  <body>
+    <nav class=" text-base z-[50] top-0 absolute w-full lg:h-[5.5rem] lg:px-[5.6rem] py-3 lg:flex lg:justify-between lg:items-center bg-white sticky" id="navbar">
+  <a href="/2.1" class="block shrink-0 w-fit mx-auto lg:mx-0">
+    <img class="w-40 lg:my-0" src="/vite-dev/images/logo_blue_ruby.svg" />
+  </a>
+  <div class="lg:hidden absolute right-4 top-2 flex w-9 h-9 items-center" id="hamburgerIcon">
+    <div class="pointer-events-none w-full h-0.5 bg-blue transition-all duration-150
+                  before:content-[''] before:absolute before:w-full before:h-0.5 before:bg-blue before:-translate-y-2.5 before:transition-all before:duration-150
+                  after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-blue after:translate-y-2.5 after:transition-all after:duration-150"></div>
+  </div>
+  <div class="lg:hidden flex flex-col text-center hidden" id="navList">
+    <div class="lg:absolute flex flex-col mt-15 gap-10 uppercase">
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="/2.1/docs/trailblazer">Documentation</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="https://dev.to/trailblazer">Blog</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="/2.1/about.html">About</a>
+      
+      <!-- <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="/2.1/pro.html">PRO</a> -->
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="https://trailblazer.zulipchat.com">Chat with us</a>
+    </div>
+  </div>
+  <div class="lg:flex hidden gap-10 items-center">
+    <div class="flex gap-7">
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold underline decoration-[5px] underline-offset-[15px] decoration-purple hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="/2.1/docs/trailblazer">Documentation</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="https://dev.to/trailblazer">Blog</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="/2.1/about.html">About</a>
+      <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="/2.0/">→ 2.0</a>
+      
+      <!-- <a class="font-medium text-base uppercase lg:normal-case lg:font-semibold  hover:underline hover:decoration-[5px] hover:underline-offset-[15px] hover:decoration-purple " href="/2.1/pro.html">PRO</a> -->
+    </div>
+
+    <a class="base-button text-base w-[12.5rem] h-[3.25rem] bg-light-purple text-blue hover:text-white hover:bg-purple" href="https://trailblazer.zulipchat.com">Chat with us</a>
+  </div>
+</nav>
+
+<section>
+  <div class="lg:hidden bg-bg-blue text-white fixed left-0 top-20 pr-1 py-3 rounded-r" id="sideNavShowButton" style="writing-mode: vertical-rl; text-orientation: upright;">
+    Chapters
+  </div>
+  <div class="lg:flex">
+    <nav class="bg-bg-blue w-screen h-screen fixed top-0 z-20 right-[100vw] overflow-y-scroll lg:w-3/12 lg:max-w-[23rem] lg:overflow-y-visible lg:shrink-0 lg:sticky lg:top-[5.5rem]" id="sideNav">
+      <button class="lg:hidden absolute right-4 top-4 text-3xl text-white" id="sideNavHideButton">
+        X
+      </button>
+      <div class="lg:pt-10 lg:pl-5 xl:pl-20 p-10 pl-20 text-white leading-10 space-y-1 h-full overflow-auto">
+  
+
+
+  
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/trailblazer/index.html">Trailblazer</a>
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/operation/index.html">Operation</a>
+
+        
+
+          
+
+            
+              <a href="/2.1/docs/activity/deprecated/index.html" class="" title="Deprecated activity docs: :input/:output, ...">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="fill-grey pl-3 hover:fill-purple flex-inline"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M251.7 127.6l0 0c10.5 10.5 24.7 16.4 39.6 16.4H448c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H197.5c4.2 0 8.3 1.7 11.3 4.7l33.9-33.9L208.8 84.7l42.9 42.9zM48 240H464V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V240zM285.7 93.7L242.7 50.7c-12-12-28.3-18.7-45.3-18.7H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H291.3c-2.1 0-4.2-.8-5.7-2.3z"/></svg>
+                 
+              </a>
+
+            
+
+
+          
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/rails_integration/index.html">Rails integration</a>
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/test/index.html">Testing</a>
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col border-t-[1px] border-t-light-purple">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/macro/index.html">Macro</a>
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/workflow/index.html">Workflow</a>
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class="bg-dark-purple flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/endpoint/index.html">Endpoint</a>
+
+        
+      </div>
+
+
+      
+        
+        <!-- FIXME: link should know its IDs. -->
+        <div class="flex items-center" id="left-toc-endpoint-canonical-invoke">
+          <a href="#endpoint-canonical-invoke" class="pl-8">Canonical invoke</a>
+        </div>
+      
+        
+        <!-- FIXME: link should know its IDs. -->
+        <div class="flex items-center" id="left-toc-endpoint-controller">
+          <a href="#endpoint-controller" class="pl-8">Controller</a>
+        </div>
+      
+        
+        <!-- FIXME: link should know its IDs. -->
+        <div class="flex items-center" id="left-toc-endpoint-protocol">
+          <a href="#endpoint-protocol" class="pl-8">Protocol</a>
+        </div>
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/internals/index.html">Internals</a>
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col border-t-[1px] border-t-light-purple">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/reform/index.html">Reform</a>
+
+        
+
+          
+
+            
+
+              <a href="/2.1/docs/reform/3.0/index.html" class="">
+                <span class="h-5 text-[8pt] py-[3px] px-2 rounded-[8px] ml-3 hover:bg-purple hover:border-purple hover:text-white border border-grey text-grey">
+                  3.0
+                </span>
+              </a>
+            
+
+
+          
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/cells/index.html">Cells</a>
+
+        
+
+          
+
+            
+
+              <a href="/2.1/docs/cells/5.0/index.html" class="">
+                <span class="h-5 text-[8pt] py-[3px] px-2 rounded-[8px] ml-3 hover:bg-purple hover:border-purple hover:text-white border border-grey text-grey">
+                  5.0
+                </span>
+              </a>
+            
+
+
+          
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/representable/index.html">Representable</a>
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/disposable/index.html">Disposable</a>
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+    <div class="flex flex-col ">
+      <div class=" flex items-center">
+        <a class="pl-4 font-bold" href="/2.1/docs/roar/index.html">Roar</a>
+
+        
+      </div>
+
+
+      
+    </div>
+
+    
+  
+</div>
+
+
+    </nav>
+    <div class="lg:p-10 pl-8 pr-4 py-10 bg-light-grey grow">
+      <h1 class="lg:text-3xl text-2xl text-blue font-bold">
+        <span class="py-1 px-3 border border rounded border border-white text-white bg-purple">2.1</span>
+        <span class="font-black uppercase header-text">
+          Endpoint
+        </span>
+        Documentation
+      </h1>
+
+      <div class="xl:flex xl:gap-0.5 mt-5">
+        <div class="max-w-3xl lg:p-8 lg:pb-14 p-4 bg-white text-bg-blue space-y-9" id="documentation">
+          <p class=""><span class="flex max-w-fit max-h-7 border border-grey uppercase text-grey text-xs pt-1 pb-1 pl-2 pr-2 pr-1 ml-4 rounded">
+            <svg class="fill-grey mt-[2px]" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M168.5 72L256 165l87.5-93h-175zM383.9 99.1L311.5 176h129L383.9 99.1zm50 124.9H256 78.1L256 420.3 433.9 224zM71.5 176h129L128.1 99.1 71.5 176zm434.3 40.1l-232 256c-4.5 5-11 7.9-17.8 7.9s-13.2-2.9-17.8-7.9l-232-256c-7.7-8.5-8.3-21.2-1.5-30.4l112-152c4.5-6.1 11.7-9.8 19.3-9.8H376c7.6 0 14.8 3.6 19.3 9.8l112 152c6.8 9.2 6.1 21.9-1.5 30.4z"></path></svg>
+            <a href="https://github.com/trailblazer/trailblazer-endpoint/tree/v0.1.0" class="ml-1" title="This feature was introduced in trailblazer-endpoint v0.1.0.">trailblazer-endpoint 0.1.0</a>
+          </span></p>
+
+<p class="">The endpoint gem provides abstractions to invoke operations, configure injected options, and gives the invoker a matcher-like interface to deal with the outcome.</p>
+
+<p class="">It also introduces a separate layer allowing to maintain “operations around” your actual business operation. This is called <a href="#endpoint-protocol" class="underline text-purple"><em>protocol</em></a>.</p>
+
+<h2 id="endpoint-canonical-invoke" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Canonical invoke</span></h2>
+
+<p class="">In many TRB-driven projects, developers override <code class="text-purple">Operation.call_with_public_method</code> to inject options and tweak the way an operation is invoked on the top-level. For example, adding ctx aliases or setting standard variables in the ctx can be achieved with a monkey-patch.</p>
+
+<p class="">However, this patch is limited and not the recommended way to configure the invocation. With <code class="text-purple">endpoint</code>, we’re introducing a canonical abstraction for invoking operations and activities, and customizing their options.</p>
+
+<p class="">This has three major advantages.</p>
+
+<ol>
+  <li class="list-image-disc ml-10">You don’t have to maintain a monkey-patch.</li>
+  <li class="list-image-disc ml-10">Operations and activities, in controllers, tests, tasks, or on the CLI, are all invoked with the same configuration.</li>
+  <li class="list-image-disc ml-10">You may use a matcher-like block to handle the outcome directly, if needed.</li>
+</ol>
+
+<pre class=""><code class="rounded">signal, result = __(Memo::Operation::Create, params: {memo: {}}) do
+  failure { |ctx, contract:, **| puts contract.errors }
+end</code></pre>
+
+<p class="">TODO:
+  :default_matcher
+  :flow_options
+  how to use in tests via trailblazer-test.</p>
+
+<h3 id="endpoint-canonical-invoke-configuration" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Configuration</span></h3>
+
+<p class="">In order to use the “canonical invoke”, you need to define the <code class="text-purple">#__()</code> method (or whatever name you want) and configure its keyword arguments.</p>
+
+<pre class=""><code class="rounded"># config/initializers/trailblazer.to
+
+include Trailblazer::Endpoint::Runtime::TopLevel
+
+def __(operation, ctx, flow_options: GLOBAL_FLOW_OPTIONS, **, &amp;block)
+  super
+end
+
+# put whatever is needed here.
+GLOBAL_FLOW_OPTIONS = {
+  context_options: {
+    aliases: {"model": :record},
+    container_class: Trailblazer::Context::Container::WithAliases,
+  }
+}</code></pre>
+
+<p class="">Your entire application can now use <code class="text-purple">#__()</code> and <code class="text-purple">#__?()</code> to invoke operations that have set a ctx alias <code class="text-purple">:record</code> for <code class="text-purple">:model</code>.</p>
+
+<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
+  <img src="/vite-dev/images/info_icon.svg" />
+  <div class="space-y-3">
+    
+<p class="">This might change in the future as we’re considering overriding <code class="text-purple">#call_with_public_interface</code> directly.</p>
+
+  </div>
+</div>
+
+
+<h2 id="endpoint-controller" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Controller</span></h2>
+
+<p class="">The layer helping you in controllers provides the canonical invoke via the <code class="text-purple">#invoke</code> method, and offers a super simple and customizable DSL to configure injected options.</p>
+
+<h3 id="endpoint-controller-installation" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Installation</span></h3>
+
+<p class="">Include the <code class="text-purple">Controller</code> module into your <code class="text-purple">ApplicationController</code> to use the endpoint controller layer across your app.</p>
+
+<pre class=""><code class="rounded">class ApplicationController &lt; ActionController::Base
+  # ...
+  include Trailblazer::Endpoint::Controller.module
+  # ...
+end
+</code></pre>
+
+<p class="">Your controller and all subclasses are now ready to configure and run endpoints.</p>
+
+<h3 id="endpoint-controller-invoke" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Invoke</span></h3>
+
+<p class="">To use the <a href="#endpoint-canonical-invoke" class="underline text-purple">canonical invoke</a> along with all its mechanics, use the <code class="text-purple">#invoke</code> method in your controller actions. It will automatically inject the well-defined options for each operation call, and accepts an optional block to handle different outcomes.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  def create
+    invoke Memo::Operation::Create, params: params, protocol: false do #  FIXME: protocol should be false per default.
+      success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
+      failure { |ctx, contract:, **|
+        render partial: "form", locals: {contract: contract}
+      }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">In the example above, input for the operation, such as <code class="text-purple">:params</code>, needs to be handed manually into <code class="text-purple">#invoke</code>.</p>
+
+<p class="">Also, every possible outcome has to be defined by hand in the matcher block, cluttering the simple controller action with verbose code.</p>
+
+<p class="">However, it’s actually very simple to move the reappearing options and matchers one level up using the <a href="#endpoint-controller-configuration" class="underline text-purple">configuration DSL</a>.</p>
+
+<h3 id="endpoint-controller-configuration" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Configuration</span></h3>
+
+<p class="">You can predefine endpoint-specific options within the <code class="text-purple">endpoint</code> block of a controller. Usually, that would be done on the <code class="text-purple">ApplicationController</code> level.</p>
+
+<pre class=""><code class="rounded">
+class ApplicationController &lt; ActionController::Base
+  include Trailblazer::Endpoint::Controller.module
+
+  endpoint do
+    ctx do
+      # ...
+    end
+
+    default_matcher do
+      # ...
+    end
+
+    flow_options do
+      # ...
+    end
+  end</code></pre>
+
+<p class="">The various directives are discussed in the following sections.</p>
+
+<h4 id="endpoint-controller-configuration-ctx" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">ctx</span>
+
+                  </h4>
+
+<p class="">Use the <code class="text-purple">ctx</code> block to define what ctx variables always get passed into the operation invocation.</p>
+
+<pre class=""><code class="rounded">endpoint do
+  # ...
+  ctx do |controller:, **|
+    {
+      params: controller.params,
+    }
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">Note that you have access to <code class="text-purple">:controller</code> and <code class="text-purple">:activity</code> as block keyword arguments. Any number of ctx variables may be added, such as the <code class="text-purple">current_user</code>.</p>
+
+<p class="">Now, the controller action doesn’t need to pass <code class="text-purple">params</code> anymore.</p>
+
+<pre class=""><code class="rounded">def create
+  invoke Memo::Operation::Create, protocol: false do
+    # ...
+  end
+end
+</code></pre>
+
+<p class="">Variables passed manually to <code class="text-purple">#invoke</code> are merged with the <code class="text-purple">endpoint.ctx</code> hash.</p>
+
+<h4 id="endpoint-controller-configuration-default_matcher" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">default_matcher</span>
+
+                  </h4>
+
+<p class="">Using the <code class="text-purple">endpoint</code> DSL, you can keep controller actions lean by defining generic handlers once, on the <code class="text-purple">ApplicationController</code> level using the <code class="text-purple">default_matcher</code> block.</p>
+
+<pre class=""><code class="rounded">endpoint do
+  # ...
+  default_matcher do
+    {
+      failure: -&gt;(ctx, contract:, **) {
+        render partial: "form", locals: {contract: contract}
+      },
+      not_found: -&gt;(ctx, **) { head 404 }
+    }
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">The hash defines handlers keyed by terminus names. The handler block receives the <code class="text-purple">ctx</code> along with keyword arguments, returned by the operation.</p>
+
+<p class="">The block is executed in the controller context, allowing you to use its internal API, e.g. <code class="text-purple">#render</code> or <code class="text-purple">#head</code>.</p>
+
+<p class="">With the above configuration, the controller action now only needs one matcher.</p>
+
+<pre class=""><code class="rounded">def create
+  invoke Memo::Operation::Create, protocol: false do
+    success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
+  end
+end
+</code></pre>
+
+<p class="">Note that a default <code class="text-purple">success</code> handler is overridden by the block passed to <code class="text-purple">#invoke</code>.</p>
+
+<h4 id="endpoint-controller-configuration-invoke" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">invoke</span>
+
+                  </h4>
+
+<p class="">TODO</p>
+
+<h4 id="endpoint-controller-configuration-inheritance" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Inheritance</span>
+
+                  </h4>
+
+<p class="">Per default, all configuration options are inherited, allowing you very lean concrete controllers that only override specific directives.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+end
+</code></pre>
+
+<p class=""><code class="text-purple">MemosController</code> inherits all <code class="text-purple">endpoint</code> options from <code class="text-purple">ApplicationController</code> and allows overriding those.</p>
+
+<h2 id="endpoint-protocol" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Protocol</span></h2>
+
+<p class="">Whenever you need an operation <em>“around”</em> your actual business operation, to add authentication, policy checks, finding models, or other steps before and after your domain code, you want to start using a <em>protocol</em> endpoint. We usually simply call those <em>endpoint</em>.</p>
+
+<h3 id="endpoint-protocol-overview" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Overview</span></h3>
+
+<p class="">A protocol endpoint is defined per <em>use case</em>, which usually corresponds to a particular controller action and operation. In this example, an <code class="text-purple">Update</code> operation is embraced by its endpoint. You may add arbitrary steps to the endpoint, such as authentication, authorization or data filtering that is unrelated to your business domain.</p>
+
+<p class="">Usually, a bunch of use cases share the same protocol.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/vite-dev/images/endpoint-update.png" /></p>
+
+<p class="">Here, two exemplary steps <code class="text-purple">authenticate</code> and <code class="text-purple">policy</code> are placed before the actual business operation <code class="text-purple">Memo::Operation::Update</code>. Also note how both “protocol steps” have their <code class="text-purple">failure</code> output connected to their own terminus. The layout of the endpoint, nevertheless, is completely up to you.</p>
+
+<p class="">Endpoints define a fixed set of possible outcomes: besides <code class="text-purple">success</code> and <code class="text-purple">failure</code> there might be additional, more fine-grained termini like <code class="text-purple">not_found</code> or even <code class="text-purple">credit_card_invalid</code>. It’s the job of your team to decide which generic, reusable termini to introduce.</p>
+
+<p class="">The key idea of a <em>fixed set</em> of outcomes is a <em>fixed set</em> of handlers. You implement the handlers for each terminus once, and override those in specific cases per controller or controller action. In other words, <code class="text-purple">not_found</code> renders a 404 error automatically, but you can customize the rendering in a <code class="text-purple">success</code> outcome manually.</p>
+
+<h4 id="endpoint-protocol-overview-protocol" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Overview
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Protocol</span>
+
+                  </h4>
+
+<p class="">Endpoints can be used anywhere, in controllers, tests, background jobs, or wherever you need to invoke an operation. This example showcases a typical Rails controller using an operation <code class="text-purple">Memo::Operation::Create</code> along with our self-tailored protocol. The latter might look like so.</p>
+
+<pre class=""><code class="rounded">class MyProtocol &lt; Trailblazer::Activity::Railway # two termini.
+  step :authenticate              # our imaginary logic to find {current_user}.
+  step nil, id: :domain_activity  # {Memo::Operation::Create} gets placed here.
+
+  def authenticate(ctx, request:, **)
+    ctx[:current_user] = AuthorizeFromJWT.(request)
+  end
+end
+</code></pre>
+
+<p class="">The <code class="text-purple">Protocol</code>, for obvious reasons, needs to be an <code class="text-purple">Activity</code> subclass like <code class="text-purple">Railway</code> or <code class="text-purple">FastTrack</code>.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/vite-dev/images/endpoint-protocol-railway.png" /></p>
+
+<p class="">The steps involved, the termini exposed, all that is up to the designer. Only one step named <code class="text-purple">:domain_activity</code> is mandatory as this step gets replaced with the actual business operation.</p>
+
+<h4 id="endpoint-protocol-overview-defining" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Overview
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Defining</span>
+
+                  </h4>
+
+<p class="">Use the controller method <code class="text-purple">::endpoint</code> to compile an actual endpoint with your <code class="text-purple">MyProtocol</code> and a concrete operation.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Create, protocol: MyProtocol # define endpoint.
+  # ...
+end
+</code></pre>
+
+<p class="">A new activity is created where <code class="text-purple">MyProtocol</code> now contains <code class="text-purple">Memo::Operation::Create</code> as its <code class="text-purple">:domain_activity</code> step. This is done on the class level so it’s compiled and stored once.</p>
+
+<h4 id="endpoint-protocol-overview-invocation" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Overview
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Invocation</span>
+
+                  </h4>
+
+<p class="">To run the protocol with your operation, use <code class="text-purple">#invoke</code>. This part is (almost) identical to when running an <a href="#endpoint-controller-invoke" class="underline text-purple">operation without a protocol</a>.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  def create
+    invoke Memo::Operation::Create, protocol: true, request: request, params: params do
+      success { |ctx, model:, **| redirect_to memo_path(id: model.id) }
+      failure { |ctx, params:, **| head 401 }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">With <code class="text-purple">protocol: true</code>, the invocation logic will grab the endpoint you created earlier. Check the <code class="text-purple">#wtf?</code> trace to understand what happens here.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/vite-dev/images/protocol-wtf" /></p>
+
+<p class="">As planned, the business operation is run as one step of the protocol.</p>
+
+<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
+  <img src="/vite-dev/images/info_icon.svg" />
+  <div class="space-y-3">
+    
+<p class="">This example is very verbose. You can move many options onto the controller level. This is discussed in the <a href="#endpoint-protocol-configuration" class="underline text-purple">Configuration</a> section.</p>
+
+  </div>
+</div>
+
+<h3 id="endpoint-protocol-layout" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Layout</span></h3>
+
+<p class="">One main reasons to use protocols is a fixed set of termini, which allows you to create generic default matchers to handle outcomes. This reduces application code in your controllers and saves developers from having to think about possible outcomes.</p>
+
+<h4 id="endpoint-protocol-layout-terminus" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Layout
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Terminus</span>
+
+                  </h4>
+
+<p class="">When creating a protocol for a segment of your application, most of the thinking will be about which termini to expose and how to connect them. You can use any feature of the <a href="/2.1/docs/operation/index.html#operation-wiring-api" class="underline text-purple">Wiring API</a> - in the end, a protocol is just another “operation”.</p>
+
+<pre class=""><code class="rounded">class MyProtocol &lt; Trailblazer::Activity::Railway
+  # add additional termini.
+  terminus :not_found
+  terminus :not_authenticated
+  terminus :not_authorized
+
+  step :authenticate, Output(:failure) =&gt; Track(:not_authenticated)
+  step nil, id: :domain_activity  # {Memo::Operation::Create} gets placed here.
+
+  def authenticate(ctx, params:, **)
+    # ...
+  end
+end
+</code></pre>
+
+<p class="">The above example protocol exposes five termini. Three extra termini are added using <a href="/2.1/docs/operation/index.html#operation-wiring-api-terminus" class="underline text-purple"><code class="text-purple">#terminus</code></a> to Railway’s <code class="text-purple">success</code> and <code class="text-purple">failure</code> tuple.</p>
+
+<p class="">To re-route the <code class="text-purple">failure</code> output of the <code class="text-purple">authenticate</code> step, the Wiring API is leveraged and connects it directly to the new terminus <code class="text-purple">not_authenticated</code>.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/vite-dev/images/endpoint-protocol-termini" /></p>
+
+<p class="">Five termini to rule them all.</p>
+
+<ol>
+  <li class="list-image-disc ml-10"><code class="text-purple">success</code> obviously indicates everything went fine.</li>
+  <li class="list-image-disc ml-10"><code class="text-purple">failure</code> informs the caller of a validation error.</li>
+  <li class="list-image-disc ml-10"><code class="text-purple">not_found</code> could be terminated on when a model wasn’t found.</li>
+  <li class="list-image-disc ml-10">If the <code class="text-purple">current_user</code> couldn’t be computed, due to invalid credentials, the <code class="text-purple">not_authenticated</code> terminus is hit.</li>
+  <li class="list-image-disc ml-10">Any kind of policy breach could be routed to <code class="text-purple">not_authorized</code>.</li>
+</ol>
+
+<h4 id="endpoint-protocol-layout-handlers" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Layout
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Handlers</span>
+
+                  </h4>
+
+<p class="">Now, exposing this kind of layout is only helpful if you actually handle each case in a specific way. For a better understanding, here’s an example matcher block.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Create, protocol: MyProtocol
+
+  def create
+    invoke Memo::Operation::Create, protocol: true, params: params do
+      success   { |ctx, model:, **| redirect_to memo_path(model.id) }
+      failure   { |ctx, contract:, **| render partial: "form", object: contract }
+      not_authorized { |**| head 403 }
+      not_authenticated { |**| head 401 }
+      not_found { |ctx, **| render file: PAGE_404, status: :not_found }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">This <code class="text-purple">#create</code> controller action illustrates nicely how endpoint’s matcher interface allows dealing with outcomes (or different termini). Check the <a href="#endpoint-controller-configuration-default_matcher" class="underline text-purple"><code class="text-purple">default_matcher</code></a> directive to learn how to reduce redundancy and be less verbose with your matchers.</p>
+
+<h4 id="endpoint-protocol-layout-wiring" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Layout
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Wiring</span>
+
+                  </h4>
+
+<p class="">When compiling an endpoint with <code class="text-purple">MyProtocol</code>, every “known” terminus of the business operation is automatically connected.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Update, protocol: MyProtocol
+  # ...
+end
+</code></pre>
+
+<p class="">For example, if <code class="text-purple">Update</code> was exposing a <code class="text-purple">not_found</code> terminus, it’s linked to its respective terminus in the protocol.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/vite-dev/images/endpoint-protocol-update" /></p>
+
+<p class="">In case you need to connect an output to another arbitrary track or terminus, you can use the Wiring API in an optional block when compiling the endpoint.</p>
+
+<p class="">Let’s assume the <code class="text-purple">Update</code> operation was terminating on its built-in <code class="text-purple">fail_fast</code> terminus when the updated model couldn’t be found. You can wire that very terminus to the <code class="text-purple">not_found</code> track in the protocol using the Wiring API.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Update, protocol: MyProtocol do
+    {
+      Output(:fail_fast) =&gt; Track(:not_found)
+    }
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">The returned hash of wiring instructions is executed when the <code class="text-purple">:domain_activity</code> placeholder step is replaced with the actual business operation at compile time, making the diagram look as follows.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/vite-dev/images/protocol-fail-fast" /></p>
+
+<p class="">This trick allows you to “translate” any kind of operation layout to your protocol’s. For instance, you could even move legacy operations into endpoints and connect their termini to corresponding tracks in the protocol.</p>
+
+<h3 id="endpoint-protocol-configuration" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Configuration</span></h3>
+
+<p class="">Any <a href="#endpoint-controller-configuration" class="underline text-purple">configuration directive</a> from the controller layer can be used in combination with a protocol. In addition to that, we do have some extra options to fine-tune the compilation of your protocol endpoints.</p>
+
+<h4 id="endpoint-protocol-configuration-options" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">options</span>
+
+                  </h4>
+
+<p class="">Use the <code class="text-purple">options</code> directive to default options when you create a new endpoint on the controller level.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint do
+    options do
+      {
+        protocol: MyProtocol,
+      }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">With the above setting, you can skip the <code class="text-purple">:protocol</code> option.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Create # no :protocol needed!
+  # ...
+end
+</code></pre>
+
+<p class="">Note that you can still manually override the class-wide option when defining the endpoint.</p>
+
+<h4 id="endpoint-protocol-configuration-fast_track_to_railway" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">fast_track_to_railway</span>
+
+                  </h4>
+
+<p class="">If you’re not interested in handling your operation’s <code class="text-purple">pass_fast</code> and <code class="text-purple">fail_fast</code> termination separately, you can use the <code class="text-purple">:fast_track_to_railway</code> shortcut in <code class="text-purple">options</code> to wire the two fast track termini to their railway friends.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint do
+    options do
+      {
+        # ...
+        fast_track_to_railway: true,
+      }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">This will result in a flow diagram similar to this.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/vite-dev/images/endpoint-fast-track-rw.png" /></p>
+
+<p class="">Here, the distinction between <code class="text-purple">failure</code> and <code class="text-purple">fail_fast</code> gets lost after the endpoint has been run. In most scenarios, this is desired, as this mimics querying the result object via <code class="text-purple">result.success?</code>.</p>
+
+<p class="">In some cases you might want to deal with a <code class="text-purple">fail_fast</code> or <code class="text-purple">pass_fast</code> termination of your operation. Simply override the option when defining the specific endpoint.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Update,
+    fast_track_to_railway: false
+  # ...
+end
+</code></pre>
+
+<p class="">Your endpoint now needs to define those two additional termini, so they can be properly connected.</p>
+
+<h4 id="endpoint-protocol-configuration-protocol_block" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Configuration
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">protocol_block</span>
+
+                  </h4>
+
+<p class="">You can define a default block for the <a href="#endpoint-protocol-layout-wiring" class="underline text-purple">wiring</a> of the domain operation.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint do
+    options do
+      {
+        protocol_block: -&gt; do
+          {Output(:fail_fast) =&gt; Track(:not_found)}
+        end,
+      }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">The <code class="text-purple">:protocol_block</code> option is used when compiling an endpoint, you don’t need to specify the custom wiring anymore.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint Memo::Operation::Update, protocol: MyProtocol # {fail_fast} =&gt; {not_found}
+  # ...
+end
+</code></pre>
+
+<p class="">It’s even possible to have a dynamic <code class="text-purple">:protocol_block</code>. The block is executed in the context of the domain operation.</p>
+
+<pre class=""><code class="rounded">class MemosController &lt; ApplicationController
+  # ...
+  endpoint do
+    options do
+      {
+        protocol_block: -&gt; do
+          if to_h[:outputs].find { |output| output.semantic == :not_found }
+            {Output(:not_found) =&gt; End(:not_found)}
+          else
+            {} # no custom wiring.
+          end
+        end,
+      }
+    end
+  end
+  # ...
+end
+</code></pre>
+
+<p class="">In this example, the block is evaluated in context of <code class="text-purple">Memo::Operation::Update</code>. Within this block, you may use the <a href="/2.1/docs/operation/index.html#operation-internals-introspection-api" class="underline text-purple"><code class="text-purple">Introspect</code> API</a> or any method of the domain operation. Here, <code class="text-purple">to_h</code>  translates to <code class="text-purple">Memo::Operation::Update.to_h</code>, allowing you to add custom wiring as it applies.</p>
+
+        </div>
+
+            <!-- 5.5rem is lg navbar height -->
+        <div class="bg-white h-screen w-56 sticky top-[5.5rem]" id="right-toc">
+          <div id="docsearch" class="flex flex-col w-[203px] pt-5"></div>
+
+          <div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-endpoint-canonical-invoke">
+  <h4 class="font-base font-bold leading-10 pl-2">
+     Canonical invoke
+  </h4>
+
+  
+    <a class="block px-2 leading-8" href="#endpoint-canonical-invoke-configuration">Configuration</a>
+
+    
+  
+</div>
+
+
+<div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-endpoint-controller">
+  <h4 class="font-base font-bold leading-10 pl-2">
+     Controller
+  </h4>
+
+  
+    <a class="block px-2 leading-8" href="#endpoint-controller-installation">Installation</a>
+
+    
+  
+    <a class="block px-2 leading-8" href="#endpoint-controller-invoke">Invoke</a>
+
+    
+  
+    <a class="block px-2 leading-8" href="#endpoint-controller-configuration">Configuration</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-ctx">ctx</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-default_matcher">default_matcher</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-invoke">invoke</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-controller-configuration-inheritance">Inheritance</a>
+    
+  
+</div>
+
+
+<div class="display_none bg-white p-5 w-56 shrink-0 text-bg-blue overflow-y-scroll top-22 toc-right-height" id="right-toc-endpoint-protocol">
+  <h4 class="font-base font-bold leading-10 pl-2">
+     Protocol
+  </h4>
+
+  
+    <a class="block px-2 leading-8" href="#endpoint-protocol-overview">Overview</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-overview-protocol">Protocol</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-overview-defining">Defining</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-overview-invocation">Invocation</a>
+    
+  
+    <a class="block px-2 leading-8" href="#endpoint-protocol-layout">Layout</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-layout-terminus">Terminus</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-layout-handlers">Handlers</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-layout-wiring">Wiring</a>
+    
+  
+    <a class="block px-2 leading-8" href="#endpoint-protocol-configuration">Configuration</a>
+
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-configuration-options">options</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-configuration-fast_track_to_railway">fast_track_to_railway</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#endpoint-protocol-configuration-protocol_block">protocol_block</a>
+    
+  
+</div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer class="lg:text-left bg-bg-blue py-16 text-white text-center text-base">
+  <div class="lg:flex justify-between w-11/12 max-w-[80rem] mx-auto">
+    <div class="lg:flex lg:flex-col lg:justify-between">
+      <a href="/2.1/" class="block shrink-0 w-fit mx-auto lg:mx-0" >
+        <img class="w-48" src="/vite-dev/images/logo_white_ruby.svg" />
+      </a>
+      <div class="lg:block hidden">
+        © 2023 Trailblazer GmbH
+
+      </div>
+    </div>
+    <div class="lg:flex lg:gap-20 xl:gap-40">
+      <div class="lg:mt-0 flex flex-col gap-5 mt-15">
+        <a class="font-bold text-xl" href="/2.1/docs/trailblazer/">Documentation</a>
+        <a href="/2.1/docs/trailblazer/#trailblazer-learn-trailblazer-tales">Videos</a>
+        <a href="/2.1/docs/trailblazer/">API</a>
+        <a href="/2.1/docs/operation/">Operation</a>
+      </div>
+      <div class="lg:mt-0 flex flex-col gap-5 mt-15">
+        <a class="font-bold text-xl" href="/2.1/about/">About us</a>
+        <div class="flex items-center">
+          <a href="https://www.linkedin.com/company/trailblazer-gmbh/">LinkedIn</a>
+          <a href="https://www.linkedin.com/company/trailblazer-gmbh/">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="fill-white pl-2" height="1.3em"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+          </a>
+        </div>
+        <a href="https://dev.to/trailblazer">Blog</a>
+        <a href="/2.1/about/">Trailblazer GmbH</a>
+        <a href="/2.1/pro/">Trailblazer PRO</a>
+      </div>
+      <div class="lg:mt-0 flex flex-col gap-5 mt-15">
+        <a class="font-bold text-xl" href="https://trailblazer.zulipchat.com">Help</a>
+        <a href="https://trailblazer.zulipchat.com">Chat</a>
+        <a href="http://eepurl.com/hHE3a5">Newsletter</a>
+      </div>
+    </div>
+  </div>
+  <div class="lg:hidden mt-15">
+    © 2023 Trailblazer GmbH
+  </div>
+</footer>
+
+
+  </body>
+</html>
