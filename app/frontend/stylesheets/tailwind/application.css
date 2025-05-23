@@ -87,9 +87,9 @@
 
 @layer components {
 /*  FIXME: doesn't show up*/
-  /*.DocSearch-Button {
-    @apply rounded bg-white !important h-20;
-  }*/
+  .DocSearch-Button {
+    @apply !rounded !bg-white !h-20;
+  }
 
   .hamburger-toggle {
     @apply
