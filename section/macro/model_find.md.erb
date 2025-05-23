@@ -13,7 +13,7 @@ In operations that target existing models, the `Model::Find()` macro is the righ
 
 When using this macro, a small nested activity is added as a step to your operation.
 
-<%= image_tag "model_find.png" %>
+<%= vite_image_tag "images/model_find.png" %>
 
 It comprises of two steps.
 
@@ -62,7 +62,7 @@ The lambda receives `ctx` and keyword options just like any other step in the op
 
 You can wire the `Model::Find()` step to a dedicated terminus `:not_found` in case of a missing model (instead of connecting it to the default failure track). The new terminus represents an explicit outcome and could, for instance, be used in an [endpoint](/2.1/docs/endpoint.html) to render a **404 response** without having to check if `ctx[:model]` is present or not.
 
-<%= image_tag "model-not-found.png" %>
+<%= vite_image_tag "images/model-not-found.png" %>
 
 To add the explicit `End.not_found`terminus, pass the `:not_found_terminus` option to the macro.
 
@@ -84,7 +84,7 @@ This will result in an invocation like `Song.find(id)`. As always `:find` can be
 
 With tracing turned on, you can see that `Model::Find()` actually creates a tiny activity with two steps.
 
-<%= image_tag "model_find_trace.png" %>
+<%= vite_image_tag "images/model_find_trace.png" %>
 
 1. The first extracts the ID from params. If this step fails, your configured ID couldn't be found
 2. The second step runs the finder.

@@ -12,7 +12,7 @@ Once on the failure track, it stays there (unless you instruct not to do so!).
 
 This operation will look as follows.
 
-<%= image_tag "memo-create.png" %>
+<%= vite_image_tag "images/memo-create.png" %>
 
 Four possible execution paths this operation might take.
 
@@ -64,5 +64,5 @@ If the return value of a task on the success path shouldn't matter, use `#pass`.
 
 `#save`'s return value is ignored in the operation run, the next step will always be `#notify` on the success track.
 
-<%= image_tag "memo-pass.png" %>
+<%= vite_image_tag "images/memo-pass.png" %>
 

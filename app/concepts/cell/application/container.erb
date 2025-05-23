@@ -6,11 +6,12 @@
     <meta content="width=device-width,initial-scale=1" name="viewport"/>
     <%#= csrf_meta_tags %>
     <%#= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "open-sauce" %>
-    <%# stylesheet_link_tag "tailwind" %>
-    <%= stylesheet_link_tag "application" %>
+
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'application' %>
+    <%= vite_stylesheet_tag "application.css" %>
+
     <%= script_for_page_identifier %>
-    <%= javascript_importmap_tags %>
   </head>
   <body>
     <%= yield %>

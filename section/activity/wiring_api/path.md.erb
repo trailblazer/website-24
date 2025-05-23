@@ -10,7 +10,7 @@ You can use the `:terminus` option for `Path()` to lead the path to an existing 
 
 If the `#find_provider` steps returns false, the steps on the "paypal" path will be executed. Since we are using the `:terminus` option, the run stops in the new terminus `:paypal` .
 
-<%= image_tag "wiring-path-helper.png" %>
+<%= vite_image_tag "images/wiring-path-helper.png" %>
 
 You don't necessarily have to use the `:failure` output in order to branch out a new path. You might as well use an [additional signal](#operation-mechanics-flow-control-signal), or any other predefined output of the task.
 
@@ -30,7 +30,7 @@ If you want the path to reconnect and join the railway at some point, use the `:
 
 Instead of creating an additional terminus, the last path step will be connected to whatever step is specified via the `Id()` helper.
 
-<%= image_tag "wiring-path-connect-to.png" %>
+<%= vite_image_tag "images/wiring-path-connect-to.png" %>
 
 You can easily branch out and handle specific edge cases using this helper.
 

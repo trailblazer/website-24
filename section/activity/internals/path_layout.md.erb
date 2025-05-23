@@ -10,7 +10,7 @@ Per default, this activity will only expose one `success` terminus but you're fr
 
 Without any additional DSL options, this results in a straight path.
 
-<%= image_tag "path.png" %>
+<%= vite_image_tag "images/path.png" %>
 
 In turn, this means that only `true` return values in your tasks will work. The DSL will, per default, wrap every task with the `Binary` interface, meaning returning `true` will result in `Activity::Right`, and false in `Activity::Left`. Currently, only `Right` signals are wired up.
 
@@ -30,7 +30,7 @@ The `End()` helper allows creating a new end event labelled with the specified s
 
 This will result in the following circuit.
 
-<%= image_tag "path-end.png" %>
+<%= vite_image_tag "images/path-end.png" %>
 
 The `validate` task now has a `success` and a `failure` output. Since it's wrapped using `Binary` it may return `true` or `false` to dictate the used output (or `Activity::Right`/`Activity::Left` since it's the [task interface]).
 
@@ -48,6 +48,6 @@ The `Activity::Railway` layout is great for simple railway activities. It's used
 
 It has two tracks and two termini leading to `success` and `failure`.
 
-<%= image_tag "memo-create.png" %>
+<%= vite_image_tag "images/memo-create.png" %>
 
 This layout is perfect for internal "mini activities" in your applications.

@@ -1,20 +1,19 @@
+// dependencies
 import hljs from 'highlight.js/lib/core';
 import ruby from 'highlight.js/lib/languages/ruby';
-import anchorJS from 'anchor-js';
-
-import 'navigations'; // FIXME: here, part of the code should only be run when "docs".
-
+import "@lottiefiles/lottie-player";
+import AnchorJS from 'anchor-js';
 import jquery from 'jquery';
+import { ParallaxScroll } from "../javascript/jquery.parallax-scroll";
 
-import { ParallaxScroll } from "jquery.parallax-scroll";
+// custom files
+import '../javascript/navigations'; // FIXME: here, part of the code should only be run when "docs".
 
 hljs.registerLanguage('ruby', ruby);
 hljs.highlightAll();
 
 if (pageIdentifier == "landing") {
   jquery(document).ready(function() {
-    import("lottie-player");
-
     ParallaxScroll.init();
 
     // TODO: move to separate  function/file.
@@ -37,7 +36,7 @@ if (pageIdentifier == "landing") {
 
 if (pageIdentifier == "docs") {
   jquery(document).ready(function() {
-    import("docsearch");
+    import("../javascript/docsearch");
 
     let h2_map = [];
 
@@ -166,7 +165,7 @@ if (pageIdentifier == "docs") {
     jquery(window).on("scroll", h2_listener);
     h2_listener(null); // init wyof-scrollspy
 
-    var anchors = new anchorJS();
+    var anchors = new AnchorJS();
     anchors.add('h2, h3, h4');
 
     // listen for click on tab links

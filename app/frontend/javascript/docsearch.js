@@ -1,4 +1,6 @@
-import 'docsearch-3.5.2';
+import docsearch from '@docsearch/js';
+
+import '@docsearch/css';
 
 // TODO: remove, currently unused function.
 function my_transformItems(items) {

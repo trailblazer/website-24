@@ -91,20 +91,20 @@ class ViewsController < ApplicationController
 
         end
 
-            # = image_tag "info_icon.svg"
+            # = vite_image_tag "info_icon.svg"
         def info(type: :info, &block)
-          box(img: "info_icon.svg", bg: "bg-bg-purple-1/50", &block)
+          box(img: "images/info_icon.svg", bg: "bg-bg-purple-1/50", &block)
         end
 
         def warning(&block)
-          box(img: "light_bulb_icon.svg", bg: "bg-bg-orange", &block)
+          box(img: "images/light_bulb_icon.svg", bg: "bg-bg-orange", &block)
         end
 
         def box(bg:, img:, &block) # TODO: use cell for this.
           kramdown_options  = @options.fetch(:kramdown_options)
           convert_method    = kramdown_options.fetch(:converter)
 
-          icon_tag = @options[:controller].helpers.image_tag img
+          icon_tag = @options[:controller].helpers.vite_image_tag img
           html  = yield
 
           html = Kramdown::Document.new(html, kramdown_options).send(convert_method) # TODO: encapsulate that.
@@ -158,15 +158,15 @@ class ViewsController < ApplicationController
           block
         end
 
-        My::Cell.delegate_to_controller_helpers(self, :image_tag)
+        My::Cell.delegate_to_controller_helpers(self, :vite_image_tag)
 
-        module ImageTag
-          def image_tag(*args, **options)
+        module ViteImageTag
+          def vite_image_tag(*args, **options)
             super(*args, **Cms::Config.tailwind.img, **options)
           end
         end
 
-        include ImageTag
+        include ViteImageTag
 
         module H
           class Render < Torture::Cms::Helper::Header::Render
@@ -225,7 +225,15 @@ class ViewsController < ApplicationController
           @options = options.merge(controller: controller) # TODO: find way how to specify required kws.
         end
 
-        My::Cell.delegate_to_controller_helpers(self, :csrf_meta_tags, :csp_meta_tag, :stylesheet_link_tag, :javascript_importmap_tags)
+        My::Cell.delegate_to_controller_helpers(
+          self,
+          :csrf_meta_tags,
+          :csp_meta_tag,
+          :stylesheet_link_tag,
+          :vite_client_tag,
+          :vite_javascript_tag,
+          :vite_stylesheet_tag
+        )
 
         def script_for_page_identifier
           %(<script>pageIdentifier = "#{@options.fetch(:page_identifier)}";</script>)
@@ -248,7 +256,13 @@ class ViewsController < ApplicationController
             @options = options.merge(controller: controller)
           end
 
-          My::Cell.delegate_to_controller_helpers(self, :link_to, :image_tag) # navbar.erb
+          My::Cell.delegate_to_controller_helpers(
+            self,
+            :link_to,
+            :vite_image_tag,
+            :vite_asset_path,
+            :vite_asset_url
+          ) # navbar.erb
 
           def render(template)
             ::Cell.({template: template, exec_context: self}) # DISCUSS: does {render} always mean we want the same exec_context?
@@ -282,7 +296,7 @@ class ViewsController < ApplicationController
         end
 
         def navbar_logo
-          "logo_blue_ruby.svg"
+          "images/logo_blue_ruby.svg"
         end
 
         def navbar_options
@@ -504,7 +518,7 @@ class ViewsController < ApplicationController
         end
 
         def navbar_logo
-          "logo_white_ruby.svg"
+          "images/logo_white_ruby.svg"
         end
 
         My::Cell.delegate_to_controller_helpers(self, :asset_path)

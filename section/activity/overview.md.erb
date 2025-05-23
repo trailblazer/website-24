@@ -22,7 +22,7 @@ It's a convenient way for you to define _what_ happens. The operation takes care
 
 Internally, the above operation compiles to some kind of "circuit" which looks as follows.
 
-<%= image_tag "memo-create.png" %>
+<%= vite_image_tag "images/memo-create.png" %>
 
 As visible, your "steps" are placed onto two tracks, forming a "railway".
 
@@ -74,7 +74,7 @@ Operations can trace themselves when being run. This allows you to see which ste
 
 Just run the operation using the `wtf?` method instead of `#call`.
 
-<%= image_tag "cli/memo-create.png" %>
+<%= vite_image_tag "images/cli/memo-create.png" %>
 
 This will print the trace in the terminal, which is incredibly helpful and time-saving when working with [complex operations](#operation-wiring-api-subprocess).
 
@@ -86,7 +86,7 @@ Check out our video on debugging or the [→ DEVELOPER docs](/2.1/docs/trailblaz
 
 In your operation, you can define any circuit you need in order to accomplish your task using the [Wiring API](#operation-wiring-api). You're not limited to a linear railway!
 
-<%= image_tag "wiring-end.png" %>
+<%= vite_image_tag "images/wiring-end.png" %>
 
 You may add additional termini to your operations to indicate state, go back and retry a particular step, error-out early, or even [nest operations](#operation-wiring-api-subprocess) to solve more complex business logic.
 
@@ -102,6 +102,6 @@ Using our PRO debugger, you can even trace this variable flow.
 
 We are (finally, and definitely!) releasing PRO in 2024 which will bring us the `workflow` gem and our BPMN editor to model and implement complex, long-running workflows.
 
-<%= image_tag "bpmn-editor-23.png" %>
+<%= vite_image_tag "images/bpmn-editor-23.png" %>
 
 This will be pretty exciting and introduces "enterprise" concepts that haven't been around in Ruby so far.

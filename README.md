@@ -4,7 +4,7 @@
 
 To write docs, use `guard` and `rails` as a server.
 
-```
+```shell
 bundle exec guard
 rails s
 ```
@@ -16,7 +16,7 @@ To work on CSS and new features, you need to run the "development mode" where Ta
 
 Run with
 
-```
+```shell
 $ foreman start -f Procfile.dev
 ```
 
@@ -30,25 +30,13 @@ Browse to
 
 If styles don't show up, run
 
-```
+```shell
 $ rails assets:clobber
-```
-
-### Troubleshooting
-
-```
-The asset "tailwind.css" is not present in the asset pipeline. (Sprockets::Rails::Helper::AssetNotFound)
-```
-
-Run
-
-```
-rails tailwindcss:build
 ```
 
 ## Publishing
 
-```
+```shell
 $ rails site:deploy
 ```
 
@@ -74,12 +62,11 @@ https://crawler.algolia.com/admin/crawlers/870e3bcd-5879-4bfd-9d57-8241620b249b/
 
 ## Javascript
 
-```ruby
-bin/importmap pin jquery --download
+JS dependencies are handled by [ViteJS](https://vitejs.dev/) and npm tool (installed with Node)
+
+```shell
+$ npm install
 ```
-
-will copy the library to `vendor/javascript/jquery.js`
-
 
 ## Publishing (before Netlify)
 

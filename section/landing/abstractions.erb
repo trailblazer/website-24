@@ -2,7 +2,7 @@
 
 <section class="bg-bg-blue pt-20 pb-32 px-10">
   <h2 class="section-header text-white font-bold text-4xl lg:text-6xl">
-    Our 
+    Our
     <span class="text-purple-text">abstraction</span>
     layers
   </h2>
@@ -12,7 +12,7 @@
   <div class="max-w-[63rem] section-content-wrapper md:py-0">
     <div class="md:text-left md:flex-row md:gap-16 lg:gap-20 md:justify-between md:mt-[5.5rem] flex flex-col mt-10 text-center">
 
-      <div class="max-w-50">
+      <div>
         <pre><code class="rounded border-light-purple border">class MemosController < ApplicationController
   def create
     if Memo::Operation::Create.(params: params)
@@ -59,7 +59,7 @@ end</code></pre>
           </p>
         </div>
       </div>
-      <div class="max-w-50">
+      <div>
         <pre><code class="rounded  border-light-purple border">module Memo::Operation
   class Create < Trailblazer::Operation
     step :validate
@@ -73,7 +73,7 @@ end</code></pre>
 
     <div class="md:text-left md:flex-row md:gap-16 lg:gap-20 md:justify-between md:mt-24 flex flex-col mt-10 text-center">
 
-      <div class="max-w-50">
+      <div>
         <pre><code class="rounded  border-light-purple border">module Memo::Contract
   class Create < Reform::Form
     property :text
