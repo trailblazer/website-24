@@ -1,5 +1,5 @@
-@import "../stylesheets/tailwind/application.css";
-@import "../stylesheets/application.css";
-@import "../stylesheets/highlightjs-trb.css";
-@import "../stylesheets/open-sauce.css";
-@import "../stylesheets/anchor-js.css";
+@import "@/stylesheets/open-sauce.css";
+@import "@/stylesheets/tailwind/application.css";
+@import "@/stylesheets/application.css";
+@import "@/stylesheets/highlightjs-trb.css";
+@import "@/stylesheets/anchor-js.css";

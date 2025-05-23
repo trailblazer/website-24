@@ -4,10 +4,10 @@ import ruby from 'highlight.js/lib/languages/ruby';
 import "@lottiefiles/lottie-player";
 import AnchorJS from 'anchor-js';
 import jquery from 'jquery';
-import { ParallaxScroll } from "../javascript/jquery.parallax-scroll";
+import { ParallaxScroll } from "@/javascript/jquery.parallax-scroll";
 
 // custom files
-import '../javascript/navigations'; // FIXME: here, part of the code should only be run when "docs".
+import '@/javascript/navigations'; // FIXME: here, part of the code should only be run when "docs".
 
 hljs.registerLanguage('ruby', ruby);
 hljs.highlightAll();

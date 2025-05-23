@@ -10,7 +10,7 @@
 @source "../../../../section/**/*.erb";
 
 @theme {
-  --font-display: "Open Sauce Sans", "sans-serif";
+  --font-sans: "Open Sauce Sans", "sans-serif";
 
   /* Colors */
   --color-neutral-500: #1B2430;

@@ -1,1 +1,1 @@
-import '../javascript/application.js'
+import '@/javascript/application.js'
