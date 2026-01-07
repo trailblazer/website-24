@@ -1,53 +1,55 @@
 <%= h2 "Wrap" %>
 
-Sometimes you need to run a sequence of steps within some block you provide. Often, this is required when certain steps must be wrapped in a database transaction. The `Wrap()` macro does just that.
+The `Wrap()` macro is a convenient way to run one or more steps of an operation within your own code block, for instance, when a bunch of steps need to be wrapped in a database transaction.
 
 <%= code "upload", collapse: :meths %>
 
-In an imaginary song `Upload` operation that transfers a music file to some streaming service platform while updating fields on the database, needs the steps `#update` and `#transfer` being run inside a transaction. The code running and interpreting this block is provided via the custom transaction `MyTransaction`.
+In the above example, the steps `#upload` and `#transfer` are run through your wrap handler `MyTransaction`.
 
 <%= h3 "Wrap handler" %>
 
-The most simple "transaction" (we call it _wrap handler_) could look as follows.
+The key idea is that a wrap handler can use `yield` to run the wrapped steps.
 
 <%= code "my_transaction" %>
 
-Your transaction handler can be any type of [callable] exposing the [circuit interface](activity.html#activity-internals-circuit-interface).
+_# FIXME: ADD 2.1 EXAMPLE
 
-In the most simple transaction ever written, we simply run the wrapped steps by calling `yield`. This will return a circuit-interface return set. The interesting parts are the returned `ctx`, which is the ctx that left the wrapped steps, and the `signal`, which indicates the outcome of running the wrapped steps.
+A wrap handler can be any type of [callable] exposing the [circuit interface](/2.1/docs/operation/index.html#operation-internals-circuit-interface), meaning it receives three positional arguments and returns another set of three.
 
-Here, we simply return the original signal of the wrapped activity.
+The `ctx` argument is the application `ctx` passed through the operation at the time *before* the Wrap step got called. The remaining two incoming arguments are library-specific.
 
-Note that internally `#update` and `#transfer` are put into a separate activity. The terminus reached in that activity is the signal.
+<%= h4 "Yield" %>
+
+Use `yield` to run the wrapped steps at any point in your handler code. This will invoke `update`, then `transfer` as if they were a separate mini-operation (actually, they are!).
+
+<%= code :ruby do %>ctx, flow_options, signal = yield(ctx, flow_options, circuit_options)
+<% end %>
+
+Pass all three circuit interface arguments to `yield`, it runs the wrapped steps, and returns their return set: a new `ctx`, the library-specific `flow_options`, and the terminus `signal` of the execution of the wrapped steps.
+
+To understand the returned `signal`, keep in mind that your wrapped sequence of steps is actually a real mini operation, and `yield` runs it. That's why the returned `signal` usually is a `success` or `failure` terminus signal from that wrapped "operation".
 
 <%= image_tag "wrap.png" %>
 
-Given that both `#update` and `#transfer` are railway steps, the wrapped code can terminate in a `success` terminus, or a `failure`.
-Now, it's your handler that is responsible to interpret that. In the example above, we simply pass on the wrapped activity's terminal signal, making the `Upload` activity either continue from `success` or from `failure`.
+The Wrap() macro automatically wires those signals accordingly.
 
-<%= h4 "Routing" %>
+<%= info do %>
+Coming from TRB 2.1, you can still call `yield` without arguments. However, you will get a deprecation notice, please pass the three incoming circuit interface arguments to `yield` to reduce compatibility code.
+<% end %>
 
-Let's assume the `#transfer` step had a custom output that goes to a super-special terminus `End.timeout`.
+<%= h4 "Return set" %>
 
-<%= code "out-wrap" %>
+Note that, from your handler, you always want to return the variables returned from `yield` (unless there was an exception in `yield`), otherwise you might lose `ctx` variables or library data, e.g. when tracing.
 
-The resulting wrapped activity now has three termini.
+<%= code "yield-and-return" %>
 
-<%= image_tag "wrap-timeout.png" %>
+You don't have to return the "native" signal from `yield`, you may return any signal you need to indicate the outcome to the outer world, but make sure it is properly wired.
 
-
-
-With our handler, which simply returns the wrapped activity's signal, it's possible to route the `:timeout` signal in `Upload`. For instance, if a `:timeout` should be resulting in `Upload` jumping to the `fail_fast` track after `#transfer` terminated in `timeout`, you can do so.
-
-<%= code "out" %>
-
-Here's what the circuit would look like.
-
-<%= image_tag "wrap-route.png" %>
+See # FIXME for a better example.
 
 <%= h3 "Transaction" %>
 
-Wrapping steps into a real database transaction, and rolling back in case of a failure outcome in one of the steps, could look like so.
+A very typical real-world use-case of Wrap() is when, well, wrapping a sequence of steps into a database transaction. This allows adding specific code for a rollback in case something on the database level failed. Hundreds of TRB users have code similar to the following.
 
 <%= code "my_transaction", root: ".", file: "../trailblazer-rails/test/dummy/app/concepts/song/operation/upload.rb" %>
 
@@ -67,6 +69,26 @@ Catching and intercepting exceptions in `Wrap()` works identical to transactions
 With any exception being thrown, the original signal from the wrapped activity is returned, as if the steps were part of the `Upload` operation flow.
 
 The code below `rescue` is only run when an exception was thrown. Here, we write a new variable `:exception ` to the `ctx` and return `Left`, indicating an error.
+
+<%= h3 "Routing" %>
+
+Let's assume the `#transfer` step had a custom output that goes to a super-special terminus `End.timeout`.
+
+<%= code "out-wrap" %>
+
+The resulting wrapped activity now has three termini.
+
+<%= image_tag "wrap-timeout.png" %>
+
+
+
+With our handler, which simply returns the wrapped activity's signal, it's possible to route the `:timeout` signal in `Upload`. For instance, if a `:timeout` should be resulting in `Upload` jumping to the `fail_fast` track after `#transfer` terminated in `timeout`, you can do so.
+
+<%= code "out" %>
+
+Here's what the circuit would look like.
+
+<%= image_tag "wrap-route.png" %>
 
 <%= h3 "Compliance" %>
 
