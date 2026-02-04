@@ -28,6 +28,11 @@
 <link rel="modulepreload" href="/assets/anchor-js-821952d04abcd941bb3541822cd1c1f0234e5168bef1f9b2a050868af608aa5a.js">
 <script src="/assets/es-module-shims.min-4ca9b3dd5e434131e3bb4b0c1d7dff3bfd4035672a5086deec6f73979a49be73.js" async="async" data-turbo-track="reload"></script>
 <script type="module">import "application"</script>
+
+    <script id="setmore_script" type="text/javascript" src="https://assets.setmore.com/integration/static/setmoreIframeLive.js"></script>
+    <a style="position: fixed; right: 0px; top: 25%; display: block; z-index: 20000" id="Setmore_button_iframe" href="https://trailblazer.setmore.com">
+      <img border="none" alt="Book an appointment for Trailblazer micro consulting" src="/assets/consulting-tab-508c4ef9142037af52bf5d0ddb2868ba2ab38c1021b01a264b6a3bd32375a592.png" />
+    </a>
   </head>
   <body>
     <nav class=" text-base z-[50] top-0 absolute w-full lg:h-[5.5rem] lg:px-[5.6rem] py-3 lg:flex lg:justify-between lg:items-center bg-white sticky" id="navbar">
@@ -457,7 +462,7 @@ end
   class Create &lt; Trailblazer::Activity::Railway
     step :model
     step Nested(:decide_file_type,
-      auto_wire: [Id3Tag, VorbisComment]) # explicitely define possible nested activities.
+      static: [Id3Tag, VorbisComment]) # explicitely define possible nested activities.
     step :save
     # ...
 
@@ -503,7 +508,7 @@ end
     step :model
     step Nested(
         :decide_file_type,
-        auto_wire: [Id3Tag, VorbisComment]
+        static: [Id3Tag, VorbisComment]
       ),
       # Output and friends are used *after* Nested().
       # Connect VorbisComment's {unsupported_file_format} to our {failure} track:
@@ -561,7 +566,7 @@ Trailblazer::Developer.wtf?(Song::Activity::Create, params: {type: "vorbis"})</c
 
 <h2 id="macro-wrap" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Wrap</span></h2>
 
-<p class="">Sometimes you need to run a sequence of steps within some block you provide. Often, this is required when certain steps must be wrapped in a database transaction. The <code class="text-purple">Wrap()</code> macro does just that.</p>
+<p class="">The <code class="text-purple">Wrap()</code> macro is a convenient way to run one or more steps of an operation within your own code block, for instance, when a bunch of steps need to be wrapped in a database transaction.</p>
 
 <pre class=""><code class="rounded">module Song::Activity
   class Upload &lt; Trailblazer::Activity::FastTrack
@@ -571,75 +576,83 @@ Trailblazer::Developer.wtf?(Song::Activity::Create, params: {type: "vorbis"})</c
       step :transfer # this might even break!
     }
     step :notify
-    fail :log_error
+    left :log_error
     # ...
   end
 end
 </code></pre>
 
-<p class="">In an imaginary song <code class="text-purple">Upload</code> operation that transfers a music file to some streaming service platform while updating fields on the database, needs the steps <code class="text-purple">#update</code> and <code class="text-purple">#transfer</code> being run inside a transaction. The code running and interpreting this block is provided via the custom transaction <code class="text-purple">MyTransaction</code>.</p>
+<p class="">In the above example, the steps <code class="text-purple">#upload</code> and <code class="text-purple">#transfer</code> are run through your wrap handler <code class="text-purple">MyTransaction</code>.</p>
 
 <h3 id="macro-wrap-wrap-handler" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Wrap handler</span></h3>
 
-<p class="">The most simple “transaction” (we call it <em>wrap handler</em>) could look as follows.</p>
+<p class="">The key idea is that a wrap handler can use <code class="text-purple">yield</code> to run the wrapped steps.</p>
 
-<pre class=""><code class="rounded">class MyTransaction
-  def self.call((ctx, flow_options), **, &amp;block)
-    signal, (ctx, flow_options) = yield # calls the wrapped steps
+<pre class=""><code class="rounded"># app/concepts/macro/my_transaction.rb
+class MyTransaction
+  def self.call(ctx, flow_options, circuit_options, &amp;block)
+                                # Run the wrapped steps.
+    ctx, flow_options, signal = yield(ctx, flow_options, circuit_options)
+    # maybe do something more?
 
-    return signal, [ctx, flow_options]
+    return ctx, flow_options, signal
   end
 end
 </code></pre>
 
-<p class="">Your transaction handler can be any type of [callable] exposing the <a href="activity.html#activity-internals-circuit-interface" class="underline text-purple">circuit interface</a>.</p>
+<p class="">_# FIXME: ADD 2.1 EXAMPLE</p>
 
-<p class="">In the most simple transaction ever written, we simply run the wrapped steps by calling <code class="text-purple">yield</code>. This will return a circuit-interface return set. The interesting parts are the returned <code class="text-purple">ctx</code>, which is the ctx that left the wrapped steps, and the <code class="text-purple">signal</code>, which indicates the outcome of running the wrapped steps.</p>
+<p class="">A wrap handler can be any type of [callable] exposing the <a href="/2.1/docs/operation/index.html#operation-internals-circuit-interface" class="underline text-purple">circuit interface</a>, meaning it receives three positional arguments and returns another set of three.</p>
 
-<p class="">Here, we simply return the original signal of the wrapped activity.</p>
+<p class="">The <code class="text-purple">ctx</code> argument is the application <code class="text-purple">ctx</code> passed through the operation at the time <em>before</em> the Wrap step got called. The remaining two incoming arguments are library-specific.</p>
 
-<p class="">Note that internally <code class="text-purple">#update</code> and <code class="text-purple">#transfer</code> are put into a separate activity. The terminus reached in that activity is the signal.</p>
-
-<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/wrap-f19981a15143742a9b363da41091290a565fb3d5e728da9d6822a5b30712c81b.png" /></p>
-
-<p class="">Given that both <code class="text-purple">#update</code> and <code class="text-purple">#transfer</code> are railway steps, the wrapped code can terminate in a <code class="text-purple">success</code> terminus, or a <code class="text-purple">failure</code>.
-Now, it’s your handler that is responsible to interpret that. In the example above, we simply pass on the wrapped activity’s terminal signal, making the <code class="text-purple">Upload</code> activity either continue from <code class="text-purple">success</code> or from <code class="text-purple">failure</code>.</p>
-
-<h4 id="macro-wrap-wrap-handler-routing" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Wrap handler
-                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Routing</span>
+<h4 id="macro-wrap-wrap-handler-yield" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Wrap handler
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Yield</span>
 
                   </h4>
 
-<p class="">Let’s assume the <code class="text-purple">#transfer</code> step had a custom output that goes to a super-special terminus <code class="text-purple">End.timeout</code>.</p>
+<p class="">Use <code class="text-purple">yield</code> to run the wrapped steps at any point in your handler code. This will invoke <code class="text-purple">update</code>, then <code class="text-purple">transfer</code> as if they were a separate mini-operation (actually, they are!).</p>
 
-<pre class=""><code class="rounded">step Wrap(MyTransaction) {
-  step :update   # this changes the database.
-  step :transfer,
-    Output(:failure) =&gt; End(:timeout) # creates a third terminus.
-},
+<pre class=""><code class="rounded">ctx, flow_options, signal = yield(ctx, flow_options, circuit_options)</code></pre>
+
+<p class="">Pass all three circuit interface arguments to <code class="text-purple">yield</code>, it runs the wrapped steps, and returns their return set: a new <code class="text-purple">ctx</code>, the library-specific <code class="text-purple">flow_options</code>, and the terminus <code class="text-purple">signal</code> of the execution of the wrapped steps.</p>
+
+<p class="">To understand the returned <code class="text-purple">signal</code>, keep in mind that your wrapped sequence of steps is actually a real mini operation, and <code class="text-purple">yield</code> runs it. That’s why the returned <code class="text-purple">signal</code> usually is a <code class="text-purple">success</code> or <code class="text-purple">failure</code> terminus signal from that wrapped “operation”.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/wrap-f19981a15143742a9b363da41091290a565fb3d5e728da9d6822a5b30712c81b.png" /></p>
+
+<p class="">The Wrap() macro automatically wires those signals accordingly.</p>
+
+<div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
+  <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
+  <div class="space-y-3">
+    
+<p class="">Coming from TRB 2.1, you can still call <code class="text-purple">yield</code> without arguments. However, you will get a deprecation notice, please pass the three incoming circuit interface arguments to <code class="text-purple">yield</code> to reduce compatibility code.</p>
+
+  </div>
+</div>
+
+<h4 id="macro-wrap-wrap-handler-return-set" class="font-bold text-neutral-500 lg:text-1xl text-xl py-2">Wrap handler
+                  <span class="text-purple bg-lighter-purple p-2 rounded font-medium header-text">Return set</span>
+
+                  </h4>
+
+<p class="">Note that, from your handler, you always want to return the variables returned from <code class="text-purple">yield</code> (unless there was an exception in <code class="text-purple">yield</code>), otherwise you might lose <code class="text-purple">ctx</code> variables or library data, e.g. when tracing.</p>
+
+<pre class=""><code class="rounded">                            # Run the wrapped steps.
+ctx, flow_options, signal = yield(ctx, flow_options, circuit_options)
+# maybe do something more?
+
+return ctx, flow_options, signal
 </code></pre>
 
-<p class="">The resulting wrapped activity now has three termini.</p>
+<p class="">You don’t have to return the “native” signal from <code class="text-purple">yield</code>, you may return any signal you need to indicate the outcome to the outer world, but make sure it is properly wired.</p>
 
-<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/wrap-timeout-113e68ad4bdfb447ed448cbdc296c3fdf4a89089e305c3ca433adea46d3c3704.png" /></p>
-
-<p class="">With our handler, which simply returns the wrapped activity’s signal, it’s possible to route the <code class="text-purple">:timeout</code> signal in <code class="text-purple">Upload</code>. For instance, if a <code class="text-purple">:timeout</code> should be resulting in <code class="text-purple">Upload</code> jumping to the <code class="text-purple">fail_fast</code> track after <code class="text-purple">#transfer</code> terminated in <code class="text-purple">timeout</code>, you can do so.</p>
-
-<pre class=""><code class="rounded">step Wrap(MyTransaction) {
-  step :update   # this changes the database.
-  step :transfer,
-    Output(:failure) =&gt; End(:timeout) # creates a third terminus.
-},
-  Output(:timeout) =&gt; Track(:fail_fast) # any wiring is possible here.
-</code></pre>
-
-<p class="">Here’s what the circuit would look like.</p>
-
-<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/wrap-route-ec3d6c04738282e4b99de87d494e4f738d97771b4148aa89c9a7e7f80db24871.png" /></p>
+<p class="">See # FIXME for a better example.</p>
 
 <h3 id="macro-wrap-transaction" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Transaction</span></h3>
 
-<p class="">Wrapping steps into a real database transaction, and rolling back in case of a failure outcome in one of the steps, could look like so.</p>
+<p class="">A very typical real-world use-case of Wrap() is when, well, wrapping a sequence of steps into a database transaction. This allows adding specific code for a rollback in case something on the database level failed. Hundreds of TRB users have code similar to the following.</p>
 
 <pre class=""><code class="rounded">class MyTransaction
   def self.call((ctx, flow_options), **)
@@ -679,13 +692,13 @@ end
 <p class="">Catching and intercepting exceptions in <code class="text-purple">Wrap()</code> works identical to transactions. In case you don’t want to use our canonical <a href="#---FIXME" class="underline text-purple">Rescue() macro</a> here is a sample wrap handler that uses <code class="text-purple">rescue</code> for intercepting exceptions thrown in <code class="text-purple">#update</code> or <code class="text-purple">#transfer</code>.</p>
 
 <pre class=""><code class="rounded">class MyRescue
-  def self.call((ctx, flow_options), **, &amp;block)
-    signal, (ctx, flow_options) = yield # calls the wrapped steps
+  def self.call(ctx, flow_options, circuit_options, &amp;block)
+    ctx, flow_options, signal = yield(ctx, flow_options, circuit_options) # calls the wrapped steps
 
-    return signal, [ctx, flow_options]
+    return ctx, flow_options, signal
   rescue
     ctx[:exception] = $!.message
-    return Trailblazer::Activity::Left, [ctx, flow_options]
+    return ctx, flow_options, Trailblazer::Activity::Left
   end
 end
 </code></pre>
@@ -693,6 +706,35 @@ end
 <p class="">With any exception being thrown, the original signal from the wrapped activity is returned, as if the steps were part of the <code class="text-purple">Upload</code> operation flow.</p>
 
 <p class="">The code below <code class="text-purple">rescue</code> is only run when an exception was thrown. Here, we write a new variable <code class="text-purple">:exception </code> to the <code class="text-purple">ctx</code> and return <code class="text-purple">Left</code>, indicating an error.</p>
+
+<h3 id="macro-wrap-routing" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Routing</span></h3>
+
+<p class="">Let’s assume the <code class="text-purple">#transfer</code> step had a custom output that goes to a super-special terminus <code class="text-purple">End.timeout</code>.</p>
+
+<pre class=""><code class="rounded">step Wrap(MyTransaction) {
+  step :update   # this changes the database.
+  step :transfer,
+    Output(:failure) =&gt; End(:timeout) # creates a third terminus.
+},
+</code></pre>
+
+<p class="">The resulting wrapped activity now has three termini.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/wrap-timeout-113e68ad4bdfb447ed448cbdc296c3fdf4a89089e305c3ca433adea46d3c3704.png" /></p>
+
+<p class="">With our handler, which simply returns the wrapped activity’s signal, it’s possible to route the <code class="text-purple">:timeout</code> signal in <code class="text-purple">Upload</code>. For instance, if a <code class="text-purple">:timeout</code> should be resulting in <code class="text-purple">Upload</code> jumping to the <code class="text-purple">fail_fast</code> track after <code class="text-purple">#transfer</code> terminated in <code class="text-purple">timeout</code>, you can do so.</p>
+
+<pre class=""><code class="rounded">step Wrap(MyTransaction) {
+  step :update   # this changes the database.
+  step :transfer,
+    Output(:failure) =&gt; End(:timeout) # creates a third terminus.
+},
+  Output(:timeout) =&gt; Track(:fail_fast) # any wiring is possible here.
+</code></pre>
+
+<p class="">Here’s what the circuit would look like.</p>
+
+<p class=""><img class="mt-12 mb-12 mx-auto" src="/assets/wrap-route-ec3d6c04738282e4b99de87d494e4f738d97771b4148aa89c9a7e7f80db24871.png" /></p>
 
 <h3 id="macro-wrap-compliance" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Compliance</span></h3>
 
@@ -739,7 +781,7 @@ Trailblazer::Developer.wtf?(Song::Activity::Upload, params: {id: 1})</code></pre
       step :transfer # this might even break!
     }
     step :notify
-    fail :log_error
+    left :log_error
     # ...
   end
 end
@@ -1105,10 +1147,10 @@ end
 
 <p class="">You can use tracing with <code class="text-purple">Each()</code>.</p>
 
-<pre class=""><code class="rounded">Trailblazer::Developer.wtf?(Song::Activity::Cover, [{
+<pre class=""><code class="rounded">Trailblazer::Developer.wtf?(Song::Activity::Cover, {
   params: {id: 1},
   # ...
-}])
+})
 </code></pre>
 
 <p class="">Note that a virtual step <code class="text-purple">invoke_block_activity</code> is displayed to group the iterations, suffixed with the number of the iteration.</p>
@@ -1126,7 +1168,7 @@ end
 
 <pre class=""><code class="rounded">node, _ = Trailblazer::Developer::Introspect.find_path(
   Song::Activity::Cover,
-  ["Each/composers_for_each", "Each.iterate.block", "invoke_block_activity", :notify_composers])
+  ["Each/composers_for_each", "iterated_block", :notify_composers])
 #=&gt; #&lt;Node ...&gt;
 </code></pre>
 
@@ -1139,7 +1181,7 @@ end
 
 <pre class=""><code class="rounded">cover_patched = Trailblazer::Activity::DSL::Linear::Patch.(
   Song::Activity::Cover,
-  ["Each/composers_for_each", "Each.iterate.block"],
+  ["Each/composers_for_each", "iterated_block"],
   -&gt; { step :log_email }
 )
 </code></pre>
@@ -1396,7 +1438,7 @@ end
             <a href="#" data-toggle="code-tab" data-type="code-tab-operation">
               <span class="font-semi-bold bg-[#E4E4E4] p-2 rounded-t" data-show="code-tab-operation" data-hide="code-tab-activity" data-show-color="bg-bg-purple-1" data-hide-color="bg-[#E4E4E4]">Operation</span>
             </a>
-          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">signal, (ctx, _) = Trailblazer::Activity::TaskWrap.invoke(Song::Activity::Update, [{params: {id: nil}},{}])
+          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">ctx, _, signal = Trailblazer::Activity::TaskWrap.invoke(Song::Activity::Update, [{params: {id: nil}},{}])
 puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:not_found&gt;
 </code></pre></div><div class="code-tab-operation code-tab-content hidden"><pre class=""><code class="rounded-tr rounded-b">result = Trailblazer::Operation::TaskWrap.invoke(Song::Operation::Update, [{params: {id: nil}},{}])
 result.success? # =&gt; false
@@ -1530,7 +1572,7 @@ end
             <a href="#" data-toggle="code-tab" data-type="code-tab-operation">
               <span class="font-semi-bold bg-[#E4E4E4] p-2 rounded-t" data-show="code-tab-operation" data-hide="code-tab-activity" data-show-color="bg-bg-purple-1" data-hide-color="bg-[#E4E4E4]">Operation</span>
             </a>
-          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Create, params: {})
+          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">ctx, _, signal = Trailblazer::Activity.(Song::Activity::Create, params: {})
 puts ctx[:model] #=&gt; #&lt;struct Song id=nil, title=nil&gt;
 </code></pre></div><div class="code-tab-operation code-tab-content hidden"><pre class=""><code class="rounded-tr rounded-b">result = Song::Operation::Create.(params: {})
 puts result[:model] #=&gt; #&lt;struct Song id=nil, title=nil&gt;
@@ -1584,7 +1626,7 @@ ctx[:model] = Song.find_by(id: params[:id])</code></pre>
             <a href="#" data-toggle="code-tab" data-type="code-tab-operation">
               <span class="font-semi-bold bg-[#E4E4E4] p-2 rounded-t" data-show="code-tab-operation" data-hide="code-tab-activity" data-show-color="bg-bg-purple-1" data-hide-color="bg-[#E4E4E4]">Operation</span>
             </a>
-          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Update, params: {id: 1}, seq: [])
+          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">ctx, _, signal = Trailblazer::Activity.(Song::Activity::Update, params: {id: 1}, seq: [])
 ctx[:model] #=&gt; #&lt;Song id=1, ...&gt;
 puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:success&gt;
 </code></pre></div><div class="code-tab-operation code-tab-content hidden"><pre class=""><code class="rounded-tr rounded-b">result = Song::Operation::Update.(params: {id: 1}, seq: [])
@@ -1601,7 +1643,7 @@ result.success? # =&gt; true
             <a href="#" data-toggle="code-tab" data-type="code-tab-operation">
               <span class="font-semi-bold bg-[#E4E4E4] p-2 rounded-t" data-show="code-tab-operation" data-hide="code-tab-activity" data-show-color="bg-bg-purple-1" data-hide-color="bg-[#E4E4E4]">Operation</span>
             </a>
-          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Update, params: {})
+          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">ctx, _, signal = Trailblazer::Activity.(Song::Activity::Update, params: {})
 ctx[:model] #=&gt; nil
 puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:failure&gt;
 </code></pre></div><div class="code-tab-operation code-tab-content hidden"><pre class=""><code class="rounded-tr rounded-b">result = Song::Operation::Update.(params: {})
@@ -1694,7 +1736,7 @@ Song[params[:id]]</code></pre>
             <a href="#" data-toggle="code-tab" data-type="code-tab-operation">
               <span class="font-semi-bold bg-[#E4E4E4] p-2 rounded-t" data-show="code-tab-operation" data-hide="code-tab-activity" data-show-color="bg-bg-purple-1" data-hide-color="bg-[#E4E4E4]">Operation</span>
             </a>
-          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Update, params: {id: 1}, seq: [])
+          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">ctx, _, signal = Trailblazer::Activity.(Song::Activity::Update, params: {id: 1}, seq: [])
 ctx[:model] #=&gt; #&lt;struct Song id=1, title="Roxanne"&gt;
 </code></pre></div><div class="code-tab-operation code-tab-content hidden"><pre class=""><code class="rounded-tr rounded-b">result = Song::Operation::Update.(params: {id: 1}, seq: [])
 result[:model] #=&gt; #&lt;struct Song id=1, title="Roxanne"&gt;
@@ -1745,7 +1787,7 @@ end
             <a href="#" data-toggle="code-tab" data-type="code-tab-operation">
               <span class="font-semi-bold bg-[#E4E4E4] p-2 rounded-t" data-show="code-tab-operation" data-hide="code-tab-activity" data-show-color="bg-bg-purple-1" data-hide-color="bg-[#E4E4E4]">Operation</span>
             </a>
-          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Update, params: {id: nil})
+          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">ctx, _, signal = Trailblazer::Activity.(Song::Activity::Update, params: {id: nil})
 puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:not_found&gt;
 </code></pre></div><div class="code-tab-operation code-tab-content hidden"><pre class=""><code class="rounded-tr rounded-b">result = Song::Operation::Update.(params: {id: nil})
 result.success? # =&gt; false
@@ -1773,7 +1815,7 @@ result.success? # =&gt; false
             <a href="#" data-toggle="code-tab" data-type="code-tab-operation">
               <span class="font-semi-bold bg-[#E4E4E4] p-2 rounded-t" data-show="code-tab-operation" data-hide="code-tab-activity" data-show-color="bg-bg-purple-1" data-hide-color="bg-[#E4E4E4]">Operation</span>
             </a>
-          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Create,
+          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">ctx, _, signal = Trailblazer::Activity.(Song::Activity::Create,
   params:               {title: "Olympia"}, # some random variable.
   "model.class":        Hit,
   "model.action":       :find_by,
@@ -1855,7 +1897,7 @@ end
             <a href="#" data-toggle="code-tab" data-type="code-tab-operation">
               <span class="font-semi-bold bg-[#E4E4E4] p-2 rounded-t" data-show="code-tab-operation" data-hide="code-tab-activity" data-show-color="bg-bg-purple-1" data-hide-color="bg-[#E4E4E4]">Operation</span>
             </a>
-          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">signal, (ctx, _) = Trailblazer::Activity.(Song::Activity::Create, params: {}, :"model.class" =&gt; Hit)
+          </div><div class="code-tab-activity code-tab-content"><pre class=""><code class="rounded-tr rounded-b">ctx, _, signal = Trailblazer::Activity.(Song::Activity::Create, params: {}, :"model.class" =&gt; Hit)
 </code></pre></div><div class="code-tab-operation code-tab-content hidden"><pre class=""><code class="rounded-tr rounded-b">result = Song::Operation::Create.(params: {}, :"model.class" =&gt; Hit)
 </code></pre></div></div>
 
@@ -1873,7 +1915,7 @@ end
     step :rehash
   }
   step :notify
-  fail :log_error
+  left :log_error
   # ...
 end
 </code></pre>
@@ -1891,7 +1933,7 @@ end
     step :rehash
   }
   step :notify
-  fail :log_error
+  left :log_error
   # ...
 end
 </code></pre>
@@ -1899,7 +1941,7 @@ end
 <p class="">The handler’s <code class="text-purple">#call</code> method receives the exception and the circuit-interface arguments.</p>
 
 <pre class=""><code class="rounded">class MyHandler
-  def self.call(exception, (ctx), *)
+  def self.call(ctx, flow_options, circuit_options, exception:)
     ctx[:exception_class] = exception.class
   end
 end
@@ -2025,7 +2067,7 @@ result[:"result.policy.after_model"].success? #=&gt; true
 <p class="">A guard is a step that helps you evaluating a condition and writing the result. If the condition was evaluated as <code class="text-purple">falsey</code>, the pipe won’t be further processed and a policy breach is reported in <code class="text-purple">Result["result.policy.default"]</code>.</p>
 
 <pre class=""><code class="rounded">class Create &lt; Trailblazer::Operation
-  step Policy::Guard(-&gt;(options, pass:, **) { pass })
+  step Policy::Guard(-&gt;(options, pass:, **) { pass }), id: :policy
   step :process
 
   def process(options, **)
@@ -2764,7 +2806,9 @@ result[:"result.contract.default"].errors.messages #=&gt; {:length=&gt;["is not 
     <a class="block px-2 leading-8" href="#macro-wrap-wrap-handler">Wrap handler</a>
 
     
-      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#macro-wrap-wrap-handler-routing">Routing</a>
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#macro-wrap-wrap-handler-yield">Yield</a>
+    
+      <a class="block px-2 pt-[.33rem] pb-[.33rem] leading-snug text-purple pl-6" href="#macro-wrap-wrap-handler-return-set">Return set</a>
     
   
     <a class="block px-2 leading-8" href="#macro-wrap-transaction">Transaction</a>
@@ -2772,6 +2816,10 @@ result[:"result.contract.default"].errors.messages #=&gt; {:length=&gt;["is not 
     
   
     <a class="block px-2 leading-8" href="#macro-wrap-exception-handling">Exception handling</a>
+
+    
+  
+    <a class="block px-2 leading-8" href="#macro-wrap-routing">Routing</a>
 
     
   
@@ -3057,3 +3105,4 @@ result[:"result.contract.default"].errors.messages #=&gt; {:length=&gt;["is not 
 
   </body>
 </html>
+

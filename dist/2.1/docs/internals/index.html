@@ -28,6 +28,11 @@
 <link rel="modulepreload" href="/assets/anchor-js-821952d04abcd941bb3541822cd1c1f0234e5168bef1f9b2a050868af608aa5a.js">
 <script src="/assets/es-module-shims.min-4ca9b3dd5e434131e3bb4b0c1d7dff3bfd4035672a5086deec6f73979a49be73.js" async="async" data-turbo-track="reload"></script>
 <script type="module">import "application"</script>
+
+    <script id="setmore_script" type="text/javascript" src="https://assets.setmore.com/integration/static/setmoreIframeLive.js"></script>
+    <a style="position: fixed; right: 0px; top: 25%; display: block; z-index: 20000" id="Setmore_button_iframe" href="https://trailblazer.setmore.com">
+      <img border="none" alt="Book an appointment for Trailblazer micro consulting" src="/assets/consulting-tab-508c4ef9142037af52bf5d0ddb2868ba2ab38c1021b01a264b6a3bd32375a592.png" />
+    </a>
   </head>
   <body>
     <nav class=" text-base z-[50] top-0 absolute w-full lg:h-[5.5rem] lg:px-[5.6rem] py-3 lg:flex lg:justify-between lg:items-center bg-white sticky" id="navbar">
@@ -385,10 +390,12 @@
 <p class="">Normalizer steps usually check for options in <code class="text-purple">ctx</code> and then apply logic. Suppose you want a new option <code class="text-purple">upcase_id: true</code> in your operation DSL that uppercase the precomputed ID.</p>
 
 <pre class=""><code class="rounded">module MyNormalizer
-  def self.upcase_id(ctx, upcase_id: nil, id:, **)
-    return unless upcase_id
+  def self.upcase_id(ctx, flow_options, _, upcase_id: nil, id:, **)
+    return ctx, flow_options unless upcase_id
 
-    ctx[:id] = id.to_s.upcase
+    ctx = ctx.merge(id: id.to_s.upcase)
+
+    return ctx, flow_options
   end
 end
 </code></pre>
@@ -405,7 +412,8 @@ end
         normalizer,
         "activity.default_outputs", # few steps after "activity.normalize_id"
         {
-          "my.upcase_id" =&gt; Trailblazer::Activity::DSL::Linear::Normalizer.Task(MyNormalizer.method(:upcase_id)),
+          # "my.upcase_id" =&gt; Trailblazer::Activity::DSL::Linear::Normalizer.Task(MyNormalizer.method(:upcase_id)),
+          "my.upcase_id" =&gt; MyNormalizer.method(:upcase_id),
         }
       )
     end
@@ -435,16 +443,15 @@ end
 
 <pre class=""><code class="rounded">module MyNormalizer
   # ...
-  def self.record_upcase_id_flag(ctx, non_symbol_options:, upcase_id: nil, **)
-    ctx.merge!(
-      non_symbol_options: non_symbol_options.merge(
-        Trailblazer::Activity::DSL::Linear::Normalizer::Inherit.Record(
-          {upcase_id: upcase_id},   # what do you want to record?
-          type: :upcase_id_feature, # categorize the recorded data.
-          non_symbol_options: false # this is a real :symbol option.
-        )
+  def self.record_upcase_id_flag(ctx, flow_options, _, upcase_id: nil, **)
+    ctx = ctx.merge(
+      Trailblazer::Activity::DSL::Linear::Normalizer::Inherit.Record(
+        {upcase_id: upcase_id},   # what do you want to record?
+        type: :upcase_id_feature, # categorize the recorded data.
       )
     )
+
+    return ctx, flow_options
   end
 end
 </code></pre>
@@ -458,8 +465,10 @@ end
     normalizer,
     "activity.default_outputs", # step after "activity.normalize_id"
     {
-      "my.upcase_id"             =&gt; Trailblazer::Activity::DSL::Linear::Normalizer.Task(MyNormalizer.method(:upcase_id)),
-      "my.record_upcase_id_flag" =&gt; Trailblazer::Activity::DSL::Linear::Normalizer.Task(MyNormalizer.method(:record_upcase_id_flag)),
+      # "my.upcase_id"             =&gt; Trailblazer::Activity::DSL::Linear::Normalizer.Task(MyNormalizer.method(:upcase_id)),
+      # "my.record_upcase_id_flag" =&gt; Trailblazer::Activity::DSL::Linear::Normalizer.Task(MyNormalizer.method(:record_upcase_id_flag)),
+      "my.upcase_id"             =&gt; MyNormalizer.method(:upcase_id),
+      "my.record_upcase_id_flag" =&gt; MyNormalizer.method(:record_upcase_id_flag),
     }
   )
 end
@@ -662,12 +671,13 @@ pipeline = [row] # pipe contains one item.
 
 <p class="">You can then use the “friendly interface” using <code class="text-purple">FriendlyInterface.adds_for</code> to append another element behind <code class="text-purple">business.task</code>.</p>
 
-<pre class=""><code class="rounded">adds = Trailblazer::Activity::Adds::FriendlyInterface.adds_for(
-  [
-    [Song::Activity::Create, id: "my.create", append: "business.task"],
-  ]
-)
-extended_pipeline = Trailblazer::Activity::Adds.apply_adds(pipeline, adds)
+<pre class=""><code class="rounded">adds = [
+  [Song::Activity::Create, id: "my.create", append: "business.task"],
+]
+
+pipeline = Trailblazer::Activity.Pipeline({"business.task" =&gt; Object})
+
+extended_pipeline = Trailblazer::Activity::Adds.(pipeline, *adds)
 # =&gt; [row, #&lt;row with Song::Activity::Create&gt;]
 </code></pre>
 
@@ -790,7 +800,7 @@ It is the runtime object that actually invokes your steps.</p>
 
 <p class=""><code class="text-purple">ctx</code> mimics as “Hash” and also allows you to use Strings or Symbols interchangeably as keys; similar to the <code class="text-purple">params</code> hash in Rails.</p>
 
-<pre class=""><code class="rounded">result = Memo::Create.(params: { text: "Enjoy an IPA" })
+<pre class=""><code class="rounded">result = Memo::Operation::Create.(params: { text: "Enjoy an IPA" })
 
 result[:params]     # =&gt; { text: "Enjoy an IPA" }
 result['params']    # =&gt; { text: "Enjoy an IPA" }
@@ -809,7 +819,8 @@ Note that <code class="text-purple">ctx</code> doesn’t provide interchangeable
 <p class="">To overcome this, it is possible to define a shorter versions of context keys using <code class="text-purple">aliases</code>. By providing aliases mapping in <code class="text-purple">flow_options[:context_options]</code>, context will maintain any mutations being made on the origianl keys with 
 the aliases and vice versa.</p>
 
-<pre class=""><code class="rounded">options = { params: { text: "Enjoy an IPA" } }
+<pre class=""><code class="rounded">
+options = { params: { text: "Enjoy an IPA" } }
 flow_options = {
   context_options: {
     aliases: { 'contract.default': :contract, 'policy.default': :policy },
@@ -825,12 +836,12 @@ else # Ruby 2.6 etc
 end
 
 result['contract.default']  # =&gt; Memo::Contract::Create
-result[:contract]           # =&gt; Memo::Contract::Create
-</code></pre>
+result[:contract]           # =&gt; Memo::Contract::Create</code></pre>
 
 <p class=""><code class="text-purple">flow_options</code> are passed to the nested operations via <code class="text-purple">Subprocess</code> and all given aliases will also be applied in them by default.</p>
 
-<pre class=""><code class="rounded">class Memo::Create &lt; Trailblazer::Operation
+<pre class=""><code class="rounded">
+class Memo::Create &lt; Trailblazer::Operation
   # ...
 
   pass :sync
@@ -839,8 +850,7 @@ result[:contract]           # =&gt; Memo::Contract::Create
     # ctx['contract.default'] == ctx[:contract]
     contract.sync
   end
-end
-</code></pre>
+end</code></pre>
 
 <h2 id="internals-option" class="text-2xl font-bold text-neutral-500 lg:text-3xl py-2 flex items-center"><span class="header-text">Option</span></h2>
 
@@ -1294,3 +1304,4 @@ end
 
   </body>
 </html>
+

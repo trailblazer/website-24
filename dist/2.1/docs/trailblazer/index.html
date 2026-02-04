@@ -28,6 +28,11 @@
 <link rel="modulepreload" href="/assets/anchor-js-821952d04abcd941bb3541822cd1c1f0234e5168bef1f9b2a050868af608aa5a.js">
 <script src="/assets/es-module-shims.min-4ca9b3dd5e434131e3bb4b0c1d7dff3bfd4035672a5086deec6f73979a49be73.js" async="async" data-turbo-track="reload"></script>
 <script type="module">import "application"</script>
+
+    <script id="setmore_script" type="text/javascript" src="https://assets.setmore.com/integration/static/setmoreIframeLive.js"></script>
+    <a style="position: fixed; right: 0px; top: 25%; display: block; z-index: 20000" id="Setmore_button_iframe" href="https://trailblazer.setmore.com">
+      <img border="none" alt="Book an appointment for Trailblazer micro consulting" src="/assets/consulting-tab-508c4ef9142037af52bf5d0ddb2868ba2ab38c1021b01a264b6a3bd32375a592.png" />
+    </a>
   </head>
   <body>
     <nav class=" text-base z-[50] top-0 absolute w-full lg:h-[5.5rem] lg:px-[5.6rem] py-3 lg:flex lg:justify-between lg:items-center bg-white sticky" id="navbar">
@@ -723,10 +728,10 @@ end</code></pre>
 
 <pre class=""><code class="rounded">module MyMacro
   def self.NormalizeParams(name: :myparams, merge_hash: {})
-    task = -&gt;((ctx, flow_options), _) do
+    task = -&gt;(ctx, flow_options, _) do
       ctx[name] = ctx[:params].merge(merge_hash)
 
-      return Trailblazer::Activity::Right, [ctx, flow_options]
+      return ctx, flow_options, Trailblazer::Activity::Right
     end
 
     # new API
@@ -923,7 +928,7 @@ end
 
 <p class="">You have to use the clumsier <code class="text-purple">Developer.wtf?</code> method for tracing.</p>
 
-<pre class=""><code class="rounded">signal, (ctx, _) = Trailblazer::Developer.wtf?(
+<pre class=""><code class="rounded">ctx, _, signal = Trailblazer::Developer.wtf?(
   Memo::Operation::Create, [{params: {title: "Remember me.."}}, {}]
 )
 </code></pre>
@@ -997,7 +1002,7 @@ puts Trailblazer::Developer.render(Memo::Create)</code></pre>
 
 <p class="">You may use <code class="text-purple">Graph#find</code> with a block for a more complex search.</p>
 
-<pre class=""><code class="rounded">node = graph.find { |node| node.task.class == Trailblazer::Activity::TaskBuilder }
+<pre class=""><code class="rounded">node = graph.find { |node| node.task.class == Trailblazer::Activity::Circuit::Step::Binary }
 </code></pre>
 
 <p class="">Alternatively, using the <code class="text-purple">Graph#find</code> method with an ID provided, you can retrieve a particular node in the activity’s circuit.</p>
@@ -1270,3 +1275,4 @@ left = outputs[0] #=&gt; output object
 
   </body>
 </html>
+

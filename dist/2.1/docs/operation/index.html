@@ -28,6 +28,11 @@
 <link rel="modulepreload" href="/assets/anchor-js-821952d04abcd941bb3541822cd1c1f0234e5168bef1f9b2a050868af608aa5a.js">
 <script src="/assets/es-module-shims.min-4ca9b3dd5e434131e3bb4b0c1d7dff3bfd4035672a5086deec6f73979a49be73.js" async="async" data-turbo-track="reload"></script>
 <script type="module">import "application"</script>
+
+    <script id="setmore_script" type="text/javascript" src="https://assets.setmore.com/integration/static/setmoreIframeLive.js"></script>
+    <a style="position: fixed; right: 0px; top: 25%; display: block; z-index: 20000" id="Setmore_button_iframe" href="https://trailblazer.setmore.com">
+      <img border="none" alt="Book an appointment for Trailblazer micro consulting" src="/assets/consulting-tab-508c4ef9142037af52bf5d0ddb2868ba2ab38c1021b01a264b6a3bd32375a592.png" />
+    </a>
   </head>
   <body>
     <nav class=" text-base z-[50] top-0 absolute w-full lg:h-[5.5rem] lg:px-[5.6rem] py-3 lg:flex lg:justify-between lg:items-center bg-white sticky" id="navbar">
@@ -2549,8 +2554,8 @@ end
 <p class="">The call as below will always use <code class="text-purple">action: :create</code>, even if something else is injected.</p>
 
 <pre class=""><code class="rounded">result = Memo::Operation::Create.(
-  current_user: current_user,
-  action: :update # this is always overridden.
+  {current_user: current_user,
+  action: :update} # this is always overridden.
 )
 puts result[:model] #=&gt; #&lt;Memo id: 1, ...&gt;
 </code></pre>
@@ -2707,10 +2712,10 @@ TODO: decompose trick (input )
 
 <pre class=""><code class="rounded">module MyMacro
   def self.NormalizeParams(name: :myparams, merge_hash: {})
-    task = -&gt;((ctx, flow_options), _) do
+    task = -&gt;(ctx, flow_options, _) do
       ctx[name] = ctx[:params].merge(merge_hash)
 
-      return Trailblazer::Activity::Right, [ctx, flow_options]
+      return ctx, flow_options, Trailblazer::Activity::Right
     end
 
     # new API
@@ -2753,13 +2758,13 @@ end
 <pre class=""><code class="rounded">module MyMacro
   def self.FindModel(model_class)
     # the inserted task.
-    task = -&gt;((ctx, flow_options), _) do
+    task = -&gt;(ctx, flow_options, _) do
       model         = model_class.find_by(id: ctx[:params][:id])
 
       return_signal = model ? Trailblazer::Activity::Right : Trailblazer::Activity::Left
       ctx[:model]   = model
 
-      return return_signal, [ctx, flow_options]
+      return ctx, flow_options, return_signal
     end
 
     # the configuration needed by Trailblazer's DSL.
@@ -2783,7 +2788,7 @@ end
 
 <p class="">When running the activity without a valid model ID, it will now terminate on <code class="text-purple">End.not_found</code>.</p>
 
-<pre class=""><code class="rounded">signal, (ctx, _) = Trailblazer::Developer.wtf?(User::Create, [{params: {id: nil}}])
+<pre class=""><code class="rounded">ctx, _, signal = Trailblazer::Developer.wtf?(User::Create, [{params: {id: nil}}])
 signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:not_found&gt;
 
 `-- User::Create
@@ -2818,8 +2823,8 @@ end
   def self.Logger(logged_name: )
     {
       id: "logger",
-      input:  {logged_name =&gt; :logged},
-      output: [:log],
+      Trailblazer::Activity::Railway.In() =&gt;  {logged_name =&gt; :logged},
+      Trailblazer::Activity::Railway.Out() =&gt; [:log],
       **Trailblazer::Activity::Railway.Subprocess(Logger), # nest
     }
   end
@@ -2871,19 +2876,16 @@ span.finish(payload: {time: Time.now})
 
 <pre class=""><code class="rounded">module MyAPM # Advanced performance monitoring, done right!
   module Extension
-    def self.start_instrumentation(wrap_ctx, original_args)
-      (ctx, _flow_options), circuit_options = original_args
-
+    def self.start_instrumentation(ctx, flow_options, circuit_options, signal, lib_ctx, task:, **) # {task} is the current "step".
       activity  = circuit_options[:activity] # currently running Activity.
-      task      = wrap_ctx[:task]            # the current "step".
 
       task_id   = Trailblazer::Activity::Introspect.Nodes(activity, task: task).id
 
       span      = MyAPM.start_span("operation.step", payload: {id: task_id})
 
-      wrap_ctx[:span] = span
+      lib_ctx[:span] = span
 
-      return wrap_ctx, original_args
+      return ctx, flow_options, signal, lib_ctx
     end
   end
 end
@@ -2897,13 +2899,12 @@ end
 
 <pre class=""><code class="rounded">module MyAPM # Advanced performance monitoring, done right!
   module Extension
-    def self.finish_instrumentation(wrap_ctx, original_args)
-      ctx   = original_args[0][0]
-      span  = wrap_ctx[:span]
+    def self.finish_instrumentation(ctx, flow_options, _, signal, lib_ctx, **)
+      span = lib_ctx[:span]
 
       span.finish(payload: ctx.inspect)
 
-      return wrap_ctx, original_args
+      return ctx, flow_options, signal, lib_ctx
     end
   end
 end
@@ -2944,14 +2945,13 @@ end
 <pre class=""><code class="rounded">my_wrap = Hash.new(apm_extension)
 
 Song::Activity::Create.invoke(
-  [
-    # ctx:
-    {
-      song: {title: "Timebomb"},
-      seq: []
-    }
-  ],
-  wrap_runtime: my_wrap # runtime taskWrap extensions!
+  # ctx:
+  {
+    song: {title: "Timebomb"},
+    seq: []
+  },
+  {},
+  {wrap_runtime: my_wrap} # runtime taskWrap extensions!
 )
 </code></pre>
 
@@ -2978,14 +2978,13 @@ my_wrap = {validate_task =&gt; apm_extension}
 <p class="">When running <code class="text-purple">Create</code> with the new configuration, the APM code is only called for <code class="text-purple">#validate</code>.</p>
 
 <pre class=""><code class="rounded">Song::Activity::Create.invoke(
-  [
-    # ctx:
-    {
-      song: {title: "Timebomb"},
-      seq: []
-    }
-  ],
-  wrap_runtime: my_wrap # runtime taskWrap extensions!
+  # ctx:
+  {
+    song: {title: "Timebomb"},
+    seq: []
+  },
+  {},
+  {wrap_runtime: my_wrap} # runtime taskWrap extensions!
 )
 </code></pre>
 
@@ -3009,7 +3008,7 @@ my_wrap = {validate_task =&gt; apm_extension}
   class Create &lt; Trailblazer::Activity::Railway
     step :create_model
     step :validate,
-      Extension() =&gt; Trailblazer::Activity::TaskWrap::Extension::WrapStatic(
+      Extension() =&gt; Trailblazer::Activity::TaskWrap::Extension(
         [MyAPM::Extension.method(:start_instrumentation),  id: "my_apm.start_span",  prepend: "task_wrap.call_task"],
         [MyAPM::Extension.method(:finish_instrumentation), id: "my_apm.finish_span", append: "task_wrap.call_task"],
       )
@@ -3024,7 +3023,7 @@ end
 
 <p class="">When running, the APM instrumentation is run only around <code class="text-purple">#validate</code>.</p>
 
-<pre class=""><code class="rounded">signal, (ctx, _) = Song::Activity::Create.invoke([ctx, {}])
+<pre class=""><code class="rounded">ctx, _ = Song::Activity::Create.invoke(ctx, {})
 </code></pre>
 
 <h3 id="operation-taskwrap-introspection" class="font-bold text-neutral-500 lg:text-2xl text-xl py-2 flex items-center"><span class="header-text">Introspection</span></h3>
@@ -3133,9 +3132,9 @@ attrs.id #=&gt; :save
 <p class="">Do not fear those syntactical finesses unfamiliar to you, young padawan.</p>
 
 <pre class=""><code class="rounded">class Create &lt; Trailblazer::Activity::Railway
-  def self.validate((ctx, flow_options), **_circuit_options)
+  def self.validate(ctx, flow_options, _circuit_options)
     # ...
-    return signal, [ctx, flow_options]
+    return ctx, flow_options, signal
   end
 
   step task: method(:validate)
@@ -3154,7 +3153,7 @@ end
 <pre class=""><code class="rounded">ctx          = {name: "Face to Face"}
 flow_options = {}
 
-signal, (ctx, _flow_options) = Create.([ctx, flow_options])
+ctx, _flow_options, signal = Create.(ctx, flow_options, {})
 
 signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:success&gt;
 ctx    #=&gt; {:name=&gt;\"Face to Face\", :validate_outcome=&gt;true}
@@ -3164,13 +3163,13 @@ ctx    #=&gt; {:name=&gt;\"Face to Face\", :validate_outcome=&gt;true}
 
 <p class="">Check the implementation of <code class="text-purple">validate</code> to understand how you return a different signal or a changed <code class="text-purple">ctx</code>.</p>
 
-<pre class=""><code class="rounded">def self.validate((ctx, flow_options), **_circuit_options)
+<pre class=""><code class="rounded">def self.validate(ctx, flow_options, _circuit_options)
   is_valid = ctx[:name].nil? ? false : true
 
   ctx    = ctx.merge(validate_outcome: is_valid) # you can change ctx
   signal = is_valid ? Trailblazer::Activity::Right : Trailblazer::Activity::Left
 
-  return signal, [ctx, flow_options]
+  return ctx, flow_options, signal
 end
 </code></pre>
 
@@ -3183,9 +3182,9 @@ end
 
 <p class="">The circuit interface is a bit more clumsy but it gives you unlimited power over the way the activity will be run. And trust us, we’ve been playing with different APIs for two years and this was the easiest and fastest outcome.</p>
 
-<pre class=""><code class="rounded">def self.validate((ctx, flow_options), **_circuit_options)
+<pre class=""><code class="rounded">def self.validate(ctx, flow_options, _circuit_options)
   # ...
-  return signal, [ctx, flow_options]
+  return ctx, flow_options, signal
 end
 </code></pre>
 
@@ -3242,7 +3241,7 @@ end
   start_task: Trailblazer::Activity::Introspect::Nodes(B::Create, id: :validate).task
 }
 
-signal, (ctx, flow_options) = B::Create.([ctx, flow_options], **circuit_options)
+ctx, flow_options, signal = B::Create.(ctx, flow_options, circuit_options)
 </code></pre>
 
 <p class="">Starting with <code class="text-purple">:validate</code>, the <code class="text-purple">:create</code> task will be skipped and only <code class="text-purple">:validate</code> and then <code class="text-purple">:save</code> will be executed.</p>
@@ -3288,7 +3287,7 @@ end
   exec_context: C::Create::Implementation.new
 }
 
-signal, (ctx, flow_options) = C::Create.to_h[:circuit].([ctx, flow_options], **circuit_options)
+ctx, flow_options, signal = C::Create.to_h[:circuit].(ctx, flow_options, circuit_options)
 </code></pre>
 
 <p class="">While this bypasses <code class="text-purple">Activity#call</code>, it gives you a powerful tool for advanced activity design.</p>
@@ -3496,7 +3495,7 @@ end
 <p class="">The activity will halt on the <code class="text-purple">:invalid</code>-labelled end if <code class="text-purple">validate</code> was falsey.</p>
 
 <pre class=""><code class="rounded">ctx = {params: nil}
-signal, (ctx, flow_options) = Memo::Create.([ctx, {}])
+ctx, flow_options, signal = Memo::Create.([ctx, {}])
 
 puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:invalid&gt;
 </code></pre>
@@ -3566,34 +3565,9 @@ puts signal #=&gt; #&lt;Trailblazer::Activity::End semantic=:invalid&gt;
 
 <p class="">These variables will be available within every step of the operation <em>and after</em>.</p>
 
-<pre class=""><code class="rounded">class Create &lt; Trailblazer::Operation
-  extend ClassDependencies
-
-  # Configure some dependency on class level
-  self[:validator] = AlwaysTrue
-
-  step :validate
-  step Subprocess(Insert)
-
-  def validate(ctx, validator:, params:, **)
-    validator.(params)
-  end
-end
-</code></pre>
-
 <p class="">Starting with the invocation of the <code class="text-purple">Create</code> operation, the <code class="text-purple">validator</code> variable is injected into the <code class="text-purple">ctx</code> and passed on.</p>
 
-<pre class=""><code class="rounded">def validate(ctx, validator:, params:, **)
-  validator.(params)
-end
-</code></pre>
-
 <p class="">The variable is readable from <code class="text-purple">ctx</code> even when the operation finishes - so be careful in nested setups.</p>
-
-<pre class=""><code class="rounded">signal, (ctx, _) = Create.([ctx, {}])
-
-puts ctx[:validator] #=&gt; AlwaysTrue
-</code></pre>
 
 <div class="rounded flex p-4 gap-4 bg-bg-purple-1/50">
   <img src="/assets/info_icon-faf751d86d27155660995d9f129cfd3b63ce05a3a91e1acdda7d214f55bdb347.svg" />
@@ -3613,7 +3587,7 @@ puts ctx[:validator] #=&gt; AlwaysTrue
 <p class="">It’s a common error to use a bare <code class="text-purple">Hash</code> (with string keys!) instead of a <code class="text-purple">Trailblazer::Context</code> object when running an activity. While symbolized hashes are not a problem, string keys will fail.</p>
 
 <pre class=""><code class="rounded">ctx = {"message" =&gt; "Not gonna work!"} # bare hash.
-Bla.([ctx])
+Bla.(ctx, {})
 </code></pre>
 
 <p class="">The infamous <code class="text-purple">TypeError</code> means your context object can’t convert strings into symbol keys. This is required when calling your steps with keyword arguments.</p>
@@ -3625,7 +3599,7 @@ Bla.([ctx])
 
 <pre class=""><code class="rounded">ctx = Trailblazer::Context({"message" =&gt; "Yes, works!"})
 
-signal, (ctx, _) = Bla.([ctx])
+ctx, _, signal = Bla.(ctx, {})
 </code></pre>
 
 <p class="">The <code class="text-purple">Context</code> object automatically converts string keys to symbols.</p>
@@ -3676,15 +3650,15 @@ end
 </ul>
 
 <pre class=""><code class="rounded">class Create &lt; Trailblazer::Activity::Railway
-  def self.validate((ctx, flow_options), **circuit_options)
-    return :invalid_signal, [ctx, flow_options], circuit_options
+  def self.validate(ctx, flow_options, circuit_options)
+    return ctx, flow_options, :invalid_signal
   end
 
   step task: method(:validate)
 end
 
 ctx = {"message" =&gt; "Not gonna work!"} # bare hash.
-Create.([ctx])
+Create.(ctx, {})
 
 # IllegalSignalError: Create:
 # Unrecognized Signal `:invalid_signal` returned from `Method: Create.validate`. Registered signals are,
@@ -4207,3 +4181,4 @@ Create.([ctx])
 
   </body>
 </html>
+

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="9.380435mm"
+   height="30.811264mm"
+   viewBox="0 0 9.380435 30.811264"
+   version="1.1"
+   id="svg22841"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="consulting-tab.svg"
+   inkscape:export-filename="/home/nick/projects/trailblazer-front/app/assets/images/consulting-tab.png"
+   inkscape:export-xdpi="22.804888"
+   inkscape:export-ydpi="22.804888"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview22843"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="4.4593998"
+     inkscape:cx="54.379516"
+     inkscape:cy="47.427908"
+     inkscape:window-width="1920"
+     inkscape:window-height="1031"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs22838" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-83.7351,-242.87136)">
+    <rect
+       style="fill:#572abb;fill-opacity:1;stroke:#ffffff;stroke-width:0.406189;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect35886"
+       width="30.370644"
+       height="8.8944254"
+       x="-273.4451"
+       y="83.938194"
+       ry="1.8813314"
+       inkscape:export-filename="/home/nick/projects/trailblazer-front/app/assets/images/consulting-tab.png"
+       inkscape:export-xdpi="98.924866"
+       inkscape:export-ydpi="98.924866"
+       transform="rotate(-90)" />
+    <path
+       id="path20366"
+       style="fill:none;stroke:#ffffff;stroke-width:0.468344"
+       d="M 90.357705,274.46571 H 89.212969"
+       inkscape:export-filename="/home/nick/projects/trailblazer-front/app/assets/images/consulting-tab.png"
+       inkscape:export-xdpi="98.924866"
+       inkscape:export-ydpi="98.924866" />
+    <path
+       id="path20364"
+       style="fill:#572abb;fill-opacity:1;stroke:#ffffff;stroke-width:0.405968"
+       d="m 88.204305,243.10874 h 4.59398 c 0.01906,0 0.03441,0.0153 0.03441,0.0344 v 30.26769 c 0,0.019 -0.01535,0.0344 -0.03441,0.0344 h -4.593978"
+       inkscape:export-filename="/home/nick/projects/trailblazer-front/app/assets/images/consulting-tab.png"
+       inkscape:export-xdpi="98.924866"
+       inkscape:export-ydpi="98.924866" />
+    <path
+       id="path20364-5"
+       style="fill:#572abb;fill-opacity:1;stroke:none;stroke-width:0.14697"
+       d="m 92.501045,243.29971 h 0.60989 c 0.0025,0 0.0046,0.0152 0.0046,0.0339 v 29.88095 c 0,0.0188 -0.0021,0.0339 -0.0046,0.0339 h -0.60989"
+       inkscape:export-filename="/home/nick/projects/trailblazer-front/app/assets/images/consulting-tab.png"
+       inkscape:export-xdpi="98.924866"
+       inkscape:export-ydpi="98.924866" />
+    <path
+       id="path20362"
+       style="fill:none;stroke:#ffffff;stroke-width:0.406189"
+       d="m 89.156105,243.10888 h 1.000082"
+       inkscape:export-filename="/home/nick/projects/trailblazer-front/app/assets/images/consulting-tab.png"
+       inkscape:export-xdpi="98.924866"
+       inkscape:export-ydpi="98.924866" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.18015px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.104504"
+       x="-266.49271"
+       y="89.71946"
+       id="text37819"
+       inkscape:export-filename="/home/nick/projects/trailblazer-front/app/assets/images/consulting-tab.png"
+       inkscape:export-xdpi="98.924866"
+       inkscape:export-ydpi="98.924866"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan37817"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.18015px;font-family:'Open Sauce Sans';-inkscape-font-specification:'Open Sauce Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.104504;stroke-opacity:1"
+         x="-266.49271"
+         y="89.71946">Consulting</tspan></text>
+    <g
+       id="g20965"
+       transform="matrix(-0.16811487,-0.13782635,0.15923226,-0.14551484,143.37756,261.26081)"
+       inkscape:export-filename="/home/nick/projects/trailblazer-front/app/assets/images/consulting-tab.png"
+       inkscape:export-xdpi="98.924866"
+       inkscape:export-ydpi="98.924866">
+      <path
+         style="fill:#572abb;fill-opacity:1;stroke:#ffffff;stroke-width:1.762;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 65.390741,-125.9674 c -0.778381,0.77042 0.128384,-0.76326 -0.103849,-0.76326 -0.256765,0 0.100661,0.50651 0.103849,0.76326 0.0087,0.69656 -0.09613,1.3907 -0.103849,2.08728 -0.03195,2.88262 -0.09398,5.83743 0.294238,8.70739 0.210952,1.55947 -0.09316,-0.10635 -0.155776,-0.6698"
+         id="path20535" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.762;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 65.598439,-126.87085 c 0.510976,1.18964 1.336828,2.2234 2.007745,3.33342 2.04605,3.38514 1.806612,3.94155 1.921203,0.31153 0.04797,-1.51939 0.22715,-3.03525 0.363474,-4.5484 0.120333,-1.33567 0.02283,-1.41313 0.57117,0.56076 0.239387,0.86176 0.448778,1.73167 0.657709,2.60131 0.206494,0.8595 0.384836,1.72557 0.588475,2.58574 0.202351,0.85474 0.754748,3.05939 1.021181,3.89418 0.116634,0.36544 2.145347,5.05322 1.263499,3.59823"
+         id="path20537" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.762;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 75.187156,-124.59665 c -0.328618,0.45516 3.836402,11.98602 2.751997,9.12797"
+         id="path20670" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.762;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 73.940968,-128.88025 c -0.678553,-0.22578 -0.849357,-0.58547 -0.917329,-1.24614 -0.324234,-3.15145 4.100137,0.9776 0.917329,1.24614 z"
+         id="path20672" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.762;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 81.227701,-125.54683 c -6.932747,6.91693 0.70045,11.63467 5.832854,3.55149"
+         id="path20674" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.762;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 86.489385,-127.21354 c 0.272429,1.15902 0.07523,0.56975 0.65771,1.8069 0.27637,0.58699 0.544504,1.17795 0.830789,1.76017 0.402878,0.81933 2.182627,2.75794 1.350039,2.38324 -2.357305,-1.06089 -1.214152,-5.88546 -0.363474,-7.30549 0.887388,-1.4813 1.385072,-0.59768 2.613535,0.34269"
+         id="path20676" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.762;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 95.403087,-129.06717 c -1.669376,-0.38276 -1.79954,2.23387 -1.782742,3.30227 0.01752,1.11327 0.455192,2.17245 1.176957,3.02188 2.207575,2.59804 6.860048,-6.63924 1.41927,-7.41452 -1.120839,-0.15971 -1.870604,0.21962 -2.977004,0.52961"
+         id="path20678" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.11172px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.102793;stroke-opacity:1"
+       x="72.37925"
+       y="273.80688"
+       id="text24841"
+       transform="rotate(-2.7939236)"><tspan
+         sodipodi:role="line"
+         id="tspan24839"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.11172px;font-family:'Compacta Com';-inkscape-font-specification:'Compacta Com, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.102793;stroke-opacity:1"
+         x="72.37925"
+         y="273.80688">MICRO</tspan></text>
+  </g>
+</svg>
