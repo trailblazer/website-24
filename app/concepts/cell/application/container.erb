@@ -10,8 +10,14 @@
     <%= stylesheet_link_tag "application" %>
     <%= script_for_page_identifier %>
     <%= javascript_importmap_tags %>
+
+    <script id="setmore_script" type="text/javascript" src="https://assets.setmore.com/integration/static/setmoreIframeLive.js"></script>
+    <a style="position: fixed; right: 0px; top: 25%; display: block; z-index: 20000" id="Setmore_button_iframe" href="https://trailblazer.setmore.com">
+      <%= image_tag "consulting-tab.png", border: "none", alt: "Book an appointment for Trailblazer micro consulting" %>
+    </a>
   </head>
   <body>
     <%= yield %>
   </body>
 </html>
+

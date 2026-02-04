@@ -225,7 +225,7 @@ class ViewsController < ApplicationController
           @options = options.merge(controller: controller) # TODO: find way how to specify required kws.
         end
 
-        My::Cell.delegate_to_controller_helpers(self, :csrf_meta_tags, :csp_meta_tag, :stylesheet_link_tag, :javascript_importmap_tags)
+        My::Cell.delegate_to_controller_helpers(self, :csrf_meta_tags, :csp_meta_tag, :stylesheet_link_tag, :javascript_importmap_tags, :image_tag)
 
         def script_for_page_identifier
           %(<script>pageIdentifier = "#{@options.fetch(:page_identifier)}";</script>)
@@ -740,6 +740,7 @@ class ViewsController < ApplicationController
         "introspect.md.erb" => {snippet_file: "internals_test.rb"},
         "wiring_api.md.erb" => {snippet_file: "internals_test.rb"},
         "activity.md.erb"   => {snippet_dir: "../trailblazer-operation/test/docs", snippet_file: "option_test.rb"},
+        # "invoke.md.erb" => {snippet_file: "internals_test.rb"},
         "operation.md.erb"   => {snippet_dir: "../trailblazer-operation/test/docs", snippet_file: "option_test.rb"},
         "context.md.erb"  => {snippet_dir: "../trailblazer-operation/test/docs", snippet_file: "operation_test.rb"},
         "option.md.erb"   => {snippet_dir: "../trailblazer-option/test/docs", snippet_file: "option_test.rb"},
